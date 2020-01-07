@@ -1,0 +1,585 @@
+<template lang="html">
+<!-- / -->
+  <div class="championshipMore">
+  	<div id="addTeam" class='addTeam'>
+  		<h1>Добавление команды</h1>
+  		<div class="">
+  			<p>Название команды</p>
+  			<input id="team_name" type="text" name="team_name" value="">
+  			<p>Номинация</p>
+  			<input id='team_nomination' type="text" name="team_nomination" value="">
+  			<p>Город</p>
+  			<textarea id='team_discribtion' name="team_discribtion"></textarea>
+  			<button @click='AddToTeamFunc' type="button" placeholder='описание' name="button">Сохранить команду</button>
+  		</div>
+  	</div>
+<!--  -->
+  	<div id="addUserTeam" class='addTeam'>
+  		<h1>Пригласить в команду</h1>
+  		<div class="">
+  			<p>Название команды</p>
+  			<input id='nameteam' type="text"  value="">
+  			<p>Номинация</p>
+  			<input id='nomination' type="text" value="">
+  			<p>Сопроводительное письмо</p>
+  			<textarea id='coverletter'></textarea>
+  			<button type="button" placeholder='письмо' @click='invitetoteam' name="button">Приглосить в команду</button>
+  		</div>
+  	</div>
+<!--  -->
+  	<p class='title-link'>
+       <span @click="championship" class='par'>Чемпионаты</span>
+       <span class='partic'> — {{championatinfo[1]}}</span>
+
+    </p>
+  	<h1>{{championatinfo[1]}}</h1>
+  	<div class="ab-w">
+  		<div class="ab">
+  			<p @click='partic=true, teams=false' class='default' :class="[partic ? 'namech' : false]">Участники ({{userschampionats.length}})</p>
+  			<p class='default' :class="[teams ? 'teams' : false]" @click='partic=false,teams=true,teamfunc()'> Команды ({{championatinfo[5].split(',').length}})</p>
+  		</div>
+  	</div>
+  	<!-- -->
+  	<div v-if='partic' class="participants">
+  		<!--  -->
+  			<!-- <div > -->
+  			<div v-for='users in userschampionats' class="participant ">
+          <router-link class="half" :to="{ name: 'user', params: {id:users.all[0][0]} }">
+          <img :src="users.all[0][8]" alt="">
+  				<div class="participant-text">
+            <!-- <p>{{users}}</p> -->
+  					<h3 style="color: #000;">{{users.all[0][1]}}</h3>
+  					<p>{{users.all[0][4]}}, {{users.all[0][7]}}</p>
+  				</div>
+        </router-link>
+  				<p @click='addTeams(users.all[0][0])'  class='invite'>Пригласить </p>
+  			</div>
+  			<!-- </div> -->
+  		<!--  -->
+  		<button v-if='!addto' class="participant-btn" @click='addteamUser' type="button" name="button">Присоедениться к чемпионату</button>
+  	</div>
+  	<!--  -->
+  	<div v-if='teams' class="temsblock">
+  		<div class="blocks">
+  			<div @click='color(teams),user(teams)' :id='teams[0]' v-for='teams in teamsch.all' class="blockteams item">
+  				<h4> {{teams[1]}}</h4>
+  				<p v-if="teams[2]" class='addd'>Участников {{teams[2].split(',').length}}</p>
+  				<p class='ab'>{{teams[4]}}</p>
+  			</div>
+  			<button class='addteam' @click='invite' type="button" name="button">Добавить команду</button>
+  		</div>
+  		<!--  -->
+  		<div v-if='ids' class="blocks1">
+  			<!-- <p>{{idsp[0].all[0][0]}}</p> -->
+  			<h3>Список участников:</h3>
+  			<div v-for='id of ids' class="blockteamsP"> <img :src="id.all[0][8]" alt="">
+  				<div class="all">
+  					<div class="name">
+  						<p>{{id.all[0][1]}}</p>
+  					</div>
+  					<div class="fio">
+  						<p>{{id.all[0][4]}}, {{id.all[0][2]}}</p>
+  					</div>
+  				</div>
+  			</div>
+  		</div>
+  		<!--  -->
+  	</div>
+  </div>
+</template>
+
+<script>
+import $ from "jquery";
+
+export default {
+  name: "championship",
+  props: {
+    userschampionats: {},
+    addto: {},
+    championatinfo: {},
+    info: {},
+  },
+
+  data() {
+    return {
+      partic: true,
+      teams: false,
+      ids: "",
+      usersteam: false,
+      alluse: "",
+      userteam: "",
+      nameteam: "",
+      iduser: "",
+      teamsch: ''
+    };
+  },
+  mounted() {},
+  methods: {
+    addteamUser() {
+      console.log(this.info.id);
+      $.ajax({
+        type: "POST",
+        url: "http://91.201.54.66:5000/addteamUser",
+        // url: "http://localhost:5000/addteamUser",
+        CrossDomain: true,
+        async: false,
+        data: {
+          id: this.info.id,
+          championat_id: this.championatinfo[0]
+        },
+        success: function(data) {}
+      });
+    },
+    invitetoteam() {
+      let lthis = this;
+      $("#addUserTeam").removeClass("addTeamVisible");
+      $.ajax({
+        type: "POST",
+        url: "http://91.201.54.66:5000/invatetoadd",
+        CrossDomain: true,
+        data: {
+          nomination: $("#nomination").val(),
+          coverletter: $("#coverletter").val(),
+          nameteam: $("#nameteam").val(),
+          nameuser: lthis.info.id
+        }
+      });
+
+    },
+    AddToTeamFunc() {
+      let letThis = this;
+      console.log(this.championatinfo[4]);
+      $.ajax({
+        type: "POST",
+        url: "http://91.201.54.66:5000/AddToTeam",
+        // url: "http://localhost:5000/AddToTeam",
+        CrossDomain: true,
+        async: false,
+        data: {
+          team_name: $("#team_name").val(),
+          team_discribtion: $("#team_discribtion").val(),
+          championat_id: this.championatinfo[0],
+          team_nomination: $("#team_nomination").val(),
+          captain_id: letThis.info.id
+        },
+        success: function(data) {}
+      });
+    },
+    addTeams(data) {
+      this.iduser = data;
+      $("#addUserTeam").addClass("addTeamVisible");
+      $(document).mouseup(function(e) {
+        var addUserTeam = $("#addUserTeam");
+
+        if (
+          !addUserTeam.is(e.target) &&
+          addUserTeam.has(e.target).length === 0
+        ) {
+          $("#addUserTeam").removeClass("addTeamVisible");
+        } else {}
+      });
+    },
+    invite() {
+      $("#addTeam").addClass("addTeamVisible");
+      $(document).mouseup(function(e) {
+        var addTeam = $("#addTeam");
+
+        if (!addTeam.is(e.target) && addTeam.has(e.target).length === 0) {
+          $("#addTeam").removeClass("addTeamVisible");
+        } else {}
+      });
+    },
+    teamfunc() {
+      let lthis = this;
+      $.ajax({
+        type: "POST",
+        url: "http://91.201.54.66:5000/teamsall",
+        CrossDomain: true,
+        async: false,
+        data: {
+          championat_id: this.championatinfo[0]
+        },
+        success: function(data) {
+          console.log(data.all);
+          lthis.teamsch = data;
+          console.log(lthis.teamsch);
+        }
+      });
+    },
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    user(data) {
+      let lthis = this;
+      let usr = [];
+      console.log(data[2].split(','));
+      for (var i = 0; i < data[2].split(',').length; i++) {
+        console.log(data[2].split(',')[i]);
+        $.ajax({
+          type: "POST",
+          url: "http://91.201.54.66:5000/user",
+          CrossDomain: true,
+          async: false,
+          data: {
+            id: data[2].split(',')[i]
+          },
+          success: function(data) {
+            console.log(data);
+            usr.push(data)
+            console.log(usr);
+          }
+        });
+        lthis.ids = usr;
+      }
+      // var ids;
+      // this.nameteam = data.all[0][1];
+      // var id = data.all[0][2];
+      // if (!this.usersteam) {
+      //   this.usersteam = true;
+      // }
+      // var databaseusers = data.all[0][0];
+      // if (id != null) {
+      //   ids = id.split(",");
+      //   this.userteam = ids;
+      //   var idsM = [];
+      //   for (var i = 0; i < ids.length; i++) {
+      //     $.ajax({
+      //       type: "POST",
+      //       url: "http://91.201.54.66:5000/user",
+      //       // url: "http://localhost:5000/user",
+      //       CrossDomain: true,
+      //       async: false,
+      //       data: {
+      //         id: ids[i]
+      //       },
+      //       success: function(data) {
+      //         idsM.push(data);
+      //         this.idsp = idsM.all;
+      //       }
+      //     });
+      //   }
+      //   this.idsp = idsM;
+      // } else {
+      //   this.idsp = "";
+      // }
+    },
+    //
+    //
+    //
+    //
+    //
+    color(data) {
+      $(".item").css({
+        background: "#fff",
+        color: "#000"
+      });
+      $("#" + data).css({
+        background: "#ff7f00",
+        color: "#fff"
+      });
+    },
+    championship() {
+      this.$emit("championshipFun", "");
+    },
+    chMore() {}
+  }
+};
+</script>
+
+<style lang="css" scoped>
+img {
+  vertical-align: middle;
+  align-items: center;
+}
+.addTeam {
+  width: 500px;
+  height: 640px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 9;
+  margin: -230px 0 0 -275px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 30px 0px #0003;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.4s;
+  transform: translateY(-500px);
+}
+#addUserTeam{
+  margin: -100px 0 0 -275px;
+
+}
+.addTeamVisible {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0px);
+}
+.addTeam h1 {
+  text-align: center;
+  margin-top: -20px;
+  transform: translateY(50px);
+}
+.addTeam div {
+  width: 80%;
+}
+.addTeam div p {
+  color: #7f7f7f;
+  font-size: 15px;
+}
+.addTeam input {
+  border-radius: 10px;
+  border: none;
+  width: 100%;
+  height: 55px;
+  background: #eeeff2;
+  padding-left: 20px;
+  font-size: 16px;
+}
+.addTeam textarea {
+  border-radius: 10px;
+  border: none;
+  width: 100%;
+  height: 200px;
+  background: #eeeff2;
+  padding-left: 20px;
+  padding-top: 20px;
+  font-size: 16px;
+}
+.addTeam button {
+  margin-top: 40px;
+  border-radius: 10px;
+  border: none;
+  width: 100%;
+  height: 60px;
+  background: #ff7f00;
+  font-size: 18px;
+  color: #fff;
+  box-shadow: 0px 0px 20px 0px #0003;
+}
+.championshipMore {
+  width: 100%;
+
+  padding-bottom: 50px;
+}
+.participants {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin: auto -2%;
+  text-decoration: none !important;
+}
+.ab p {
+  margin-right: 10px;
+  font-weight: 550;
+  font-size: 16px;
+  margin-top: 4px;
+  padding-bottom: 13px;
+  margin-right: 50px;
+  cursor: pointer;
+}
+.ab {
+  display: flex;
+  justify-content: flex-start;
+}
+.ab-w {
+  border-bottom: solid 2px #c4cbd1;
+  height: 26px;
+}
+hr {
+  color: #c4cbd1;
+  margin-top: -5px;
+}
+.title-link {
+  font-size: 15px;
+  font-weight: 550;
+  transform: translateY(7px);
+}
+.par {
+  color: #ff9123;
+  cursor: pointer;
+}
+.partic {
+  cursor: pointer;
+  color: #818283;
+}
+.default {
+  color: #909193;
+}
+.namech {
+  border-bottom: 5px solid #ff7f00;
+  color: #000;
+}
+.teams {
+  border-bottom: 5px solid #ff7f00;
+  color: #000;
+}
+.temsblock {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin: auto -1%;
+}
+.blocks {
+  margin: 1%;
+  width: 48%;
+  height: auto;
+  min-height: 100px;
+}
+.blocks1 {
+  margin: 1%;
+  width: 48%;
+  min-height: 100px;
+}
+.blocks1 h3 {
+  text-align: left;
+  width: 100%;
+}
+.addteam {
+  background: rgba(255, 0, 0, 0);
+  border-radius: 10px;
+  border: 2px solid #f6b778;
+  margin-top: 10px;
+  height: 80px;
+  width: 98%;
+  font-weight: bold;
+  color: #ff7f00;
+  font-size: 16px;
+  font-family: roboto, sans-serif;
+}
+.participant {
+  width: 47%;
+  height: 75px;
+  border-radius: 10px;
+  background: #fff;
+  margin-left: 2%;
+  margin-top: 1%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  text-decoration: none;
+  position: relative;
+  transition: width 0.3s;
+  /* flex-wrap: wrap; */
+}
+.participant-btn {
+  width: 47%;
+  height: 75px;
+  border-radius: 10px;
+  border: solid 2px #ff7f00;
+  color: #ff7f00;
+  text-align: center;
+  font-size: 18px;
+  margin-left: 2%;
+  margin-top: 1%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #eeeff2;
+}
+.participant img {
+  width: 10%;
+  border-radius: 100px;
+  width: 60px;
+  height: 60px;
+}
+.participant-text {
+  margin-left: 20px;
+  margin-top: 0px;
+}
+.participant-text h3 {
+  font-size: 16px;
+}
+.participant-text p {
+  margin-top: -10px;
+  font-size: 14px;
+  color: #797979;
+  font-weight: 550;
+}
+.half {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 20px;
+  position: relative;
+  width: 95%;
+  text-decoration: none;
+}
+.invite {
+  display: block;
+  font-size: 14px;
+  font-weight: 550;
+  color: #ff9123;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  top: 20%;
+}
+.blockteams {
+  width: 98%;
+  margin-top: 10px;
+  height: 145px;
+  background: #fff;
+  border-radius: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 1px;
+  transition: all 0.3s;
+}
+.addd {
+  transform: translateY(-17px);
+  font-size: 13px;
+  font-weight: bold;
+}
+.ab {
+  line-height: 1.5em;
+  transform: translateY(-21px);
+}
+.blockteamsP {
+  width: 100%;
+  height: 75px;
+  background: #fff;
+  border-radius: 10px;
+  display: flex;
+  justify-content: аflex-start;
+  align-items: center;
+  margin-top: 10px;
+}
+.blockteamsP img {
+  width: 10%;
+  border-radius: 100px;
+  width: 60px;
+  height: 60px;
+  margin-left: 15px;
+}
+.name p {
+  transform: translateY(6px);
+  font-weight: bold;
+}
+.fio p {
+  transform: translateY(-4px);
+  font-size: 14px;
+  color: #818181;
+}
+.all {
+  margin-left: 15px;
+}
+@media screen and (max-width: 1000px) {
+  .participant {
+    width: 100%;
+  }
+  .half {
+    width: 100%;
+  }
+}
+</style>
