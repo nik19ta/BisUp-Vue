@@ -2,11 +2,11 @@
 <div id="app">
   <div class="content">
     <!-- topBar -->
-    <topBar :image='info.info.img' @invatefun='invatefun' @Championats='Championats' @exit='exit' v-if='Auth == "nan"' />
+    <topBar :image='info.info.img' @Championats='Championats' @exit='exit' v-if='Auth == "nan"' />
     <!-- роутеры -->
     <transition id='body' v-if='Auth == "nan"' name="component-fade" mode="out-in">
 
-      <router-view @reset='Championats' @server='server' @Championats='Championats' :inform='info.info' :invatedata='invatedata' :allteams='allteams' :championats='championats' />
+      <router-view @reset='Championats' @server='server' @Championats='Championats' :inform='info.info' :allteams='allteams' :championats='championats' />
 
     </transition>
     <bottomBar v-if='Auth == "nan"' />
@@ -43,8 +43,6 @@ export default {
       Auth: localStorage.st,
       allteams: '',
       championats: '',
-      invate: '',
-      invatedata: '',
       info: [],
     }
   },
@@ -128,21 +126,6 @@ export default {
         },
       });
     },
-    invatefun() {
-      let lethis = this;
-      $.ajax({
-        type: "POST",
-        url: "http://91.201.54.66:5000/invate",
-        acync: false,
-        data: {
-          id: lthis.info.id
-        },
-        success: function(data) {
-          lethis.invatedata = data;
-        },
-        error: function(error) {}
-      });
-    },
     AuthTrue(data) {
       let datastrong = data.info.login + ',' + data.info.password;
       datastrong = datastrong.split(',');
@@ -182,7 +165,6 @@ export default {
     },
     exit() {
       this.Auth = 'login';
-      this.invatedata = '';
     },
   },
 }

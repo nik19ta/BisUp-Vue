@@ -53,7 +53,9 @@
   					<p>{{users.all[0][4]}}, {{users.all[0][7]}}</p>
   				</div>
         </router-link>
-  				<p @click='addTeams(users.all[0][0])' v-if='testteam'  class='invite'>Пригласить </p>
+        <!--
+       -->
+  				<p @click='addTeams(users.all[0][0])' v-if='testteam '  class='invite'>Пригласить </p>
   			</div>
   		<!--  -->
   		<button v-if='!addto && add' class="participant-btn" @click='addteamUser' type="button" name="button">Присоедениться к чемпионату</button>
@@ -71,7 +73,7 @@
   		</div>
   		<!--  -->
   		<div v-if='ids' class="blocks1">
-  			<h3>Список участников:</h3>
+  			<h3>Список участников команды: {{teamnow[1]}}</h3>
   			<div v-for='id of ids' class="blockteamsP"> <img :src="id.all[0][8]" alt="">
   				<div class="all">
   					<div class="name">
@@ -81,6 +83,9 @@
   						<p>{{id.all[0][4]}}, {{id.all[0][2]}}</p>
   					</div>
   				</div>
+  			</div>
+  			<div @click='leavefunc' v-if='leave' class="leave">
+          <p>Покинуть команду</p>
   			</div>
   		</div>
   		<!--  -->
@@ -104,22 +109,41 @@ export default {
     return {
       partic: true,
       teams: false,
-      ids: "",
+      testteam: false,
       usersteam: false,
-      alluse: "",
-      userteam: "",
+      add: true,
+      leave: false,
+      ids: "",
       nameteam: "",
       iduser: "",
       teamsch: '',
-      add: true,
-      testteam: false,
-      nameteam: ''
+      teamnow: ''
     };
   },
   mounted() {
     this.testeam()
   },
   methods: {
+    leavefunc() {
+      console.log('leave');
+      console.log(this.info.id);
+      console.log(this.teamnow[1]);
+      $.ajax({
+        type: "POST",
+        url: "http://91.201.54.66:5000/deluser",
+        CrossDomain: true,
+        data: {
+          userid: this.info.id,
+          teamid: this.teamnow[1],
+        },
+        success: function(data) {
+          console.log(data);
+        },
+        error: function(error) {
+          console.log(error);
+        }
+      });
+    },
     testeam() {
       let lthis = this;
       $.ajax({
@@ -194,9 +218,6 @@ export default {
     },
     AddToTeamFunc() {
       let letThis = this;
-
-      console.log(letThis.championatinfo[0]);
-      console.log(this.championatinfo[4]);
       $.ajax({
         type: "POST",
         url: "http://91.201.54.66:5000/AddToTeam",
@@ -257,12 +278,11 @@ export default {
     },
     user(data) {
       // просто
+      this.teamnow = data;
       let lthis = this;
+      lthis.leave = false;
       let usr = [];
-      //
-      console.log(data[2].split(','));
       for (var i = 0; i < data[2].split(',').length; i++) {
-        console.log(data[2].split(',')[i]);
         $.ajax({
           type: "POST",
           url: "http://91.201.54.66:5000/user",
@@ -273,11 +293,14 @@ export default {
           },
           success: function(data) {
             usr.push(data)
-            console.log(usr);
-            console.log(data);
+            console.log(data.all[0][0]);
+            if (data.all[0][0] == 1) {
+              lthis.leave = true
+            }
           }
         });
-        lthis.ids = usr;
+        // console.log(usr.includes('1'));
+        lthis.ids = usr
       }
     },
     color(data) {
@@ -565,6 +588,19 @@ hr {
   justify-content: аflex-start;
   align-items: center;
   margin-top: 10px;
+}
+.leave{
+  margin-top: 10px;
+  width: 100%;
+  height: 75px;
+  border-radius: 10px;
+  border: 2px solid #ff7f00;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ff7f00;
+  font-size: 18px;
+  cursor: pointer;
 }
 .blockteamsP img {
   width: 10%;

@@ -1,22 +1,15 @@
 <template lang="html">
   <div class="content">
-
-
   <div class="invite">
     <h1>Приглашения</h1>
     <div class="invate_blocks">
-      <!-- <div class="invate_block">
-        <h4>Название команды</h4>
-        <p class='countuser'>Участников: 7</p>
-        <p class='desk'>Значимость этих проблем настолько очевидна.</p>
-      </div> -->
       <div :id='invate[0]' v-for='invate in invatedata.inform' class="invate_block inv">
-        <p class='porag1 porags' >Приглашение в команду:</p>
-        <p class='porag2 porags' ><b>{{invate[2]}}</b> </p>
-        <p class='porag3 porags' >Номинация:</p> <br>
-        <p class='porag4 porags' > <b> {{invate[3]}}</b> </p>
-        <p class='porag5 porags' >сопроводительное письмо:</p> <br>
-        <p class='porag6 porags' >{{invate[4]}}</p>
+        <p class='porag1 porags'>Приглашение в команду:</p>
+        <p class='porag2 porags'> <b>{{invate[2]}}</b> </p>
+        <p class='porag3 porags'>Номинация:</p> <br>
+        <p class='porag4 porags'> <b> {{invate[3]}}</b> </p>
+        <p class='porag5 porags'>сопроводительное письмо:</p> <br>
+        <p class='porag6 porags'>{{invate[4]}}</p>
         <a id="click1" @click='invatefun(invate)'>Принять приглашение</a> <br>
         <a id="click2" @click='noteam(invate)'>Отказатся </a>
       </div>
@@ -29,27 +22,45 @@
 import $ from 'jquery'
 
 export default {
-  props: {
-    invatedata: {},
+  data() {
+    return {
+      invatedata: ''
+    };
   },
-  methods:{
-    invatefun(data){
-      $("#" + data[0]).addClass("nan");
-      // $("#addUserTeam").addClass("addTeamVisible");
-      let lethis = this;
-      // console.log(JSON.parse(localStorage.name).info.id);
-      // console.log(data[0]);
-      // console.log(data[2]);
-
+  props: {
+    inform: {},
+  },
+  mounted() {
+    this.invate()
+  },
+  methods: {
+    invate() {
+      let lthis = this;
+      $.ajax({
+        type: "POST",
+        url: "http://91.201.54.66:5000/invate",
+        acync: false,
+        data: {
+          id: lthis.inform.id
+        },
+        success: function(data) {
+          lthis.invatedata = data;
+        },
+        error: function(error) {}
+      });
+    },
+    invatefun(data) {
+      let block = data;
       $.ajax({
         type: "POST",
         url: "http://91.201.54.66:5000/addUserToTeam",
         data: {
-          userId: JSON.parse(localStorage.name).info.id,
+          userId: this.inform.id,
           championatId: data[0],
           teamname: data[2],
         },
         success: function(data) {
+          $("#" + block[0]).addClass("nan");
           console.log(data);
         },
         error: function(error) {
@@ -57,17 +68,19 @@ export default {
         }
       });
     },
-    noteam(data){
-      $("#" + data[0]).addClass("nan");
+    noteam(data) {
+      let block = data;
+
       $.ajax({
         type: "POST",
         url: "http://91.201.54.66:5000/noAddToTeam",
         data: {
-          userId: JSON.parse(localStorage.name).info.id,
+          userId: this.inform.id,
           championatId: data[0],
           teamname: data[2],
         },
         success: function(data) {
+          $("#" + block[0]).addClass("nan");
           console.log(data);
         },
         error: function(error) {

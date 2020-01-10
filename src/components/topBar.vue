@@ -30,8 +30,12 @@
         <div class="trap">
         </div>
         <router-link class="link-r" to="/">Профиль</router-link>
-        <router-link class="link-r" to="/dialogue">Сообщения<span class='num'> (0)</span></router-link>
-        <router-link class="link-r" @click.native='invateuser' to="/invite">Приглашения <span class='num'>(0)</span></router-link>
+        <router-link class="link-r" to="/dialogue">Сообщения
+          <!-- <span class='num'> (0)</span> -->
+        </router-link>
+        <router-link class="link-r" to="/invite">Приглашения
+          <!--  <span class='num'> (0)</span>  -->
+        </router-link>
         <router-link @click.native='exit' class="link-r" to="/">Выход</router-link>
 
       </div>
@@ -58,9 +62,6 @@ export default {
   },
   mounted() {},
   methods: {
-    invateuser() {
-      this.$emit('invatefun', '')
-    },
     menu_top() {
       $("#dop").addClass("dopclick");
 
