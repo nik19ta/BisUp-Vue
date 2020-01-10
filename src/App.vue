@@ -2,18 +2,21 @@
 <div id="app">
   <div class="content">
     <!-- topBar -->
-    <topBar :image='information.info.img' @invatefun='invatefun' @Championats='Championats' @exit='exit' v-if='Auth == "nan" && information' />
+    <topBar :image='info.info.img' @invatefun='invatefun' @Championats='Championats' @exit='exit' v-if='Auth == "nan"' />
+    <!-- роутеры -->
+    <transition id='body' v-if='Auth == "nan"' name="component-fade" mode="out-in">
 
-    <transition id='body' v-if='Auth == "nan" && information' name="component-fade" mode="out-in">
-
-      <!-- main content -->
-      <router-view v-if='information' @server='server' @Championats='Championats' :inform='information.info' :invatedata='invatedata' :allteams='allteams' :championats='championats' />
-      <!-- //main content -->
+      <router-view @reset='Championats' @server='server' @Championats='Championats' :inform='info.info' :invatedata='invatedata' :allteams='allteams' :championats='championats' />
 
     </transition>
     <bottomBar v-if='Auth == "nan"' />
-    <!-- login, register, fp -->
+    <!-- log tc -->
     <auth @AuthTrue='AuthTrue' @AuthFalse='AuthFalse' v-if='Auth == "login" || !Auth' />
+    <!-- <login @Authf='Authf' v-if='Auth == "login" || !Auth' @Conversion='Conversion' @thisregistor='thisregistor' /> -->
+
+    <!-- <registor v-if='Auth == "registor"' @tologin='tologin' /> -->
+
+    <!-- <instructionsOnEmail v-if='Auth == "forgetpass"' @tologin='tologin' /> -->
 
     <error v-if='Auth == "server"' />
 
@@ -42,7 +45,7 @@ export default {
       championats: '',
       invate: '',
       invatedata: '',
-      information: [],
+      info: [],
     }
   },
   components: {
@@ -57,6 +60,31 @@ export default {
     // this.ajax()
   },
   methods: {
+    // ajax() {
+    //   $.ajax({
+    //     type: "POST",
+    //     url: "http://91.201.54.66:5000/usersinteam",
+    //     data: {
+    //       users_id: 1
+    //     },
+    //     success: function(data) {
+    //       console.log(data);
+    //     }
+    //   });
+    // },
+    // ajax() {
+    //   $.ajax({
+    //     type: "POST",
+    //     url: "http://91.201.54.66:5000/deluser",
+    //     data: {
+    //       userid: 2,
+    //       teamid: 1
+    //     },
+    //     success: function(data) {
+    //       console.log(data);
+    //     }
+    //   });
+    // },
     server() {
       $.ajax({
         type: "POST",
@@ -89,6 +117,7 @@ export default {
       });
     },
     Championats() {
+      console.log('ni');
       let lethis = this;
       $.ajax({
         type: "POST",
@@ -106,7 +135,7 @@ export default {
         url: "http://91.201.54.66:5000/invate",
         acync: false,
         data: {
-          id: lthis.information.id
+          id: lthis.info.id
         },
         success: function(data) {
           lethis.invatedata = data;
@@ -115,17 +144,17 @@ export default {
       });
     },
     AuthTrue(data) {
-      let datastrong = data.information.login + ',' + data.information.password;
+      let datastrong = data.info.login + ',' + data.info.password;
       datastrong = datastrong.split(',');
       localStorage.name = JSON.stringify(datastrong);
       localStorage.st = 'nan';
-      this.information = data;
+      this.info = data;
       this.Auth = 'nan';
     },
     AuthFalse(data) {
-      let datastrong = data.information.login + ',' + data.information.password;
+      let datastrong = data.info.login + ',' + data.info.password;
       datastrong = datastrong.split(',');
-      this.information = data;
+      this.info = data;
       this.Auth = 'nan';
     },
     AutoLogIn() {
@@ -145,7 +174,7 @@ export default {
               window.location.reload()
             } else {
               console.log(data.info);
-              lthis.information = data;
+              lthis.info = data;
             }
           }
         });

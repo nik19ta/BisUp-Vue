@@ -1,5 +1,5 @@
 <template lang="html">
-<!-- / -->
+  <!-- / -->
   <div class="championshipMore">
   	<div id="addTeam" class='addTeam'>
   		<h1>Добавление команды</h1>
@@ -13,7 +13,7 @@
   			<button @click='AddToTeamFunc' type="button" placeholder='описание' name="button">Сохранить команду</button>
   		</div>
   	</div>
-<!--  -->
+    <!--  -->
   	<div id="addUserTeam" class='addTeam'>
   		<h1>Пригласить в команду</h1>
   		<div class="">
@@ -23,10 +23,10 @@
   			<input id='nomination' type="text" value="">
   			<p>Сопроводительное письмо</p>
   			<textarea id='coverletter'></textarea>
-  			<button type="button" placeholder='письмо' @click='invitetoteam' name="button">Приглосить в команду</button>
+  			<button type="button" placeholder='письмо' @click='invitetoteam' name="button">Пригласить в команду</button>
   		</div>
   	</div>
-<!--  -->
+    <!--  -->
   	<p class='title-link'>
        <span @click="championship" class='par'>Чемпионаты</span>
        <span class='partic'> — {{championatinfo[1]}}</span>
@@ -44,7 +44,6 @@
   	<!-- -->
   	<div v-if='partic' class="participants">
   		<!--  -->
-  			<!-- <div > -->
   			<div v-for='users in userschampionats' class="participant ">
           <router-link class="half" :to="{ name: 'user', params: {id:users.all[0][0]} }">
           <img :src="users.all[0][8]" alt="">
@@ -56,7 +55,6 @@
         </router-link>
   				<p @click='addTeams(users.all[0][0])' v-if='testteam'  class='invite'>Пригласить </p>
   			</div>
-  			<!-- </div> -->
   		<!--  -->
   		<button v-if='!addto && add' class="participant-btn" @click='addteamUser' type="button" name="button">Присоедениться к чемпионату</button>
   	</div>
@@ -69,7 +67,7 @@
   				<p v-if="teams[2]" class='addd'>Участников {{teams[2].split(',').length}}</p>
   				<p class='ab'>{{teams[4]}}</p>
   			</div>
-  			<button v-if='!testteam' class='addteam' @click='invite' type="button" name="button">Добавить команду</button>
+  			<button v-if='!testteam && !add' class='addteam' @click='invite' type="button" name="button">Добавить команду</button>
   		</div>
   		<!--  -->
   		<div v-if='ids' class="blocks1">
@@ -132,10 +130,13 @@ export default {
           id: lthis.info.id,
         },
         success: function(data) {
+          console.log(data);
           if (data.arg[0]) {
             lthis.testteam = true;
             lthis.nameteam = data.arg[0];
             console.log(lthis.nameteam);
+          } else {
+            lthis.testteam = false;
           }
         },
         error: function(error) {
@@ -160,6 +161,7 @@ export default {
             all: arr
           })
           lthis.add = !lthis.add;
+          lthis.$emit('reset', '')
         }
       });
     },
@@ -181,6 +183,10 @@ export default {
           console.log(data);
           if (data == 'teem is') {
             alert('Приглашение от данной команды уже отправленно')
+          } else if (data == 'oops') {
+            alert('Заполненны не все поля')
+          } else if (data == 'ok') {
+            alert('Приглашение отправленно')
           }
         }
       });
@@ -217,7 +223,9 @@ export default {
           addUserTeam.has(e.target).length === 0
         ) {
           $("#addUserTeam").removeClass("addTeamVisible");
-        } else {}
+        } else {
+
+        }
       });
     },
     invite() {
@@ -291,6 +299,10 @@ export default {
 </script>
 
 <style lang="css" scoped>
+#nameteam{
+  color: #0007;
+  user-select: none;
+}
 img {
   vertical-align: middle;
   align-items: center;

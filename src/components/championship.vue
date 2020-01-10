@@ -4,7 +4,7 @@
     <h1 v-if='show'>Чемпионаты</h1>
     <blockChempionship v-if='show' @click.native='show=!show,championatsdataajax(block)' v-for="block in championats.all" :block='block' />
 
-    <championats :championatinfo='championatinfo' :addto='addto' :userschampionats='userschampionats' :info='inform' v-if='!show' @championshipFun='championshipFun' />
+    <championats @reset='reset' :championatinfo='championatinfo' :addto='addto' :userschampionats='userschampionats' :info='inform' v-if='!show' @championshipFun='championshipFun' />
     <!-- </transition> -->
   </div>
 </div>
@@ -43,6 +43,9 @@ export default {
   methods: {
     championatMethod() {
       this.$emit('Championats', 'st');
+    },
+    reset() {
+      this.$emit('reset', '');
     },
     BlockFun(id) {
       idblock = id;
