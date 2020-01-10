@@ -2,21 +2,18 @@
 <div id="app">
   <div class="content">
     <!-- topBar -->
-    <topBar :image='info.info.img' @invatefun='invatefun' @Championats='Championats' @exit='exit' v-if='Auth == "nan"' />
-    <!-- роутеры -->
-    <transition id='body' v-if='Auth == "nan"' name="component-fade" mode="out-in">
+    <topBar :image='information.info.img' @invatefun='invatefun' @Championats='Championats' @exit='exit' v-if='Auth == "nan" && information' />
 
-      <router-view @server='server' @Championats='Championats' :inform='info.info' :invatedata='invatedata' :allteams='allteams' :championats='championats' />
+    <transition id='body' v-if='Auth == "nan" && information' name="component-fade" mode="out-in">
+
+      <!-- main content -->
+      <router-view v-if='information' @server='server' @Championats='Championats' :inform='information.info' :invatedata='invatedata' :allteams='allteams' :championats='championats' />
+      <!-- //main content -->
 
     </transition>
     <bottomBar v-if='Auth == "nan"' />
-    <!-- log tc -->
+    <!-- login, register, fp -->
     <auth @AuthTrue='AuthTrue' @AuthFalse='AuthFalse' v-if='Auth == "login" || !Auth' />
-    <!-- <login @Authf='Authf' v-if='Auth == "login" || !Auth' @Conversion='Conversion' @thisregistor='thisregistor' /> -->
-
-    <!-- <registor v-if='Auth == "registor"' @tologin='tologin' /> -->
-
-    <!-- <instructionsOnEmail v-if='Auth == "forgetpass"' @tologin='tologin' /> -->
 
     <error v-if='Auth == "server"' />
 
@@ -45,7 +42,7 @@ export default {
       championats: '',
       invate: '',
       invatedata: '',
-      info: [],
+      information: [],
     }
   },
   components: {
@@ -57,6 +54,7 @@ export default {
 
   mounted() {
     this.main()
+    // this.ajax()
   },
   methods: {
     server() {
@@ -108,7 +106,7 @@ export default {
         url: "http://91.201.54.66:5000/invate",
         acync: false,
         data: {
-          id: lthis.info.id
+          id: lthis.information.id
         },
         success: function(data) {
           lethis.invatedata = data;
@@ -117,17 +115,17 @@ export default {
       });
     },
     AuthTrue(data) {
-      let datastrong = data.info.login + ',' + data.info.password;
+      let datastrong = data.information.login + ',' + data.information.password;
       datastrong = datastrong.split(',');
       localStorage.name = JSON.stringify(datastrong);
       localStorage.st = 'nan';
-      this.info = data;
+      this.information = data;
       this.Auth = 'nan';
     },
     AuthFalse(data) {
-      let datastrong = data.info.login + ',' + data.info.password;
+      let datastrong = data.information.login + ',' + data.information.password;
       datastrong = datastrong.split(',');
-      this.info = data;
+      this.information = data;
       this.Auth = 'nan';
     },
     AutoLogIn() {
@@ -147,7 +145,7 @@ export default {
               window.location.reload()
             } else {
               console.log(data.info);
-              lthis.info = data;
+              lthis.information = data;
             }
           }
         });

@@ -4,7 +4,7 @@
     <h1 v-if='show'>Чемпионаты</h1>
     <blockChempionship v-if='show' @click.native='show=!show,championatsdataajax(block)' v-for="block in championats.all" :block='block' />
 
-    <championshipformation :championatinfo='championatinfo' :addto='addto' :userschampionats='userschampionats' :info='inform' v-if='!show' @championshipFun='championshipFun' />
+    <championats :championatinfo='championatinfo' :addto='addto' :userschampionats='userschampionats' :info='inform' v-if='!show' @championshipFun='championshipFun' />
     <!-- </transition> -->
   </div>
 </div>
@@ -12,7 +12,7 @@
 
 <script>
 import blockChempionship from './blockChempionship.vue'
-import championshipformation from './championshipformation.vue'
+import championats from './championats.vue'
 import $ from "jquery"
 
 // import VueRouter from 'vue-router'
@@ -38,7 +38,7 @@ export default {
   },
   components: {
     blockChempionship,
-    championshipformation
+    championats
   },
   methods: {
     championatMethod() {

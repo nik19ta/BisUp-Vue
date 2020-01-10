@@ -112,7 +112,7 @@ export default {
 .mess {
   width: 100%;
   margin-top: 10px;
-  border-radius: 10px;
+  border-radius: 5px;
   display: flex;
   justify-content: center;
 
@@ -123,7 +123,7 @@ export default {
   width: 32%;
   height: 70vh;
   background-color: #fff;
-  border-radius: 10px;
+  border-radius: 5px;
   overflow: auto;
 }
 
@@ -131,7 +131,7 @@ export default {
   width: 68%;
   height: 70vh;
   background-color: #fff;
-  border-radius: 10px;
+  border-radius: 5px;
   margin-left: 1%;
   position: relative;
 }
@@ -160,7 +160,7 @@ export default {
 }
 
 .form {
-  box-shadow: 0 -5px 10px -5px #0004;
+  box-shadow: 0 -5px 7px -5px #0003;
   width: 100%;
   height: 5.5vh;
   display: flex;
@@ -198,8 +198,6 @@ button {
 h1 {
   font-size: 33px;
   margin-top: 30px;
-  /* transform: translateY(15px); */
-  /* transform: translateX(-15px); */
 }
 
 .messenge {
@@ -212,7 +210,7 @@ h1 {
   border: solid 0px;
   height: 40px;
   border-radius: 5px;
-  padding-left: 20px;
+  padding-left: 10px;
   font-size: 16px;
 }
 

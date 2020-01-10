@@ -2,7 +2,7 @@
 <div class="contact">
   <div class="infor">
     <div class="info-text">
-      <div class="">
+      <div class="d-flex">
 
         <h1>Контакты</h1>
         <p class='text-top'>Наш адрес</p><br>
@@ -136,6 +136,10 @@ h2 {
 
 .ab-text {
   line-height: 25px;
+}
+
+.d-flex {
+  margin-top: -40px;
 }
 
 input {
