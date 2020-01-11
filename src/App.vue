@@ -63,7 +63,7 @@ export default {
     //     type: "POST",
     //     url: "http://91.201.54.66:5000/usersinteam",
     //     data: {
-    //       users_id: 1
+    //       users_id: '1,2,3,4'
     //     },
     //     success: function(data) {
     //       console.log(data);

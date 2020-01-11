@@ -5,7 +5,6 @@
     <blockChempionship v-if='show' @click.native='show=!show,championatsdataajax(block)' v-for="block in championats.all" :block='block' />
 
     <championats @reset='reset' :championatinfo='championatinfo' :addto='addto' :userschampionats='userschampionats' :info='inform' v-if='!show' @championshipFun='championshipFun' />
-    <!-- </transition> -->
   </div>
 </div>
 </template>
@@ -14,8 +13,6 @@
 import blockChempionship from './blockChempionship.vue'
 import championats from './championats.vue'
 import $ from "jquery"
-
-// import VueRouter from 'vue-router'
 
 var idblock;
 
@@ -55,38 +52,26 @@ export default {
       this.show = !this.show;
     },
     championatsdataajax(data) {
+      this.addto = false;
       this.championatinfo = data;
-      if (data[7]) {
-        var ids = data[7].split(',');
-        var idsM = [];
-        for (var i = 0; i < ids.length; i++) {
-          $.ajax({
-            type: "POST",
-            url: "http://91.201.54.66:5000/user",
-            CrossDomain: true,
-            async: false,
-            data: {
-              id: ids[i]
-            },
-            success: function(data) {
-              idsM.push(data)
-            },
-            error: function(error) {}
-          });
-          this.userschampionats = idsM.all;
+      let lthis = this;
+      $.ajax({
+        type: "POST",
+        url: "http://91.201.54.66:5000/usersinteam",
+        async: false,
+        data: {
+          users_id: data[7]
+        },
+        success: function(data) {
+          console.log(data.all);
+          lthis.userschampionats = data.all;
         }
-        this.userschampionats = idsM;
-        for (var i = 0; i < idsM.length; i++) {
-          if (idsM[i].all[0][0] == this.inform.id) {
-            this.addto = true;
-            break;
-          } else {
-            this.addto = false;
-          }
+      });
+      for (var i = 0; i < data[7].split(',').length; i++) {
+        if (data[7].split(',')[i] == this.inform.id) {
+          console.log(true);
+          this.addto = true;
         }
-      } else {
-        this.addto = false;
-        this.userschampionats = '';
       }
     }
   },

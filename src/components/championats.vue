@@ -43,20 +43,16 @@
   	</div>
   	<!-- -->
   	<div v-if='partic' class="participants">
-  		<!--  -->
-  			<div v-for='users in userschampionats' class="participant ">
-          <router-link class="half" :to="{ name: 'user', params: {id:users.all[0][0]} }">
-          <img :src="users.all[0][8]" alt="">
+        <div v-for='users in userschampionats' class="participant ">
+          <router-link class="half" :to="{ name: 'user', params: {id:users[0][0]} }">
+          <img :src="users[0][8]" alt="">
   				<div class="participant-text">
-            <!-- <p>{{users}}</p> -->
-  					<h3 style="color: #000;">{{users.all[0][1]}}</h3>
-  					<p>{{users.all[0][4]}}, {{users.all[0][7]}}</p>
+  					<h3 style="color: #000;">{{users[0][1]}}</h3>
+  					<p>{{users[0][4]}}, {{users[0][7]}}</p>
   				</div>
         </router-link>
-        <!--
-       -->
-  				<p @click='addTeams(users.all[0][0])' v-if='testteam '  class='invite'>Пригласить </p>
-  			</div>
+        	<p @click='addTeams(users.all[0][0])' v-if='testteam '  class='invite'>Пригласить </p>
+        </div>
   		<!--  -->
   		<button v-if='!addto && add' class="participant-btn" @click='addteamUser' type="button" name="button">Присоедениться к чемпионату</button>
   	</div>
@@ -281,6 +277,7 @@ export default {
       this.teamnow = data;
       let lthis = this;
       lthis.leave = false;
+      console.log(lthis.info.id);
       let usr = [];
       for (var i = 0; i < data[2].split(',').length; i++) {
         $.ajax({
@@ -294,7 +291,7 @@ export default {
           success: function(data) {
             usr.push(data)
             console.log(data.all[0][0]);
-            if (data.all[0][0] == 1) {
+            if (data.all[0][0] == lthis.info.id) {
               lthis.leave = true
             }
           }
