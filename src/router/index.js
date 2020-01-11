@@ -12,6 +12,7 @@ import partner from '@/components/partner'
 import user from '@/components/user'
 import contact from '@/components/contact'
 import invite from '@/components/invite'
+import videocomponent from '@/components/videocomponent'
 
 Vue.use(Router)
 
@@ -57,6 +58,11 @@ export default new Router({
       path: '/testing',
       name: 'testing',
       component: testing
+    },
+    {
+      path: '/video',
+      name: 'videocomponent',
+      component: videocomponent
     },
     {
       path: '/games',

@@ -9,7 +9,7 @@
     <router-link to="/testing" class="testing">Тестирование</router-link>
     <router-link to="/games" class="testing">Игры</router-link>
     <router-link @click.native='chempionats' to="/championats">Чемпионаты</router-link>
-    <router-link to="/testing">Видео</router-link>
+    <router-link to="/video">Видео</router-link>
     <router-link to="/dialogue" @click.native="menunav('testing')">Диалоги</router-link>
     <router-link to="/partner">Партнёрам</router-link>
     <router-link to="/contact">Контакты</router-link>
@@ -18,7 +18,7 @@
     <router-link id='tests' @click.native='menunav("tests")' class="link" to="/testing">Тесты</router-link>
     <router-link id='games' @click.native='menunav("games")' class="link" to="/games">Игры</router-link>
     <router-link id='chempionats' @click.native='menunav("chempionats"),chempionats("data")' class="link" to="/championats">Чемпионаты</router-link>
-    <router-link id='video' @click.native='menunav("video")' class="link" to="/testing">Видео</router-link>
+    <router-link id='video' @click.native='menunav("video")' class="link" to="/video">Видео</router-link>
     <router-link id='dialogue' @click.native='menunav("dialogue")' class="link" to="/dialogue">Диалоги</router-link>
     <router-link id='partner' @click.native='menunav("partner")' class="link" to="/partner">Партнёрам</router-link>
     <router-link id='contact' @click.native='menunav("contact")' class="link" to="/contact">Контакты</router-link>

@@ -18,7 +18,7 @@
   		<h1>Пригласить в команду</h1>
   		<div class="">
   			<p>Название команды</p>
-  			<input v-model='nameteam' readonly id='nameteam' type="text"  value="">
+  			<input v-model='teamsforinv[0]' readonly id='nameteam' type="text"  value="">
   			<p>Номинация</p>
   			<input id='nomination' type="text" value="">
   			<p>Сопроводительное письмо</p>
@@ -27,6 +27,8 @@
   		</div>
   	</div>
     <!--  -->
+    <div class="bl">
+
   	<p class='title-link'>
        <span @click="championship" class='par'>Чемпионаты</span>
        <span class='partic'> — {{championatinfo[1]}}</span>
@@ -35,12 +37,13 @@
   	<h1>{{championatinfo[1]}}</h1>
   	<div class="ab-w">
   		<div class="ab">
-  			<p @click='partic=true, teams=false' class='default' :class="[partic ? 'namech' : false]">Участники <!-- ({{userschampionats.length}}) -->
+  			<p @click='partic=true, teams=false' class='default' :class="[partic ? 'namech' : false]">Участники  ({{userschampionats.length}})
         </p>
-  			 <p class='default' :class="[teams ? 'teams' : false]" @click='partic=false,teams=true,teamfunc()'> Команды <!-- ({{championatinfo}}) -->
+  			 <p class='default' :class="[teams ? 'teams' : false]" @click='partic=false,teams=true'> Команды  ({{countteam}})
         </p>
   		</div>
   	</div>
+  </div>
   	<!-- -->
   	<div v-if='partic' class="participants">
         <div v-for='users in userschampionats' class="participant ">
@@ -51,7 +54,7 @@
   					<p>{{users[0][4]}}, {{users[0][7]}}</p>
   				</div>
         </router-link>
-        	<p @click='addTeams(users[0][0])' v-if='testteam '  class='invite'>Пригласить </p>
+        	<p @click='addTeams(users[0][0])' v-if='invatetrue'  class='invite'>Пригласить </p>
         </div>
   		<!--  -->
   		<button v-if='!addto' class="participant-btn" @click='addteamUser' type="button" name="button">Присоедениться к чемпионату</button>
@@ -99,25 +102,25 @@ export default {
     addto: {},
     championatinfo: {},
     info: {},
+    teamsch: {},
+    countteam: {},
+    invatetrue: {},
+    teamsforinv: {}
   },
 
   data() {
     return {
       partic: true,
       teams: false,
-      testteam: false,
       usersteam: false,
       leave: false,
       ids: "",
       nameteam: "",
       iduser: "",
-      teamsch: '',
       teamnow: ''
     };
   },
-  mounted() {
-    this.testeam()
-  },
+  mounted() {},
   methods: {
     leavefunc() {
       let lthis = this;
@@ -131,32 +134,14 @@ export default {
         },
         success: function(data) {
           lthis.leave = false;
-          setTimeout(lthis.teamfunc, 0);
           lthis.user(lthis.teamnow)
           alert('вы вышли из команды')
         },
         error: function(error) {}
       });
     },
-    testeam() {
-      let lthis = this;
-      $.ajax({
-        type: "POST",
-        url: "http://91.201.54.66:5000/testteam",
-        CrossDomain: true,
-        data: {
-          id: lthis.info.id,
-        },
-        success: function(data) {
-          if (data.arg[0] == lthis.info.id) {
-            lthis.testteam = true;
-            lthis.nameteam = data.arg[0];
-          } else {
-            lthis.testteam = false;
-          }
-        },
-        error: function(error) {}
-      });
+    notification(data) {
+      console.log('nat');
     },
     addteamUser() {
       let lthis = this;
@@ -192,14 +177,16 @@ export default {
         success: function(data) {
           if (data == 'teem is') {
             alert('Приглашение от данной команды уже отправленно')
+            lthis.notification('Приглашение от данной команды уже отправленно')
           } else if (data == 'oops') {
             alert('Заполненны не все поля')
+            lthis.notification('Заполненны не все поля')
           } else if (data == 'ok') {
             alert('Приглашение отправленно')
+            lthis.notification('Приглашение отправленно')
           }
         }
       });
-
     },
     AddToTeamFunc() {
       let letThis = this;
@@ -215,7 +202,9 @@ export default {
           team_nomination: $("#team_nomination").val(),
           captain_id: letThis.info.id,
         },
-        success: function(data) {}
+        success: function(data) {
+          alert(data)
+        }
       });
     },
     addTeams(data) {
@@ -242,21 +231,6 @@ export default {
         if (!addTeam.is(e.target) && addTeam.has(e.target).length === 0) {
           $("#addTeam").removeClass("addTeamVisible");
         } else {}
-      });
-    },
-    teamfunc() {
-      let lthis = this;
-      $.ajax({
-        type: "POST",
-        url: "http://91.201.54.66:5000/teamsall",
-        CrossDomain: true,
-        async: false,
-        data: {
-          championat_id: this.championatinfo[0]
-        },
-        success: function(data) {
-          lthis.teamsch = data;
-        }
       });
     },
     user(data) {
@@ -314,7 +288,7 @@ img {
   top: 50%;
   left: 50%;
   z-index: 9;
-  margin: -230px 0 0 -275px;
+  margin: -330px 0 0 -250px;
   background: #fff;
   border-radius: 10px;
   box-shadow: 0px 0px 30px 0px #0003;
@@ -326,10 +300,6 @@ img {
   opacity: 0;
   transition: all 0.4s;
   transform: translateY(-500px);
-}
-#addUserTeam{
-  margin: -100px 0 0 -275px;
-
 }
 .addTeamVisible {
   visibility: visible;
@@ -380,8 +350,8 @@ img {
 }
 .championshipMore {
   width: 100%;
-
-  padding-bottom: 50px;
+  min-height: calc(100vh - 60px);
+  position: relative;
 }
 .participants {
   display: flex;
@@ -389,6 +359,7 @@ img {
   flex-wrap: wrap;
   margin: auto -2%;
   text-decoration: none !important;
+
 }
 .ab p {
   margin-right: 10px;
@@ -444,8 +415,14 @@ hr {
 .blocks {
   margin: 1%;
   width: 48%;
-  height: auto;
-  min-height: 100px;
+  /* min-height: 100px; */
+  overflow-y: auto;
+  height:calc(100vh - 270px);
+
+
+}
+.bl{
+  height: 120px;
 }
 .blocks1 {
   margin: 1%;
@@ -481,6 +458,7 @@ hr {
   text-decoration: none;
   position: relative;
   transition: width 0.3s;
+
   /* flex-wrap: wrap; */
 }
 .participant-btn {
@@ -598,12 +576,12 @@ hr {
 .all {
   margin-left: 15px;
 }
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 800px) {
   .participant {
     width: 100%;
   }
-  .half {
+  /* .half {
     width: 100%;
-  }
+  } */
 }
 </style>

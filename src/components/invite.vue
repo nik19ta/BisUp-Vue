@@ -104,7 +104,7 @@ export default {
 }
 .invite{
   padding-top: 50px;
-  width: 1200px;
+  width: 90%;
 }
 .porags{
   width: 70%;
