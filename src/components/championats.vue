@@ -18,7 +18,7 @@
   		<h1>Пригласить в команду</h1>
   		<div class="">
   			<p>Название команды</p>
-  			<input v-model='teamsforinv[0]' readonly id='nameteam' type="text"  value="">
+  			<input v-model='teamsforinv[0]' readonly  type="text"  value="">
   			<p>Номинация</p>
   			<input id='nomination' type="text" value="">
   			<p>Сопроводительное письмо</p>
@@ -115,7 +115,6 @@ export default {
       usersteam: false,
       leave: false,
       ids: "",
-      nameteam: "",
       iduser: "",
       teamnow: ''
     };
@@ -140,9 +139,6 @@ export default {
         error: function(error) {}
       });
     },
-    notification(data) {
-      console.log('nat');
-    },
     addteamUser() {
       let lthis = this;
       $.ajax({
@@ -164,6 +160,10 @@ export default {
     invitetoteam() {
       let lthis = this;
       $("#addUserTeam").removeClass("addTeamVisible");
+      console.log($("#nomination").val());
+      console.log($("#coverletter").val());
+      console.log(lthis.teamsforinv[0][0]);
+      console.log(lthis.iduser);
       $.ajax({
         type: "POST",
         url: "http://91.201.54.66:5000/invatetoadd",
@@ -171,19 +171,16 @@ export default {
         data: {
           nomination: $("#nomination").val(),
           coverletter: $("#coverletter").val(),
-          nameteam: lthis.nameteam,
+          nameteam: lthis.teamsforinv[0][0],
           nameuser: lthis.iduser
         },
         success: function(data) {
           if (data == 'teem is') {
             alert('Приглашение от данной команды уже отправленно')
-            lthis.notification('Приглашение от данной команды уже отправленно')
           } else if (data == 'oops') {
             alert('Заполненны не все поля')
-            lthis.notification('Заполненны не все поля')
           } else if (data == 'ok') {
             alert('Приглашение отправленно')
-            lthis.notification('Приглашение отправленно')
           }
         }
       });
