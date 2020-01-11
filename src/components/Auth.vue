@@ -60,6 +60,8 @@ export default {
       });
     },
     reg(data) {
+      let reg = data;
+      let lthis = this;
       $.ajax({
         type: "POST",
         url: "http://91.201.54.66:5000/reg",
@@ -69,7 +71,17 @@ export default {
           password: data.split(',')[2]
         },
         success: function(data) {
-          console.log(data);
+          $.ajax({
+            type: "POST",
+            url: "http://91.201.54.66:5000/login",
+            data: {
+              login: reg.split(',')[0],
+              password: reg.split(',')[2],
+            },
+            success: function(data) {
+              lthis.$emit('AuthTrue', data);
+            }
+          });
         }
       });
     }

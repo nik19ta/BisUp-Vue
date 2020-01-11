@@ -35,9 +35,9 @@
   	<h1>{{championatinfo[1]}}</h1>
   	<div class="ab-w">
   		<div class="ab">
-  			<p @click='partic=true, teams=false' class='default' :class="[partic ? 'namech' : false]">Участники <!-- ({{userschampionats.length}})  -->
+  			<p @click='partic=true, teams=false' class='default' :class="[partic ? 'namech' : false]">Участники <!-- ({{userschampionats.length}}) -->
         </p>
-  			 <p class='default' :class="[teams ? 'teams' : false]" @click='partic=false,teams=true,teamfunc()'> Команды <!-- ({{championatinfo[5].split(',').length}}) -->
+  			 <p class='default' :class="[teams ? 'teams' : false]" @click='partic=false,teams=true,teamfunc()'> Команды <!-- ({{championatinfo}}) -->
         </p>
   		</div>
   	</div>
@@ -51,10 +51,10 @@
   					<p>{{users[0][4]}}, {{users[0][7]}}</p>
   				</div>
         </router-link>
-        	<p @click='addTeams(users.all[0][0])' v-if='testteam '  class='invite'>Пригласить </p>
+        	<p @click='addTeams(users[0][0])' v-if='testteam '  class='invite'>Пригласить </p>
         </div>
   		<!--  -->
-  		<button v-if='!addto && add' class="participant-btn" @click='addteamUser' type="button" name="button">Присоедениться к чемпионату</button>
+  		<button v-if='!addto' class="participant-btn" @click='addteamUser' type="button" name="button">Присоедениться к чемпионату</button>
   	</div>
   	<!--  -->
     <!-- команды блин -->
@@ -65,18 +65,18 @@
   				<p v-if="teams[2]" class='addd'>Участников {{teams[2].split(',').length}}</p>
   				<p class='ab'>{{teams[4]}}</p>
   			</div>
-  			<button v-if='!testteam && !add' class='addteam' @click='invite' type="button" name="button">Добавить команду</button>
+  			<button v-if='addto' class='addteam' @click='invite' type="button" name="button">Добавить команду</button>
   		</div>
   		<!--  -->
   		<div v-if='ids' class="blocks1">
   			<h3>Список участников команды: {{teamnow[1]}}</h3>
-  			<div v-for='id of ids' class="blockteamsP"> <img :src="id.all[0][8]" alt="">
+  			<div v-for='id of ids' class="blockteamsP"> <img :src="id[0][8]" alt="">
   				<div class="all">
   					<div class="name">
-  						<p>{{id.all[0][1]}}</p>
+  						<p>{{id[0][1]}}</p>
   					</div>
   					<div class="fio">
-  						<p>{{id.all[0][4]}}, {{id.all[0][2]}}</p>
+  						<p>{{id[0][4]}}, {{id[0][2]}}</p>
   					</div>
   				</div>
   			</div>
@@ -107,7 +107,6 @@ export default {
       teams: false,
       testteam: false,
       usersteam: false,
-      add: true,
       leave: false,
       ids: "",
       nameteam: "",
@@ -121,9 +120,7 @@ export default {
   },
   methods: {
     leavefunc() {
-      console.log('leave');
-      console.log(this.info.id);
-      console.log(this.teamnow[1]);
+      let lthis = this;
       $.ajax({
         type: "POST",
         url: "http://91.201.54.66:5000/deluser",
@@ -133,11 +130,12 @@ export default {
           teamid: this.teamnow[1],
         },
         success: function(data) {
-          console.log(data);
+          lthis.leave = false;
+          setTimeout(lthis.teamfunc, 0);
+          lthis.user(lthis.teamnow)
+          alert('вы вышли из команды')
         },
-        error: function(error) {
-          console.log(error);
-        }
+        error: function(error) {}
       });
     },
     testeam() {
@@ -150,18 +148,14 @@ export default {
           id: lthis.info.id,
         },
         success: function(data) {
-          console.log(data);
-          if (data.arg[0]) {
+          if (data.arg[0] == lthis.info.id) {
             lthis.testteam = true;
             lthis.nameteam = data.arg[0];
-            console.log(lthis.nameteam);
           } else {
             lthis.testteam = false;
           }
         },
-        error: function(error) {
-          console.log(error);
-        }
+        error: function(error) {}
       });
     },
     addteamUser() {
@@ -177,17 +171,13 @@ export default {
         },
         success: function(data) {
           let arr = [data.all];
-          lthis.userschampionats.push({
-            all: arr
-          })
-          lthis.add = !lthis.add;
+          lthis.userschampionats.push(arr)
           lthis.$emit('reset', '')
         }
       });
     },
     invitetoteam() {
       let lthis = this;
-      console.log(this.iduser);
       $("#addUserTeam").removeClass("addTeamVisible");
       $.ajax({
         type: "POST",
@@ -200,7 +190,6 @@ export default {
           nameuser: lthis.iduser
         },
         success: function(data) {
-          console.log(data);
           if (data == 'teem is') {
             alert('Приглашение от данной команды уже отправленно')
           } else if (data == 'oops') {
@@ -266,38 +255,29 @@ export default {
           championat_id: this.championatinfo[0]
         },
         success: function(data) {
-          console.log(data.all);
           lthis.teamsch = data;
-          console.log(lthis.teamsch);
         }
       });
     },
     user(data) {
-      // просто
-      this.teamnow = data;
       let lthis = this;
+      this.teamnow = data;
       lthis.leave = false;
-      console.log(lthis.info.id);
-      let usr = [];
-      for (var i = 0; i < data[2].split(',').length; i++) {
-        $.ajax({
-          type: "POST",
-          url: "http://91.201.54.66:5000/user",
-          CrossDomain: true,
-          async: false,
-          data: {
-            id: data[2].split(',')[i]
-          },
-          success: function(data) {
-            usr.push(data)
-            console.log(data.all[0][0]);
-            if (data.all[0][0] == lthis.info.id) {
-              lthis.leave = true
-            }
-          }
-        });
-        // console.log(usr.includes('1'));
-        lthis.ids = usr
+      $.ajax({
+        type: "POST",
+        url: "http://91.201.54.66:5000/usersinteam",
+        async: false,
+        data: {
+          users_id: data[2]
+        },
+        success: function(data) {
+          lthis.ids = data.all;
+        }
+      });
+      for (var i = 0; i < lthis.ids.length; i++) {
+        if (lthis.ids[i][0][0] == lthis.info.id && lthis.info.id != lthis.teamnow[6]) {
+          lthis.leave = true;
+        }
       }
     },
     color(data) {

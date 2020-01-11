@@ -145,8 +145,7 @@ export default {
         async: false,
         data: {
           passw: $('#passw').val(),
-          passw: $('#passw1').val(),
-          passw: $('#passw2').val(),
+          passw2: $('#passw1').val(),
           id: this.inform.id
         },
         success: function() {}

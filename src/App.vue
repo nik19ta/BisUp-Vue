@@ -55,34 +55,8 @@ export default {
 
   mounted() {
     this.main()
-    // this.ajax()
   },
   methods: {
-    // ajax() {
-    //   $.ajax({
-    //     type: "POST",
-    //     url: "http://91.201.54.66:5000/usersinteam",
-    //     data: {
-    //       users_id: '1,2,3,4'
-    //     },
-    //     success: function(data) {
-    //       console.log(data);
-    //     }
-    //   });
-    // },
-    // ajax() {
-    //   $.ajax({
-    //     type: "POST",
-    //     url: "http://91.201.54.66:5000/deluser",
-    //     data: {
-    //       userid: 2,
-    //       teamid: 1
-    //     },
-    //     success: function(data) {
-    //       console.log(data);
-    //     }
-    //   });
-    // },
     server() {
       $.ajax({
         type: "POST",
@@ -115,7 +89,6 @@ export default {
       });
     },
     Championats() {
-      console.log('ni');
       let lethis = this;
       $.ajax({
         type: "POST",
@@ -127,18 +100,26 @@ export default {
       });
     },
     AuthTrue(data) {
-      let datastrong = data.info.login + ',' + data.info.password;
-      datastrong = datastrong.split(',');
-      localStorage.name = JSON.stringify(datastrong);
-      localStorage.st = 'nan';
-      this.info = data;
-      this.Auth = 'nan';
+      if (data == 'error') {
+        alert('не верный логин или пароль')
+      } else if (data.status == 'ok') {
+        let datastrong = data.info.login + ',' + data.info.password;
+        datastrong = datastrong.split(',');
+        localStorage.name = JSON.stringify(datastrong);
+        localStorage.st = 'nan';
+        this.info = data;
+        this.Auth = 'nan';
+      }
     },
     AuthFalse(data) {
-      let datastrong = data.info.login + ',' + data.info.password;
-      datastrong = datastrong.split(',');
-      this.info = data;
-      this.Auth = 'nan';
+      if (data == 'error') {
+        alert('не верный логин или пароль')
+      } else if (data.status == 'ok') {
+        let datastrong = data.info.login + ',' + data.info.password;
+        datastrong = datastrong.split(',');
+        this.info = data;
+        this.Auth = 'nan';
+      }
     },
     AutoLogIn() {
       let lthis = this;
@@ -156,7 +137,6 @@ export default {
               localStorage.st = 'login';
               window.location.reload()
             } else {
-              console.log(data.info);
               lthis.info = data;
             }
           }

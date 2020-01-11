@@ -26,7 +26,7 @@ export default {
     return {
       show: true,
       userschampionats: '',
-      addto: '',
+      addto: false,
       championatinfo: '',
     }
   },
@@ -63,13 +63,11 @@ export default {
           users_id: data[7]
         },
         success: function(data) {
-          console.log(data.all);
           lthis.userschampionats = data.all;
         }
       });
       for (var i = 0; i < data[7].split(',').length; i++) {
         if (data[7].split(',')[i] == this.inform.id) {
-          console.log(true);
           this.addto = true;
         }
       }
