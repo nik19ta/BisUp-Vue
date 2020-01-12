@@ -4,12 +4,9 @@
     <h1>Приглашения</h1>
     <div class="invate_blocks">
       <div :id='invate[0]' v-for='invate in invatedata.inform' class="invate_block inv">
-        <p class='porag1 porags'>Приглашение в команду:</p>
-        <p class='porag2 porags'> <b>{{invate[2]}}</b> </p>
-        <p class='porag3 porags'>Номинация:</p> <br>
-        <p class='porag4 porags'> <b> {{invate[3]}}</b> </p>
-        <p class='porag5 porags'>сопроводительное письмо:</p> <br>
-        <p class='porag6 porags'>{{invate[4]}}</p>
+        <p class='porag1 porags'>Приглашение в команду: <b>{{invate[2]}}</b> </p>
+        <p class='porag3 porags'>Номинация:</p><p> <b> {{invate[3]}}</b> </p>
+        <p class='porag5 porags'>сопроводительное письмо:</p><p> {{invate[4]}}</p>
         <a id="click1" @click='invatefun(invate)'>Принять приглашение</a> <br>
         <a id="click2" @click='noteam(invate)'>Отказатся </a>
       </div>
@@ -45,6 +42,7 @@ export default {
         },
         success: function(data) {
           lthis.invatedata = data;
+
         },
         error: function(error) {}
       });
@@ -62,6 +60,7 @@ export default {
         success: function(data) {
           $("#" + block[0]).addClass("nan");
           console.log(data);
+          alert(data)
         },
         error: function(error) {
           console.log('ошибка ajax запроса');
@@ -106,12 +105,6 @@ export default {
   padding-top: 50px;
   width: 90%;
 }
-.porags{
-  width: 70%;
-  text-align: center;
-  display: block;
-
-}
 .porag1{
   font-weight: 400;
   font-size: 21px;
@@ -146,6 +139,7 @@ export default {
 }
 #click2{
   width: 76%;
+  margin-top: 20px;
   text-align: center;
   color: #ff8000;
   display: block;
@@ -155,18 +149,16 @@ export default {
 }
 .invate_block{
   background: #fff;
-  width: 570px;
-  height: 515px;
-  display: block;
+  max-width: 570px;
+  height: 500px;
   margin-top: 20px;
-  border-radius: 8px;
+  border-radius: 5px;
   margin-left: 10px;
   margin-right: 10px;
   padding-left: 20px;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  align-items: flex-start;
 }
 p{
   width: 100%;

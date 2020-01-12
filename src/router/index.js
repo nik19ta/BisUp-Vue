@@ -19,7 +19,7 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/dialogue',
+      path: '/chat',
       name: 'dialogue',
       component: dialogue
     },

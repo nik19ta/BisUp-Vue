@@ -63,7 +63,7 @@
     <!-- команды блин -->
   	<div v-if='teams' class="temsblock">
   		<div class="blocks">
-  			<div @click='color(teams),user(teams)' :id='teams[0]' v-for='teams in teamsch.all' class="blockteams item">
+  			<div @click='user(teams)' :id='teams[0]' v-for='teams in teamsch.all' class="blockteams item">
   				<h4> {{teams[1]}}</h4>
   				<p v-if="teams[2]" class='addd'>Участников {{teams[2].split(',').length}}</p>
   				<p class='ab'>{{teams[4]}}</p>
@@ -99,7 +99,9 @@ export default {
   name: "championship",
   props: {
     userschampionats: {},
-    addto: {},
+    addto: {
+      required: true
+    },
     championatinfo: {},
     info: {},
     teamsch: {},
@@ -132,9 +134,17 @@ export default {
           teamid: this.teamnow[1],
         },
         success: function(data) {
+          // alert('вы вышли из команды')
           lthis.leave = false;
-          lthis.user(lthis.teamnow)
-          alert('вы вышли из команды')
+          let arruser = lthis.teamnow[2].split(',');
+          for (var i = 0; i < arruser.length; i++) {
+            if (arruser[i] == lthis.info.id) {
+              arruser.splice(arruser[i])
+              lthis.teamnow[2] = arruser.join();
+              lthis.user(lthis.teamnow)
+              break;
+            }
+          }
         },
         error: function(error) {}
       });
@@ -152,7 +162,13 @@ export default {
         },
         success: function(data) {
           let arr = [data.all];
-          lthis.userschampionats.push(arr)
+          if (lthis.userschampionats == '') {
+            lthis.userschampionats = arr;
+          } else {
+            lthis.userschampionats.push(arr);
+
+          }
+          lthis.$emit('addtofunc', '')
           lthis.$emit('reset', '')
         }
       });
@@ -160,10 +176,6 @@ export default {
     invitetoteam() {
       let lthis = this;
       $("#addUserTeam").removeClass("addTeamVisible");
-      console.log($("#nomination").val());
-      console.log($("#coverletter").val());
-      console.log(lthis.teamsforinv[0][0]);
-      console.log(lthis.iduser);
       $.ajax({
         type: "POST",
         url: "http://91.201.54.66:5000/invatetoadd",
@@ -175,13 +187,7 @@ export default {
           nameuser: lthis.iduser
         },
         success: function(data) {
-          if (data == 'teem is') {
-            alert('Приглашение от данной команды уже отправленно')
-          } else if (data == 'oops') {
-            alert('Заполненны не все поля')
-          } else if (data == 'ok') {
-            alert('Приглашение отправленно')
-          }
+          alert(data)
         }
       });
     },
@@ -201,6 +207,9 @@ export default {
         },
         success: function(data) {
           alert(data)
+          if (data == 'Команда создана!') {
+            letThis.$emit('AddTooTeamFunc', '')
+          }
         }
       });
     },
@@ -230,10 +239,27 @@ export default {
         } else {}
       });
     },
+    //
+    //
+    //
+    //
+    //
+    //
+
     user(data) {
+      $(".item").css({
+        background: "#fff",
+        color: "#000"
+      });
+      $("#" + data).css({
+        background: "#ff7f00",
+        color: "#fff"
+      });
+      //
       let lthis = this;
       this.teamnow = data;
       lthis.leave = false;
+      console.log(data[2]);
       $.ajax({
         type: "POST",
         url: "http://91.201.54.66:5000/usersinteam",
@@ -250,16 +276,6 @@ export default {
           lthis.leave = true;
         }
       }
-    },
-    color(data) {
-      $(".item").css({
-        background: "#fff",
-        color: "#000"
-      });
-      $("#" + data).css({
-        background: "#ff7f00",
-        color: "#fff"
-      });
     },
     championship() {
       this.$emit("championshipFun", "");

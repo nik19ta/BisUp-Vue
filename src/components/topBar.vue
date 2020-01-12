@@ -10,7 +10,7 @@
     <router-link to="/games" class="testing">Игры</router-link>
     <router-link @click.native='chempionats' to="/championats">Чемпионаты</router-link>
     <router-link to="/video">Видео</router-link>
-    <router-link to="/dialogue" @click.native="menunav('testing')">Диалоги</router-link>
+    <router-link to="/chat" @click.native="menunav('testing')">Диалоги</router-link>
     <router-link to="/partner">Партнёрам</router-link>
     <router-link to="/contact">Контакты</router-link>
   </div>
@@ -19,7 +19,7 @@
     <router-link id='games' @click.native='menunav("games")' class="link" to="/games">Игры</router-link>
     <router-link id='chempionats' @click.native='menunav("chempionats"),chempionats("data")' class="link" to="/championats">Чемпионаты</router-link>
     <router-link id='video' @click.native='menunav("video")' class="link" to="/video">Видео</router-link>
-    <router-link id='dialogue' @click.native='menunav("dialogue")' class="link" to="/dialogue">Диалоги</router-link>
+    <router-link id='dialogue' @click.native='menunav("dialogue")' class="link" to="/chat">Диалоги</router-link>
     <router-link id='partner' @click.native='menunav("partner")' class="link" to="/partner">Партнёрам</router-link>
     <router-link id='contact' @click.native='menunav("contact")' class="link" to="/contact">Контакты</router-link>
   </div>
@@ -30,7 +30,7 @@
         <div class="trap">
         </div>
         <router-link class="link-r" to="/">Профиль</router-link>
-        <router-link class="link-r" to="/dialogue">Сообщения
+        <router-link class="link-r" to="/chat">Сообщения
           <!-- <span class='num'> (0)</span> -->
         </router-link>
         <router-link class="link-r" to="/invite">Приглашения
@@ -291,9 +291,9 @@ button {
 }
 
 @media screen and (max-device-width: 1300px) {
-  .menu {
+  /* .menu {
     width: 80%;
-  }
+  } */
 
   /* .logo {
     display: none;
@@ -325,60 +325,12 @@ button {
 }
 
 @media screen and (max-width: 900px) {
-  .menu-mob-all {
-    position: absolute;
-    display: block;
-    width: 100%;
-    top: 60px;
-  }
-
-  .menu-mob-all a {
-    display: block;
-    height: 40px;
-    background: #1d3e51;
-    width: 100%;
-    padding-left: 20px;
-    color: #eeeff2;
-    font-size: 18px;
-  }
-
-  .menu-mob {
-    display: block;
-    position: absolute;
-    height: 100%;
-    left: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  .menu {
+    width: 800px;
   }
 
   .menu-mob img {
-    width: 30px;
-  }
-
-  button {
-    margin-left: 0px;
-  }
-
-  .logo img {
-    margin-right: 100px;
-  }
-
-  .menu {
     display: none;
-  }
-
-
-  .logo {
-    width: 100%;
-  }
-
-  button {
-    margin-right: 0;
-  }
-
-  .dop {
-    margin-left: -100px;
   }
 }
 </style>

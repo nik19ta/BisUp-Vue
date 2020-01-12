@@ -4,8 +4,8 @@
     <h1 v-if='show'>Чемпионаты</h1>
     <blockChempionship v-if='show' @click.native='show=!show,championatsdataajax(block)' v-for="block in championats.all" :block='block' />
 
-    <championats :teamsforinv='teamsforinv' :invatetrue='invatetrue' :countteam='countteam' :teamsch='teamsch' @reset='reset' :championatinfo='championatinfo' :addto='addto' :userschampionats='userschampionats' :info='inform' v-if='!show'
-      @championshipFun='championshipFun' />
+    <championats :teamsforinv='teamsforinv' :invatetrue='invatetrue' :countteam='countteam' :teamsch='teamsch' @reset='reset' :championatinfo='championatinfo' @addtofunc='addtofunc' :addto='addto' :userschampionats='userschampionats' :info='inform'
+      v-if='!show' @championshipFun='championshipFun' @AddTooTeamFunc='AddTooTeamFunc' />
   </div>
 </div>
 </template>
@@ -47,8 +47,48 @@ export default {
     championatMethod() {
       this.$emit('Championats', 'st');
     },
+    AddTooTeamFunc() {
+      let lthis = this;
+      $.ajax({
+        type: "POST",
+        url: "http://91.201.54.66:5000/teamsall",
+        CrossDomain: true,
+        async: false,
+        data: {
+          championat_id: this.championatinfo[0]
+        },
+        success: function(data) {
+          lthis.teamsch = data;
+          lthis.countteam = lthis.teamsch.all.length;
+        }
+      });
+      for (var i = 0; i < lthis.teamsch.all.length; i++) {
+
+        if (this.inform.id == lthis.teamsch.all[i][6]) {
+          $.ajax({
+            type: "POST",
+            url: "http://91.201.54.66:5000/testin",
+            CrossDomain: true,
+            async: false,
+            data: {
+              user: this.inform.id
+            },
+            success: function(data) {
+              lthis.invatetrue = true;
+              lthis.teamsforinv = data.list;
+              console.log(data);
+            }
+          });
+
+        }
+
+      }
+    },
     reset() {
       this.$emit('reset', '');
+    },
+    addtofunc() {
+      this.addto = !this.addto;
     },
     BlockFun(id) {
       idblock = id;
@@ -59,6 +99,7 @@ export default {
     },
     championatsdataajax(data) {
       this.invatetrue = false;
+      this.userschampionats = '';
       this.addto = false;
       this.championatinfo = data;
       let lthis = this;
@@ -91,10 +132,8 @@ export default {
           lthis.countteam = lthis.teamsch.all.length;
         }
       });
-      console.log(lthis.teamsch.all);
       for (var i = 0; i < lthis.teamsch.all.length; i++) {
-        console.log(lthis.teamsch.all[i][6]);
-        console.log(this.inform.id);
+
         if (this.inform.id == lthis.teamsch.all[i][6]) {
           $.ajax({
             type: "POST",
