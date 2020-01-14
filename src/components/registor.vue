@@ -47,35 +47,35 @@ export default {
     reg() {
       let email = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
       console.log($("#login-inp").val().length);
-      if ($('#passw1').val() == $('#passw2').val() && email.test($('#email').val()) == true && $("#login-inp").val().length > 3 && $('#passw1').val().length > 7) {
+      if ($('#passw1').val() == $('#passw2').val()) {
         let data = $("#login-inp").val() + ',' + $('#email').val() + ',' + $('#passw1').val();
         this.$emit('reg', data);
         //
       }
-      if ($("#login-inp").val().length < 4) {
-        this.statuslogin = 'Слишком короткий логин'
-        //
-      } else {
-        this.statuslogin = ''
-      }
-      if (email.test($('#email').val()) == false) {
-        this.statusemail = 'Не корректный email'
-        //
-      } else {
-        this.statusemail = ''
-      }
-      if ($('#passw1').val().length < 7) {
-        this.statuspass = 'Пароль должен быть меньше 7 символов'
-        //
-      } else {
-        this.statuspass = ''
-      }
-      if ($('#passw1').val() != $('#passw2').val()) {
-        this.statuspass = 'Пароли не совподают'
-        //
-      } else {
-        this.statuspass2 = ''
-      }
+      // if ($("#login-inp").val().length < 4) {
+      //   this.statuslogin = 'Слишком короткий логин'
+      //   //
+      // } else {
+      //   this.statuslogin = ''
+      // }
+      // if (email.test($('#email').val()) == false) {
+      //   this.statusemail = 'Не корректный email'
+      //   //
+      // } else {
+      //   this.statusemail = ''
+      // }
+      // if ($('#passw1').val().length < 7) {
+      //   this.statuspass = 'Пароль должен быть меньше 7 символов'
+      //   //
+      // } else {
+      //   this.statuspass = ''
+      // }
+      // if ($('#passw1').val() != $('#passw2').val()) {
+      //   this.statuspass = 'Пароли не совподают'
+      //   //
+      // } else {
+      //   this.statuspass2 = ''
+      // }
 
     },
   }

@@ -58,6 +58,7 @@
         </div>
   		<!--  -->
   		<button v-if='!addto' class="participant-btn" @click='addteamUser' type="button" name="button">Присоедениться к чемпионату</button>
+  		<button v-if='addto' class="participant-btn" @click='ExitChampionat' type="button" name="button">Выйти из чемпионата</button>
   	</div>
   	<!--  -->
     <!-- команды блин -->
@@ -118,10 +119,12 @@ export default {
       leave: false,
       ids: "",
       iduser: "",
-      teamnow: ''
+      teamnow: '',
     };
   },
-  mounted() {},
+  mounted() {
+    this.teamsinfo()
+  },
   methods: {
     leavefunc() {
       let lthis = this;
@@ -134,20 +137,48 @@ export default {
           teamid: this.teamnow[1],
         },
         success: function(data) {
-          // alert('вы вышли из команды')
           lthis.leave = false;
           let arruser = lthis.teamnow[2].split(',');
           for (var i = 0; i < arruser.length; i++) {
             if (arruser[i] == lthis.info.id) {
-              arruser.splice(arruser[i])
-              lthis.teamnow[2] = arruser.join();
-              lthis.user(lthis.teamnow)
+              console.log(i);
+              console.log(arruser.length);
+              lthis.teamnow[2] = arruser.splice(arruser[0][i - 1]).join();
+              lthis.user(lthis.teamnow);
               break;
             }
           }
         },
-        error: function(error) {}
+        error: function(error) {
+          alert('ошибка сервера')
+        }
       });
+
+    },
+    ExitChampionat() {
+      let lthis = this;
+      $.ajax({
+        type: "POST",
+        url: "http://91.201.54.66:5000/deluserfromchampionat",
+        CrossDomain: true,
+        async: false,
+        data: {
+          userid: this.info.id,
+          championatid: this.championatinfo[0]
+        },
+        success: function(data) {
+          lthis.$emit('addtofunc', '')
+          let usersm = lthis.championatinfo[7].split(',');
+          for (var i = 0; i < lthis.championatinfo[7].split(',').length; i++) {
+            if (lthis.championatinfo[7].split(',')[i] == lthis.info.id) {
+              usersm.splice(i)
+              lthis.$emit('res', usersm)
+            }
+          }
+
+        }
+      });
+
     },
     addteamUser() {
       let lthis = this;
@@ -191,6 +222,54 @@ export default {
         }
       });
     },
+    teamsinfo() {
+
+      // let usr = [];
+      // let user = [];
+      // for (var i = 0; i < this.teamsch.all.length; i++) {
+      //   //  для всех пользователей
+      //   usr = usr + this.teamsch.all[i][2].split(',') + ',';
+      //   usr = usr.split(',')
+      //   //
+      //   user.push({
+      //     users: this.teamsch.all[i][2].split(','),
+      //     team: this.teamsch.all[i][0]
+      //   })
+      // }
+      // //  для всех
+
+      // for (var i = 0; i < usr.length; i++) {
+      //   if (this.info.id == usr[i]) {
+      //     console.log('ура');
+      //
+      //   }
+      // }
+      // console.log(user[0].users.length);
+      // for (var i = 0; i < user.length; i++) {
+      //   console.log(user[i].users);
+      // }
+      // console.log(usr);
+      // console.log(user);
+    },
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
     AddToTeamFunc() {
       let letThis = this;
       $.ajax({
@@ -239,14 +318,8 @@ export default {
         } else {}
       });
     },
-    //
-    //
-    //
-    //
-    //
-    //
-
     user(data) {
+      // console.log(data);
       $(".item").css({
         background: "#fff",
         color: "#000"
@@ -259,7 +332,6 @@ export default {
       let lthis = this;
       this.teamnow = data;
       lthis.leave = false;
-      console.log(data[2]);
       $.ajax({
         type: "POST",
         url: "http://91.201.54.66:5000/usersinteam",

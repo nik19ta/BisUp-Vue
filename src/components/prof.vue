@@ -66,24 +66,16 @@
     </h1>
   </div>
   <hr class="line">
-  <div class="rating_flex">
-    <p>Нет данных</p>
-  </div>
-  <div class="rating">
-    <h1>Хардскилы</h1>
-  </div>
-  <hr class="line">
-  <div class="rating_flex">
-    <p>Нет данных</p>
-  </div>
+  <div class="scroll">
 
-  <div class="rating">
-    <h1>Софтскилы</h1>
-  </div>
-  <hr class="line">
-  <div class="rating_flex">
-    <p>Нет данных</p>
-
+    <div v-for='virt in virtomonika' class="virtomonika">
+      <p class='virtomonika-name'>{{virt.name}}</p>
+      <p class='virtomonika-level'>Вы достигли {{virt.level}} уровня!</p>
+      <div class="">
+        <progress class='virtomonika-progress' :value="virt.progress" max="100">0%</progress>
+        <p class="togame">Перейти к игре </p>
+      </div>
+    </div>
   </div>
 </div>
 </template>
@@ -99,13 +91,28 @@ export default {
   data() {
     return {
       online: 'В сети',
+      virtomonika: ''
     }
   },
   components: {
     blockR,
   },
-  mounted() {},
+  mounted() {
+    this.ajax()
+  },
   methods: {
+    ajax() {
+      let lthis = this;
+      $.ajax({
+        type: "GET",
+        url: "https://virtonomica.ru/api/vera/main/achievement/browse?user_id=146",
+        CrossDomain: true,
+        success: function(data) {
+          console.log(data);
+          lthis.virtomonika = data;
+        }
+      });
+    },
     rddata() {
       $("#info").addClass("addTeamVisible");
       $(document).mouseup(function(e) {
@@ -167,8 +174,29 @@ export default {
 </script>
 
 <style scoped>
+.virtomonika-name {
+  font-weight: bold;
+}
+
+.scroll {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-bottom: 50px;
+}
+
+.virtomonika {
+  width: 31%;
+  background: #fff;
+  height: 200px;
+  border-radius: 5px;
+  margin: 1%;
+  padding: 5px;
+  padding-left: 20px;
+}
+
 .rating_flex p {
-  /* background: #fff;   */
   padding: 20px;
   text-align: center;
   width: 100%;
@@ -264,12 +292,7 @@ export default {
 
 .profile {
   width: 1200px;
-  font-family: 'PF BeauSans Pro' !important;
   font-style: normal;
-  /* display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap; */
   padding-top: 60px;
 }
 
@@ -307,10 +330,9 @@ export default {
 
 .names {
   color: #8f8f91;
-  font-weight: 600;
 }
 
-.data {
+/* .data {
   width: 530px;
   height: 500px;
   background-color: #fff;
@@ -322,7 +344,7 @@ export default {
   flex-wrap: wrap;
   align-items: flex-start;
   margin-bottom: 200px;
-}
+} */
 
 .title-data {
   text-align: center;

@@ -4,8 +4,8 @@
     <h1 v-if='show'>Чемпионаты</h1>
     <blockChempionship v-if='show' @click.native='show=!show,championatsdataajax(block)' v-for="block in championats.all" :block='block' />
 
-    <championats :teamsforinv='teamsforinv' :invatetrue='invatetrue' :countteam='countteam' :teamsch='teamsch' @reset='reset' :championatinfo='championatinfo' @addtofunc='addtofunc' :addto='addto' :userschampionats='userschampionats' :info='inform'
-      v-if='!show' @championshipFun='championshipFun' @AddTooTeamFunc='AddTooTeamFunc' />
+    <championats @res='res' :teamsforinv='teamsforinv' :invatetrue='invatetrue' :countteam='countteam' :teamsch='teamsch' @reset='reset' :championatinfo='championatinfo' @addtofunc='addtofunc' :addto='addto' :userschampionats='userschampionats'
+      :info='inform' v-if='!show' @championshipFun='championshipFun' @AddTooTeamFunc='AddTooTeamFunc' />
   </div>
 </div>
 </template>
@@ -47,6 +47,22 @@ export default {
     championatMethod() {
       this.$emit('Championats', 'st');
     },
+    res(data) {
+      console.log(data);
+      this.userschampionats = '';
+      let lthis = this;
+      $.ajax({
+        type: "POST",
+        url: "http://91.201.54.66:5000/usersinteam",
+        async: false,
+        data: {
+          users_id: data.join()
+        },
+        success: function(data) {
+          lthis.userschampionats = data.all;
+        }
+      });
+    },
     AddTooTeamFunc() {
       let lthis = this;
       $.ajax({
@@ -76,7 +92,6 @@ export default {
             success: function(data) {
               lthis.invatetrue = true;
               lthis.teamsforinv = data.list;
-              console.log(data);
             }
           });
 
@@ -146,7 +161,6 @@ export default {
             success: function(data) {
               lthis.invatetrue = true;
               lthis.teamsforinv = data.list;
-              console.log(data);
             }
           });
 

@@ -90,7 +90,6 @@ export default {
     },
     Championats() {
       let lethis = this;
-      console.log('championats');
       $.ajax({
         type: "POST",
         url: "http://91.201.54.66:5000/championats",
