@@ -120,6 +120,7 @@ export default {
       ids: "",
       iduser: "",
       teamnow: '',
+      users: []
     };
   },
   mounted() {
@@ -141,8 +142,9 @@ export default {
           let arruser = lthis.teamnow[2].split(',');
           for (var i = 0; i < arruser.length; i++) {
             if (arruser[i] == lthis.info.id) {
-              console.log(i);
-              console.log(arruser.length);
+              // console.log(i);
+
+              // console.log(arruser.length);
               lthis.teamnow[2] = arruser.splice(arruser[0][i - 1]).join();
               lthis.user(lthis.teamnow);
               break;
@@ -157,14 +159,25 @@ export default {
     },
     ExitChampionat() {
       let lthis = this;
+      let usersteam;
+      console.log();
+      for (var i = 0; i < lthis.users.length; i++) {
+        if (lthis.users[i].users == lthis.info.id) {
+          usersteam = lthis.users[i].team;
+        }
+      }
+      console.log(this.info.id);
+      console.log(this.championatinfo[0]);
+      console.log(usersteam);
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66:5000/deluserfromchampionat",
+        url: "http://91.201.54.66:5000/exitFromChampionat",
         CrossDomain: true,
         async: false,
         data: {
-          userid: this.info.id,
-          championatid: this.championatinfo[0]
+          user_id: this.info.id,
+          championat_id: this.championatinfo[0],
+          teamid: usersteam
         },
         success: function(data) {
           lthis.$emit('addtofunc', '')
@@ -175,9 +188,10 @@ export default {
               lthis.$emit('res', usersm)
             }
           }
-
         }
       });
+
+
 
     },
     addteamUser() {
@@ -224,52 +238,34 @@ export default {
     },
     teamsinfo() {
 
-      // let usr = [];
-      // let user = [];
-      // for (var i = 0; i < this.teamsch.all.length; i++) {
-      //   //  для всех пользователей
-      //   usr = usr + this.teamsch.all[i][2].split(',') + ',';
-      //   usr = usr.split(',')
-      //   //
-      //   user.push({
-      //     users: this.teamsch.all[i][2].split(','),
-      //     team: this.teamsch.all[i][0]
-      //   })
-      // }
-      // //  для всех
+      let usr = [];
+      let user = [];
+      for (var i = 0; i < this.teamsch.all.length; i++) {
+        //  для всех пользователей
+        usr = usr + this.teamsch.all[i][2].split(',') + ',';
+        usr = usr.split(',')
+        //
+        user.push({
+          users: this.teamsch.all[i][2].split(','),
+          team: this.teamsch.all[i][0]
+        })
+      }
+      //  для всех
 
-      // for (var i = 0; i < usr.length; i++) {
-      //   if (this.info.id == usr[i]) {
-      //     console.log('ура');
-      //
-      //   }
-      // }
+      for (var i = 0; i < usr.length; i++) {
+        if (this.info.id == usr[i]) {
+          console.log('ура');
+
+        }
+      }
       // console.log(user[0].users.length);
-      // for (var i = 0; i < user.length; i++) {
-      //   console.log(user[i].users);
-      // }
+      for (var i = 0; i < user.length; i++) {
+        // console.log(user[i].users);
+      }
       // console.log(usr);
+      this.users = user;
       // console.log(user);
     },
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
     AddToTeamFunc() {
       let letThis = this;
       $.ajax({
