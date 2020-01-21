@@ -126,7 +126,7 @@ export default {
       let lthis = this;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66:5000/chengedata",
+        url: "http://91.201.54.66/bis/chengedata",
         // url: "http://localhost:5000/chengedata",
         CrossDomain: true,
         data: {
@@ -146,7 +146,7 @@ export default {
     changepassword() {
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66:5000/changepass",
+        url: "http://91.201.54.66/changepass",
         // url: "http://localhost:5000/chengedata",
         CrossDomain: true,
         async: false,

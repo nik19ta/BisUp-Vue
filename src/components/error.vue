@@ -3,7 +3,7 @@
   <div class="">
     <h1>Server error, <br>Unfortunately, the server is not available at this time. <br> You can write to me in telegram @nik19ta <br>to solve the problem.</h1>
     <hr>
-    <h1>Ошибка сервера, <br> к сожелению сервер не доступен в данное время. <br> Вы можете обратится в телеграмм @nik19ta <br> для решение приблемы.</h1>
+    <h1>Ошибка сервера, <br> к сожелению сервер не доступен в данное время. <br> Вы можете обратится в телеграмм @nik19ta <br> для решение проблемы.</h1>
   </div>
 </div>
 </template>

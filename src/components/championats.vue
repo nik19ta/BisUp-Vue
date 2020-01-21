@@ -39,7 +39,7 @@
   		<div class="ab">
   			<p @click='partic=true, teams=false' class='default' :class="[partic ? 'namech' : false]">Участники  ({{userschampionats.length}})
         </p>
-  			 <p class='default' :class="[teams ? 'teams' : false]" @click='partic=false,teams=true'> Команды  ({{countteam}})
+  			 <p class='default' :class="[teams ? 'teams' : false]" @click='teamzero(),partic=false,teams=true'> Команды  ({{countteam}})
         </p>
   		</div>
   	</div>
@@ -100,9 +100,7 @@ export default {
   name: "championship",
   props: {
     userschampionats: {},
-    addto: {
-      required: true
-    },
+    addto: {},
     championatinfo: {},
     info: {},
     teamsch: {},
@@ -127,11 +125,14 @@ export default {
     this.teamsinfo()
   },
   methods: {
+    teamzero() {
+      this.ids = ''
+    },
     leavefunc() {
       let lthis = this;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66:5000/deluser",
+        url: "http://91.201.54.66/deluser",
         CrossDomain: true,
         data: {
           userid: this.info.id,
@@ -159,28 +160,30 @@ export default {
     },
     ExitChampionat() {
       let lthis = this;
-      let usersteam;
-      console.log();
+      let teamid = 0;
       for (var i = 0; i < lthis.users.length; i++) {
         if (lthis.users[i].users == lthis.info.id) {
-          usersteam = lthis.users[i].team;
+          teamid = lthis.users[i].team;
         }
       }
-      console.log(this.info.id);
-      console.log(this.championatinfo[0]);
-      console.log(usersteam);
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66:5000/exitFromChampionat",
+        url: "http://91.201.54.66/exitFromChampionat",
         CrossDomain: true,
         async: false,
         data: {
           user_id: this.info.id,
           championat_id: this.championatinfo[0],
-          teamid: usersteam
+          teamid: teamid
         },
         success: function(data) {
-          lthis.$emit('addtofunc', '')
+          lthis.$emit('count', '')
+          console.log(data);
+          if (data == 'участник был капитаном, поэтому и команда удалена!') {
+            lthis.$emit('addtofunc', '')
+            lthis.$emit('AddTooTeamFunc', '')
+            console.log('data');
+          }
           let usersm = lthis.championatinfo[7].split(',');
           for (var i = 0; i < lthis.championatinfo[7].split(',').length; i++) {
             if (lthis.championatinfo[7].split(',')[i] == lthis.info.id) {
@@ -198,7 +201,7 @@ export default {
       let lthis = this;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66:5000/addteamUser",
+        url: "http://91.201.54.66/addteamUser",
         CrossDomain: true,
         async: false,
         data: {
@@ -223,7 +226,7 @@ export default {
       $("#addUserTeam").removeClass("addTeamVisible");
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66:5000/invatetoadd",
+        url: "http://91.201.54.66/invatetoadd",
         CrossDomain: true,
         data: {
           nomination: $("#nomination").val(),
@@ -237,40 +240,32 @@ export default {
       });
     },
     teamsinfo() {
-
       let usr = [];
       let user = [];
       for (var i = 0; i < this.teamsch.all.length; i++) {
-        //  для всех пользователей
         usr = usr + this.teamsch.all[i][2].split(',') + ',';
         usr = usr.split(',')
-        //
         user.push({
           users: this.teamsch.all[i][2].split(','),
           team: this.teamsch.all[i][0]
         })
       }
-      //  для всех
-
       for (var i = 0; i < usr.length; i++) {
         if (this.info.id == usr[i]) {
           console.log('ура');
 
         }
       }
-      // console.log(user[0].users.length);
-      for (var i = 0; i < user.length; i++) {
-        // console.log(user[i].users);
-      }
-      // console.log(usr);
+      for (var i = 0; i < user.length; i++) {}
       this.users = user;
-      // console.log(user);
+
+      console.log(this.teamsch);
     },
     AddToTeamFunc() {
       let letThis = this;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66:5000/AddToTeam",
+        url: "http://91.201.54.66/AddToTeam",
         CrossDomain: true,
         async: false,
         data: {
@@ -315,7 +310,6 @@ export default {
       });
     },
     user(data) {
-      // console.log(data);
       $(".item").css({
         background: "#fff",
         color: "#000"
@@ -330,7 +324,7 @@ export default {
       lthis.leave = false;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66:5000/usersinteam",
+        url: "http://91.201.54.66/usersinteam",
         async: false,
         data: {
           users_id: data[2]

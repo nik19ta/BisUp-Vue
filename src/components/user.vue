@@ -140,8 +140,7 @@ export default {
       var letthis = this;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66:5000/user",
-        // url: "http://localhost:5000/login",
+        url: "http://91.201.54.66/user",
         data: {
           id: this.id
         },

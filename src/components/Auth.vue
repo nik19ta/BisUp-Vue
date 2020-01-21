@@ -45,7 +45,7 @@ export default {
       let localdata = data;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66:5000/login",
+        url: "http://91.201.54.66/login",
         data: {
           login: data.login,
           password: data.pass,
@@ -64,7 +64,7 @@ export default {
       let lthis = this;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66:5000/reg",
+        url: "http://91.201.54.66/reg",
         data: {
           login: data.split(',')[0],
           email: data.split(',')[1],
@@ -73,7 +73,7 @@ export default {
         success: function(data) {
           $.ajax({
             type: "POST",
-            url: "http://91.201.54.66:5000/login",
+            url: "http://91.201.54.66/login",
             data: {
               login: reg.split(',')[0],
               password: reg.split(',')[2],

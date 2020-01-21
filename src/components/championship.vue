@@ -4,8 +4,8 @@
     <h1 v-if='show'>Чемпионаты</h1>
     <blockChempionship v-if='show' @click.native='show=!show,championatsdataajax(block)' v-for="block in championats.all" :block='block' />
 
-    <championats @res='res' :teamsforinv='teamsforinv' :invatetrue='invatetrue' :countteam='countteam' :teamsch='teamsch' @reset='reset' :championatinfo='championatinfo' @addtofunc='addtofunc' :addto='addto' :userschampionats='userschampionats'
-      :info='inform' v-if='!show' @championshipFun='championshipFun' @AddTooTeamFunc='AddTooTeamFunc' />
+    <championats @count='count' @res='res' :teamsforinv='teamsforinv' :invatetrue='invatetrue' :countteam='countteam' :teamsch='teamsch' @reset='reset' :championatinfo='championatinfo' @addtofunc='addtofunc' :addto='addto'
+      :userschampionats='userschampionats' :info='inform' v-if='!show' @championshipFun='championshipFun' @AddTooTeamFunc='AddTooTeamFunc' />
   </div>
 </div>
 </template>
@@ -47,13 +47,16 @@ export default {
     championatMethod() {
       this.$emit('Championats', 'st');
     },
+    count() {
+      this.countteam = this.countteam - 1;
+    },
     res(data) {
       console.log(data);
       this.userschampionats = '';
       let lthis = this;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66:5000/usersinteam",
+        url: "http://91.201.54.66/usersinteam",
         async: false,
         data: {
           users_id: data.join()
@@ -64,10 +67,11 @@ export default {
       });
     },
     AddTooTeamFunc() {
+      console.log('nik');
       let lthis = this;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66:5000/teamsall",
+        url: "http://91.201.54.66/teamsall",
         CrossDomain: true,
         async: false,
         data: {
@@ -83,7 +87,7 @@ export default {
         if (this.inform.id == lthis.teamsch.all[i][6]) {
           $.ajax({
             type: "POST",
-            url: "http://91.201.54.66:5000/testin",
+            url: "http://91.201.54.66/testin",
             CrossDomain: true,
             async: false,
             data: {
@@ -120,7 +124,7 @@ export default {
       let lthis = this;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66:5000/usersinteam",
+        url: "http://91.201.54.66/usersinteam",
         async: false,
         data: {
           users_id: data[7]
@@ -136,7 +140,7 @@ export default {
       }
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66:5000/teamsall",
+        url: "http://91.201.54.66/teamsall",
         CrossDomain: true,
         async: false,
         data: {
@@ -152,7 +156,7 @@ export default {
         if (this.inform.id == lthis.teamsch.all[i][6]) {
           $.ajax({
             type: "POST",
-            url: "http://91.201.54.66:5000/testin",
+            url: "http://91.201.54.66/testin",
             CrossDomain: true,
             async: false,
             data: {

@@ -60,7 +60,7 @@ export default {
     server() {
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66:5000/server",
+        url: "http://91.201.54.66/server",
         acync: false,
         data: {
           server: ''
@@ -75,7 +75,7 @@ export default {
       let lthis = this;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66:5000/server",
+        url: "http://91.201.54.66/server",
         acync: false,
         data: {
           server: ''
@@ -92,7 +92,7 @@ export default {
       let lethis = this;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66:5000/championats",
+        url: "http://91.201.54.66/championats",
         data: {},
         success: function(data) {
           lethis.championats = data;
@@ -127,7 +127,7 @@ export default {
         let authdata = JSON.parse(localStorage.name)
         $.ajax({
           type: "POST",
-          url: "http://91.201.54.66:5000/login",
+          url: "http://91.201.54.66/login",
           data: {
             login: authdata[0],
             password: authdata[1],
