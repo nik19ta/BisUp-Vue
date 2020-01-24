@@ -3,7 +3,6 @@
   <div class="infor">
     <div class="info-text">
       <div class="d-flex">
-
         <h1>Контакты</h1>
         <p class='text-top'>Наш адрес</p><br>
         <p class="ab-text">

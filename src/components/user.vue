@@ -86,7 +86,6 @@
 </template>
 
 <script>
-import blockR from './blockR.vue'
 import $ from "jquery"
 
 

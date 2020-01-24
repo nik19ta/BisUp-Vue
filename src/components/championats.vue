@@ -193,9 +193,6 @@ export default {
           }
         }
       });
-
-
-
     },
     addteamUser() {
       let lthis = this;
@@ -214,7 +211,6 @@ export default {
             lthis.userschampionats = arr;
           } else {
             lthis.userschampionats.push(arr);
-
           }
           lthis.$emit('addtofunc', '')
           lthis.$emit('reset', '')
@@ -222,6 +218,7 @@ export default {
       });
     },
     invitetoteam() {
+
       let lthis = this;
       $("#addUserTeam").removeClass("addTeamVisible");
       $.ajax({

@@ -68,12 +68,18 @@
   <hr class="line">
   <div class="scroll">
 
-    <div v-for='virt in virtomonika' class="virtomonika">
-      <p class='virtomonika-name'>{{virt.name}}</p>
-      <p class='virtomonika-level'>Вы достигли {{virt.level}} уровня!</p>
-      <div class="">
-        <progress class='virtomonika-progress' :value="virt.progress" max="100">0%</progress>
-        <p class="togame">Перейти к игре </p>
+    <div v-for='virt in virtomonika' class="blockR">
+      <!-- <p>{{virt}}</p> -->
+      <p class="bloclR-text-title">{{virt.name}}</p>
+      <p class="bloclR-text"> <img src="../assets/beaker.png" alt=""> Вы достигли {{virt.level}} уровня!</p>
+      <!-- <p class="bloclR-text"> <img src="../assets/star.png" alt=""> 36 место из 1200 игроков!</p> -->
+      <div class="status-bar">
+        <p class='points'></p>
+        <p class='points2'>{{Math.round(virt.progress)}}%</p>
+        <progress :value="virt.progress" max="100"></progress>
+      </div>
+      <div class="next">
+        <a href="#">Перейти к игре ➔</a>
       </div>
     </div>
   </div>
@@ -81,7 +87,6 @@
 </template>
 
 <script>
-import blockR from './blockR.vue'
 import $ from "jquery"
 
 
@@ -93,9 +98,6 @@ export default {
       online: 'В сети',
       virtomonika: ''
     }
-  },
-  components: {
-    blockR,
   },
   mounted() {
     this.ajax()
@@ -174,26 +176,12 @@ export default {
 </script>
 
 <style scoped>
-.virtomonika-name {
-  font-weight: bold;
-}
-
 .scroll {
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
   width: 100%;
   padding-bottom: 50px;
-}
-
-.virtomonika {
-  width: 31%;
-  background: #fff;
-  height: 200px;
-  border-radius: 5px;
-  margin: 1%;
-  padding: 5px;
-  padding-left: 20px;
 }
 
 .rating_flex p {
@@ -331,20 +319,6 @@ export default {
 .names {
   color: #8f8f91;
 }
-
-/* .data {
-  width: 530px;
-  height: 500px;
-  background-color: #fff;
-  position: fixed;
-  box-shadow: 0px 0px 30px 0px #0002;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  margin-bottom: 200px;
-} */
 
 .title-data {
   text-align: center;
@@ -500,9 +474,133 @@ export default {
   width: 100%;
 }
 
+.blockR {
+  background-color: #fff;
+  width: 31.3%;
+  height: auto;
+  margin: 1%;
+  border-radius: 10px;
+}
+
+.points {
+  font-size: 12px;
+  height: 0px;
+  margin-left: 20px;
+  color: #3b5767;
+  /* position: relative; */
+  margin-top: 0px;
+  margin-top: 10px;
+}
+
+progress {
+  border: 0;
+  width: 90%;
+  height: 8px;
+  border-radius: 100px;
+  margin-left: 20px;
+  background: #eeeff2;
+}
+
+progress::-webkit-progress-value {
+  border-radius: 5px;
+  background: #ff7f00;
+}
+
+progress::-webkit-progress-bar {
+  width: 90%;
+  border-radius: 5px;
+  background: #eeeff2;
+}
+
+progress::-moz-progress-bar {
+  border-radius: 5px;
+  background: #ff7f00;
+}
+
+.bloclR-text-title {
+  margin-left: 20px;
+  font-weight: bold;
+}
+
+.points2 {
+  font-size: 12px;
+  height: 0px;
+  margin-left: 300px;
+  color: #3b5767;
+  margin-top: 0px;
+  margin-top: 10px;
+}
+
+.bloclR-text {
+  margin-left: 20px;
+}
+
+.bloclR-text img {
+  width: 20px;
+  /* position: absolute; */
+}
+
+.status-bar {
+  width: 100%;
+  height: 50px;
+  background-color: #f3f5f6;
+  display: flex;
+  justify-content: flex-start;
+  flex-flow: wrap;
+}
+
+.next {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.next a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #a4a5a7;
+}
+
+@media screen and (max-width: 1250px) {
+  .points2 {
+    margin-left: 260px;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .blockR {
+    width: 48%;
+    height: auto;
+    margin: 1%;
+    border-radius: 10px;
+  }
+
+  .points2 {
+    margin-left: 360px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .blockR {
+    background-color: #fff;
+    width: 380px;
+    height: auto;
+    margin: 1%;
+    border-radius: 10px;
+  }
+}
+
 @media screen and (max-width: 1300px) {
   .profile {
     width: 90%;
+  }
+}
+
+@media screen and (max-width: 880px) {
+  .scroll {
+    justify-content: center;
   }
 }
 
