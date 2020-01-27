@@ -12,6 +12,13 @@
       <button type="button" @click='changedata' placeholder='письмо' name="button">Сохранить изменения</button>
     </div>
   </div>
+  <div id="addacc" class='addacc'>
+    <div class="">
+      <h2 class='virttext'>Добавить аккаунт Виртономики</h2>
+      <input class='virtinp' :value='inform.account' name='accadd' type="text" placeholder="Например 1370892">
+      <button class='virtbtn' type="button" @click='addacc' placeholder='письмо' name="button">Добавить аккаунт </button>
+    </div>
+  </div>
   <div id="pass" class='addTeam'>
     <h1>Изменения пароля</h1>
     <div class="">
@@ -58,6 +65,7 @@
     <div class="link-mid">
       <p @click='rddata'>Редактировать данные</p>
       <p @click='ChangePass'>Изменить пароль</p>
+      <p @click='addaccvirtomonica'>Добавить аккаунт Виртономики</p>
     </div>
   </div>
   <div class="rating">
@@ -107,7 +115,7 @@ export default {
       let lthis = this;
       $.ajax({
         type: "GET",
-        url: "https://virtonomica.ru/api/vera/main/achievement/browse?user_id=146",
+        url: `https://virtonomica.ru/api/vera/main/achievement/browse?user_id=${this.inform.account}`,
         CrossDomain: true,
         success: function(data) {
           console.log(data);
@@ -128,8 +136,7 @@ export default {
       let lthis = this;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66/bis/chengedata",
-        // url: "http://localhost:5000/chengedata",
+        url: "http://91.201.54.66/chengedata",
         CrossDomain: true,
         data: {
           id: lthis.inform.id,
@@ -149,7 +156,6 @@ export default {
       $.ajax({
         type: "POST",
         url: "http://91.201.54.66/changepass",
-        // url: "http://localhost:5000/chengedata",
         CrossDomain: true,
         async: false,
         data: {
@@ -170,12 +176,71 @@ export default {
 
         } else {}
       });
+    },
+    addacc() {
+      let lthis = this;
+      if (document.getElementsByName('accadd')[0].value) {
+        $.ajax({
+          type: "POST",
+          url: "http://91.201.54.66/addacc",
+          CrossDomain: true,
+          data: {
+            accid: document.getElementsByName('accadd')[0].value,
+            id: this.inform.id,
+            login: this.inform.login,
+            password: this.inform.password,
+          },
+          success: function(data) {
+            alert(data)
+            lthis.ajax()
+          }
+        });
+      }
+    },
+    addaccvirtomonica() {
+      $("#addacc").addClass("addTeamVisible");
+      $(document).mouseup(function(e) {
+        var pass = $("#addacc");
+
+        if (!pass.is(e.target) && pass.has(e.target).length === 0) {
+          $("#addacc").removeClass("addTeamVisible")
+
+        } else {}
+      });
     }
   }
 };
 </script>
 
 <style scoped>
+.virtinp {
+  border-radius: 10px;
+  border: none;
+  width: 100%;
+  height: 55px;
+  background: #eeeff2;
+  padding-left: 20px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.virttext {
+  margin-top: 30px;
+}
+
+.virtbtn {
+  margin-top: 40px;
+  border-radius: 10px;
+  border: none;
+  width: 100%;
+  height: 60px;
+  background: #ff7f00;
+  font-size: 18px;
+  color: #fff;
+  -webkit-box-shadow: 0px 0px 20px 0px #0003;
+  box-shadow: 0px 0px 20px 0px #0003;
+}
+
 .scroll {
   display: flex;
   justify-content: flex-start;
@@ -190,6 +255,28 @@ export default {
   width: 100%;
   border-radius: 5px;
   font-size: 20px;
+}
+
+.addacc {
+  width: 550px;
+  height: 270px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 9;
+  margin: -155px 0 0 -275px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 30px 0px #0003;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.4s;
+  transform: translateY(-850px);
 }
 
 .addTeam {
