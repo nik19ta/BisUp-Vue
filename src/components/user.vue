@@ -60,26 +60,30 @@
     <h1>Личный рейтинг</h1>
   </div>
   <hr class="line">
-  <div class="rating_flex">
-    <p>Нет данных</p>
-  </div>
+  <div class="scroll">
 
-
-  <div class="rating">
-    <h1>Хардскилы</h1>
-  </div>
-  <hr class="line">
-  <div class="rating_flex">
-    <p>Нет данных</p>
-  </div>
-
-
-  <div class="rating">
-    <h1>Софтскилы</h1>
-  </div>
-  <hr class="line">
-  <div class="rating_flex">
-    <p>Нет данных</p>
+    <div v-for='virt in virtomonikauser' class="blockR">
+      <!-- <p>{{virt}}</p> -->
+      <p class="bloclR-text-title">{{virt.name}}</p>
+      <p class="bloclR-text">
+        <img class='image' src="../assets/beaker.png" alt="">
+        <span class='text-span'>
+          Достиг {{virt.level}} уровня!
+        </span>
+      </p>
+      <!-- <p class="bloclR-text"> <img src="../assets/star.png" alt=""> 36 место из 1200 игроков!</p> -->
+      <div class="status-bar">
+        <p class='points'></p>
+        <p class='points2'>{{Math.round(virt.progress)}}%</p>
+        <progress :value="virt.progress" max="100"></progress>
+      </div>
+      <div class="next">
+        <a href="#">Перейти к игре ➔</a>
+      </div>
+    </div>
+    <!-- <div v-else class="rating_flex">
+      <p>Нет данных</p>
+    </div> -->
 
   </div>
 </div>
@@ -95,7 +99,8 @@ export default {
     return {
       online: 'error',
       login: localStorage.name,
-      infouser: 'ni'
+      infouser: '',
+      virtomonikauser: ''
     }
   },
   props: {
@@ -110,6 +115,7 @@ export default {
   },
   mounted() {
     this.test(this.id)
+
   },
   beforeUpdate() {
     // console.log('beforeUpdate');
@@ -123,6 +129,18 @@ export default {
   },
   created() {},
   methods: {
+    ajax() {
+      let lthis = this;
+      $.ajax({
+        type: "GET",
+        url: `https://virtonomica.ru/api/vera/main/achievement/browse?user_id=${this.infouser[9]}`,
+        CrossDomain: true,
+        success: function(data) {
+          console.log(data);
+          lthis.virtomonikauser = data;
+        }
+      });
+    },
     addTeams() {
       $("#info").addClass("addTeamVisible");
       $(document).mouseup(function(e) {
@@ -145,6 +163,7 @@ export default {
         },
         success: function(data) {
           letthis.infouser = data.all[0];
+          letthis.ajax()
         },
         error: function(error) {}
       });
@@ -166,13 +185,29 @@ export default {
 </script>
 
 <style scoped>
+.scroll {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-bottom: 50px;
+  margin: -5px 0px;
+}
+
 .rating_flex p {
-  /* background: #fff; */
   padding: 20px;
   text-align: center;
   width: 100%;
   border-radius: 5px;
   font-size: 20px;
+}
+
+.blockR {
+  background-color: #fff;
+  width: 31.3%;
+  height: auto;
+  margin: 1%;
+  border-radius: 10px;
 }
 
 .addTeam {
@@ -201,6 +236,88 @@ export default {
   opacity: 1;
   transform: translateY(0px);
 
+}
+
+.text-span {
+  margin-left: 25px;
+}
+
+.status-bar {
+  width: 100%;
+  height: 50px;
+  background-color: #f3f5f6;
+  display: flex;
+  justify-content: flex-start;
+  flex-flow: wrap;
+}
+
+.points {
+  font-size: 12px;
+  height: 0px;
+  margin-left: 20px;
+  color: #3b5767;
+  /* position: relative; */
+  margin-top: 0px;
+  margin-top: 10px;
+}
+
+progress {
+  border: 0;
+  width: 90%;
+  height: 8px;
+  border-radius: 100px;
+  margin-left: 20px;
+  background: #eeeff2;
+}
+
+progress::-webkit-progress-value {
+  border-radius: 5px;
+  background: #ff7f00;
+}
+
+progress::-webkit-progress-bar {
+  width: 90%;
+  border-radius: 5px;
+  background: #eeeff2;
+}
+
+progress::-moz-progress-bar {
+  border-radius: 5px;
+  background: #ff7f00;
+}
+
+.points2 {
+  font-size: 12px;
+  height: 0px;
+  margin-left: 300px;
+  color: #3b5767;
+  margin-top: 0px;
+  margin-top: 10px;
+}
+
+.bloclR-text img {
+  width: 20px;
+  /* position: absolute; */
+}
+
+
+.image {
+  position: absolute;
+  margin-top: -2px;
+}
+
+.bloclR-text {
+  margin-left: 20px;
+}
+
+.bloclR-text img {
+  width: 20px;
+  /* position: absolute; */
+}
+
+.bloclR-text-title {
+  margin-left: 20px;
+  font-weight: bold;
 }
 
 .addTeamVisibleDown {
@@ -261,14 +378,25 @@ export default {
 
 }
 
+.next {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.next a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #a4a5a7;
+}
+
+
 .profile {
   width: 1200px;
   font-family: 'PF BeauSans Pro' !important;
   font-style: normal;
-  /* display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap; */
   padding-top: 60px;
 }
 
@@ -484,14 +612,40 @@ export default {
   }
 }
 
+@media screen and (max-width: 1250px) {
+  .points2 {
+    margin-left: 260px;
+  }
+}
+
 @media screen and (max-width: 1100px) {
 
   .rating_flex {
     width: 80%;
   }
+
+  .points2 {
+    margin-left: 360px;
+  }
+
+  .blockR {
+    width: 48%;
+    height: auto;
+    margin: 1%;
+    border-radius: 10px;
+  }
 }
 
 @media screen and (max-width: 900px) {
+
+  .blockR {
+    background-color: #fff;
+    width: 380px;
+    height: auto;
+    margin: 1%;
+    border-radius: 10px;
+  }
+
   .about {
     width: 100%;
   }

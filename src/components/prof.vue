@@ -263,6 +263,7 @@ export default {
   flex-wrap: wrap;
   width: 100%;
   padding-bottom: 50px;
+  margin: -5px 0px;
 }
 
 .rating_flex p {
