@@ -65,7 +65,8 @@
     <div class="link-mid">
       <p @click='rddata'>Редактировать данные</p>
       <p @click='ChangePass'>Изменить пароль</p>
-      <p @click='addaccvirtomonica'>Добавить аккаунт Виртономики</p>
+      <p v-if='inform.account' @click='addaccvirtomonica'>Изминить аккаунт Виртономики</p>
+      <p v-else @click='addaccvirtomonica'>Добавить аккаунт Виртономики</p>
     </div>
   </div>
   <div class="rating">
@@ -79,7 +80,12 @@
     <div v-for='virt in virtomonika' class="blockR">
       <!-- <p>{{virt}}</p> -->
       <p class="bloclR-text-title">{{virt.name}}</p>
-      <p class="bloclR-text"> <img src="../assets/beaker.png" alt=""> Вы достигли {{virt.level}} уровня!</p>
+      <p class="bloclR-text">
+        <img class='image' src="../assets/beaker.png" alt="">
+        <span class='text-span'>
+          Вы достигли {{virt.level}} уровня!
+        </span>
+      </p>
       <!-- <p class="bloclR-text"> <img src="../assets/star.png" alt=""> 36 место из 1200 игроков!</p> -->
       <div class="status-bar">
         <p class='points'></p>
@@ -192,6 +198,7 @@ export default {
           },
           success: function(data) {
             alert(data)
+            lthis.inform.account = document.getElementsByName('accadd')[0].value;
             lthis.ajax()
           }
         });
@@ -213,6 +220,15 @@ export default {
 </script>
 
 <style scoped>
+.image {
+  position: absolute;
+  margin-top: -2px;
+}
+
+.text-span {
+  margin-left: 25px;
+}
+
 .virtinp {
   border-radius: 10px;
   border: none;
