@@ -65,7 +65,7 @@
     <div class="link-mid">
       <p @click='rddata'>Редактировать данные</p>
       <p @click='ChangePass'>Изменить пароль</p>
-      <p v-if='inform.account' @click='addaccvirtomonica'>Изминить аккаунт Виртономики</p>
+      <p v-if='inform.account' @click='addaccvirtomonica'>Изменить аккаунт Виртономики</p>
       <p v-else @click='addaccvirtomonica'>Добавить аккаунт Виртономики</p>
     </div>
   </div>
@@ -78,7 +78,15 @@
   <div class="scroll">
 
     <div v-for='virt in virtomonika' class="blockR">
-      <!-- <p>{{virt}}</p> -->
+      <div :id='virt.template_id' class="more-n">
+        <h4>{{virt.name}}</h4>
+        <p>Описание: {{virt.descr}}</p>
+        <p>Категория: {{virt.category_name}}</p>
+        <p>Счет: {{virt.score}}</p>
+        <p>Уровень: {{virt.level}}</p>
+        <p>Дата: {{virt.reached}}</p>
+        <!-- <p>{{virt}}</p> -->
+      </div>
       <p class="bloclR-text-title">{{virt.name}}</p>
       <p class="bloclR-text">
         <img class='image' src="../assets/beaker.png" alt="">
@@ -86,16 +94,19 @@
           Вы достигли {{virt.level}} уровня!
         </span>
       </p>
-      <!-- <p class="bloclR-text"> <img src="../assets/star.png" alt=""> 36 место из 1200 игроков!</p> -->
       <div class="status-bar">
-        <p class='points'></p>
-        <p class='points2'>{{Math.round(virt.progress)}}%</p>
+        <div class='points'>
+          <p>{{Math.round(virt.score)}} очков </p>
+          <p>{{Math.round(virt.progress)}}%</p>
+        </div>
         <progress :value="virt.progress" max="100"></progress>
       </div>
       <div class="next">
         <a href="#">Перейти к игре ➔</a>
+        <a @click='moreinfo(virt.template_id)' class='moreinfo'>•••</a>
       </div>
     </div>
+
   </div>
 </div>
 </template>
@@ -157,6 +168,17 @@ export default {
       this.inform.fio = $('#fio').val()
       this.inform.date_of_birth = $('#dataof').val()
       this.inform.city = $('#city').val()
+    },
+    moreinfo(data) {
+      $("#" + data).addClass("more")
+      $(document).mouseup(function(e) {
+        var pass = $("#" + data);
+
+        if (!pass.is(e.target) && pass.has(e.target).length === 0) {
+          $("#" + data).removeClass("more")
+
+        } else {}
+      });
     },
     changepassword() {
       $.ajax({
@@ -220,9 +242,39 @@ export default {
 </script>
 
 <style scoped>
+.more-n {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  top: -30px;
+  width: 400px;
+  min-height: 270px;
+  box-shadow: 0px 0px 15px 1px #0001;
+  padding: 10px;
+  background: #fff;
+  border-radius: 3px;
+  left: calc(50vw - 200px);
+  transition: all 0.3s;
+}
+
+.more {
+  visibility: visible;
+  opacity: 1;
+  top: calc(50vh - 135px);
+  z-index: 9;
+
+}
+
 .image {
   position: absolute;
   margin-top: -2px;
+}
+
+.moreinfo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 17px;
 }
 
 .text-span {
@@ -261,9 +313,10 @@ export default {
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
-  width: 100%;
+  width: calc(100% + 24px);
   padding-bottom: 50px;
-  margin: -5px 0px;
+  /* background: #456; */
+  margin: -5px -12px;
 }
 
 .rating_flex p {
@@ -506,6 +559,7 @@ export default {
   font-weight: 500;
 }
 
+
 .content-profile-child {
   display: flex;
   justify-content: space-around;
@@ -583,17 +637,23 @@ export default {
   width: 31.3%;
   height: auto;
   margin: 1%;
-  border-radius: 10px;
+  border-radius: 7px;
+}
+
+.points p {
+  font-size: 12px;
+  height: 0px;
+  color: #3b5767;
+  margin-top: 0px;
+  margin-top: 10px;
 }
 
 .points {
-  font-size: 12px;
-  height: 0px;
-  margin-left: 20px;
-  color: #3b5767;
-  /* position: relative; */
-  margin-top: 0px;
-  margin-top: 10px;
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
+  display: flex;
+  justify-content: space-between;
 }
 
 progress {
@@ -626,15 +686,6 @@ progress::-moz-progress-bar {
   font-weight: bold;
 }
 
-.points2 {
-  font-size: 12px;
-  height: 0px;
-  margin-left: 300px;
-  color: #3b5767;
-  margin-top: 0px;
-  margin-top: 10px;
-}
-
 .bloclR-text {
   margin-left: 20px;
 }
@@ -656,8 +707,9 @@ progress::-moz-progress-bar {
 .next {
   width: 100%;
   height: 50px;
+  padding-right: 20px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -667,22 +719,12 @@ progress::-moz-progress-bar {
   color: #a4a5a7;
 }
 
-@media screen and (max-width: 1250px) {
-  .points2 {
-    margin-left: 260px;
-  }
-}
-
 @media screen and (max-width: 1100px) {
   .blockR {
     width: 48%;
     height: auto;
     margin: 1%;
     border-radius: 10px;
-  }
-
-  .points2 {
-    margin-left: 360px;
   }
 }
 

@@ -1,31 +1,7 @@
 <template>
 <div class="profile">
-  <div id="info" class='addTeam'>
-    <h1>Редактировать данные</h1>
-    <div class="">
-      <p>Фамилия, Имя, Очество</p>
-      <input id="team_name" type="text" name="team_name" placeholder="FIO" value="">
-      <p>Дата Рождения</p>
-      <input id='team_nomination' type="text" name="" placeholder="19-07-2000" value="">
-      <p>Город</p>
-      <input id='team_nomination' type="text" name="" placeholder="Moskow" value="">
-      <button type="button" placeholder='письмо' name="button">Сохранить изменения</button>
-    </div>
-  </div>
-  <div id="pass" class='addTeam'>
-    <h1>Изменения пароля</h1>
-    <div class="">
-      <p>Старый пароль</p>
-      <input id="team_name" type="text" name="team_name" placeholder="Введите старый пароль" value="">
-      <p>Новый пароль</p>
-      <input id='team_nomination' type="text" name="" placeholder="Придумайте новый пароль" value="">
-      <p>Подтверждение нового пароля</p>
-      <input id='team_nomination' type="text" name="" placeholder="Подтвердите новый пароль" value="">
-      <button type="button" placeholder='письмо' name="button">Сохранить изменения</button>
-    </div>
-  </div>
   <div class='title-name'>
-    <p>Профиль</p>
+    <p>Профиль: {{infouser[1]}}</p>
   </div>
   <div class="content-profile">
     <div class="content-profile-child">
@@ -106,26 +82,9 @@ export default {
   props: {
     id: {},
   },
-  beforeCreate() {
-    // console.log('beforeCreate');
-  },
-  beforeMount() {
-    // console.log('beforeMount');
-    // this.test()
-  },
   mounted() {
     this.test(this.id)
 
-  },
-  beforeUpdate() {
-    // console.log('beforeUpdate');
-    // this.test()
-    // console.log(this.id);
-  },
-  updated() {
-    // console.log('updated')
-    // this.test()
-    // console.log(this.id);
   },
   created() {},
   methods: {
@@ -210,27 +169,6 @@ export default {
   border-radius: 10px;
 }
 
-.addTeam {
-  width: 550px;
-  height: 560px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 9;
-  margin: -305px 0 0 -275px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0px 0px 30px 0px #0003;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
-  visibility: hidden;
-  opacity: 0;
-  transition: all 0.4s;
-  transform: translateY(-850px);
-}
-
 .addTeamVisible {
   visibility: visible;
   opacity: 1;
@@ -256,7 +194,6 @@ export default {
   height: 0px;
   margin-left: 20px;
   color: #3b5767;
-  /* position: relative; */
   margin-top: 0px;
   margin-top: 10px;
 }
@@ -297,7 +234,6 @@ progress::-moz-progress-bar {
 
 .bloclR-text img {
   width: 20px;
-  /* position: absolute; */
 }
 
 
@@ -312,7 +248,6 @@ progress::-moz-progress-bar {
 
 .bloclR-text img {
   width: 20px;
-  /* position: absolute; */
 }
 
 .bloclR-text-title {
@@ -529,9 +464,6 @@ progress::-moz-progress-bar {
   padding-top: 3px;
   padding-bottom: 3px;
   margin-bottom: 10px;
-  /* font-size: 15px; */
-  /* font-weight: 500; */
-  font-family: fantasy;
 }
 
 .content-profile-child {
@@ -678,8 +610,6 @@ progress::-moz-progress-bar {
     width: 100%;
     display: flex;
     justify-content: flex-start;
-    /* flex-start */
-    ;
   }
 
   .content {
