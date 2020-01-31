@@ -160,7 +160,7 @@ export default {
     },
     ExitChampionat() {
       let lthis = this;
-      let teamid = 0;
+      let teamid = false;
       for (var i = 0; i < lthis.users.length; i++) {
         if (lthis.users[i].users == lthis.info.id) {
           teamid = lthis.users[i].team;
@@ -181,6 +181,11 @@ export default {
           console.log(data);
           if (data == 'участник был капитаном, поэтому и команда удалена!') {
             lthis.$emit('addtofunc', '')
+            lthis.$emit('AddTooTeamFunc', '')
+            console.log('data');
+          }
+          if (data == 'Пользователь удален из чемпионата!') {
+            // lthis.$emit('addtofunc', '')
             lthis.$emit('AddTooTeamFunc', '')
             console.log('data');
           }

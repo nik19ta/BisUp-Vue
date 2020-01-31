@@ -70,9 +70,7 @@
     </div>
   </div>
   <div class="rating">
-    <h1>
-      Личный рейтинг
-    </h1>
+    <h1> Личный рейтинг</h1>
   </div>
   <hr class="line">
   <div class="scroll">
@@ -85,7 +83,6 @@
         <p>Счет: {{virt.score}}</p>
         <p>Уровень: {{virt.level}}</p>
         <p>Дата: {{virt.reached}}</p>
-        <!-- <p>{{virt}}</p> -->
       </div>
       <p class="bloclR-text-title">{{virt.name}}</p>
       <p class="bloclR-text">
@@ -108,6 +105,27 @@
     </div>
 
   </div>
+  <div class="rating">
+    <h1> Хардскилы </h1>
+    <hr class="line">
+    <div class="scroll2">
+      <!-- {{dict}} -->
+      <div v-for='hards  in virtonomika_hard' class=" hards">
+        <div :id='hards.kind' class='hards_col' v-bind:style="{ background: 'rgb(252,88,48)', height: (hards.value/0.2) + '5px' }">
+          <span class='value'>{{hards.value}}</span>
+        </div>
+        <span class='kind'>{{hards.kind}}</span>
+      </div>
+
+    </div>
+  </div>
+  <div class="rating">
+    <h1> Софтскилы </h1>
+    <hr class="line">
+    <div class="scroll2">
+
+    </div>
+  </div>
 </div>
 </template>
 
@@ -121,11 +139,16 @@ export default {
   data() {
     return {
       online: 'В сети',
-      virtomonika: ''
+      virtomonika: '',
+      virtonomika_hard: '',
+      dict: [],
+      isActive: 'nik'
     }
   },
   mounted() {
     this.ajax()
+    this.hardskills()
+    this.dictfunc()
   },
   methods: {
     ajax() {
@@ -135,8 +158,31 @@ export default {
         url: `https://virtonomica.ru/api/vera/main/achievement/browse?user_id=${this.inform.account}`,
         CrossDomain: true,
         success: function(data) {
-          console.log(data);
           lthis.virtomonika = data;
+        }
+      });
+    },
+    dictfunc() {
+      let lthis = this;
+      $.ajax({
+        type: "GET",
+        url: `https://virtonomica.ru/api/fast/main/knowledge/browse?id==${this.inform.account}`,
+        CrossDomain: true,
+        success: function(data) {
+          console.log(data);
+          lthis.dict = data;
+        }
+      });
+    },
+    hardskills() {
+      let lthis = this;
+      $.ajax({
+        type: "GET",
+        url: `https://virtonomica.ru/api/vera/main/user/competences/browse?id=${this.inform.account}`,
+        CrossDomain: true,
+        success: function(data) {
+          console.log(data);
+          lthis.virtonomika_hard = data;
         }
       });
     },
@@ -242,6 +288,72 @@ export default {
 </script>
 
 <style scoped>
+#management {
+  background: rgba(97, 125, 138) !important;
+}
+
+#trade {
+  background: rgba(252, 88, 48) !important;
+}
+
+#manufacture {
+  background: rgba(144, 195, 69) !important;
+}
+
+#mining {
+  background: rgba(21, 149, 136) !important;
+}
+
+#research {
+  background: rgba(30, 170, 241) !important;
+}
+
+#advert {
+  background: rgba(64, 84, 178) !important;
+}
+
+#farming {
+  background: rgba(230, 61, 99) !important;
+}
+
+#animal {
+  background: rgba(79, 172, 83) !important;
+}
+
+#fishing {
+  background: rgba(192, 208, 70) !important;
+}
+
+#service {
+  background: rgba(97, 125, 138) !important;
+}
+
+#medicine {
+  background: rgba(252, 88, 48) !important;
+}
+
+#restaurant {
+  background: rgba(144, 195, 69) !important;
+}
+
+#power {
+  background: rgba(21, 149, 136) !important;
+}
+
+#car {
+  background: rgba(30, 170, 241) !important;
+}
+
+#it {
+  background: rgba(64, 84, 178) !important;
+}
+
+#educational {
+  background: rgba(230, 61, 99) !important;
+}
+
+
+
 .more-n {
   opacity: 0;
   visibility: hidden;
@@ -309,14 +421,49 @@ export default {
   box-shadow: 0px 0px 20px 0px #0003;
 }
 
+
 .scroll {
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
   width: calc(100% + 24px);
   padding-bottom: 50px;
-  /* background: #456; */
   margin: -5px -12px;
+}
+
+.scroll2 {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  flex-wrap: nowrap;
+  width: calc(100%);
+  padding-bottom: 50px;
+  height: 300px;
+}
+
+.hards {
+  width: calc(100%/16);
+  margin-top: 10px;
+  bottom: 0;
+  text-align: center;
+
+
+}
+
+.hards_col {
+  width: 100%;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+}
+
+.kind {
+  display: block;
+  margin-top: 10px;
+  font-size: 12.5px;
+  white-space: pre-wrap;
 }
 
 .rating_flex p {
@@ -385,6 +532,7 @@ export default {
   opacity: 0;
 }
 
+
 .addTeam h1 {
   text-align: center;
   margin-top: -20px;
@@ -439,6 +587,7 @@ export default {
   width: 1200px;
   font-style: normal;
   padding-top: 60px;
+  padding-bottom: 60px;
 }
 
 .line {
@@ -493,6 +642,7 @@ export default {
   width: 75%;
   height: 90%;
 }
+
 
 .form-data input {
   background: #eeeff2;
@@ -640,6 +790,8 @@ export default {
   border-radius: 7px;
 }
 
+
+
 .points p {
   font-size: 12px;
   height: 0px;
@@ -692,7 +844,6 @@ progress::-moz-progress-bar {
 
 .bloclR-text img {
   width: 20px;
-  /* position: absolute; */
 }
 
 .status-bar {
@@ -703,6 +854,7 @@ progress::-moz-progress-bar {
   justify-content: flex-start;
   flex-flow: wrap;
 }
+
 
 .next {
   width: 100%;

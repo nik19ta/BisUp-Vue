@@ -10,13 +10,8 @@
 
     </transition>
     <bottomBar v-if='Auth == "nan"' />
-    <!-- log tc -->
+
     <auth @AuthTrue='AuthTrue' @AuthFalse='AuthFalse' v-if='Auth == "login" || !Auth' />
-    <!-- <login @Authf='Authf' v-if='Auth == "login" || !Auth' @Conversion='Conversion' @thisregistor='thisregistor' /> -->
-
-    <!-- <registor v-if='Auth == "registor"' @tologin='tologin' /> -->
-
-    <!-- <instructionsOnEmail v-if='Auth == "forgetpass"' @tologin='tologin' /> -->
 
     <error v-if='Auth == "server"' />
 
@@ -180,9 +175,7 @@ a,
 body {
   margin: 0px;
   width: 100%;
-  height: 100vh;
   background: #eeeff2;
-
 }
 
 #noop {
@@ -194,7 +187,6 @@ body {
   width: 100%;
   height: 100%;
   min-height: 100%;
-  ;
 }
 
 .content {
@@ -212,36 +204,5 @@ body {
   width: 100%;
   display: flex;
   justify-content: center;
-  overflow: auto;
-}
-
-::-webkit-scrollbar-button {
-  background-image: url('');
-  background-repeat: no-repeat;
-  width: 4px;
-  height: 0px;
-}
-
-::-webkit-scrollbar-track {
-  background-color: #bbc5ca;
-}
-
-::-webkit-scrollbar-thumb {
-  -webkit-border-radius: 0px;
-  border-radius: 0px;
-  background-color: #ff7f00;
-}
-
-::-webkit-scrollbar-thumb:hover {}
-
-::-webkit-resizer {
-  background-image: url('');
-  background-repeat: no-repeat;
-  width: 4px;
-  height: 0px;
-}
-
-::-webkit-scrollbar {
-  width: 3px;
 }
 </style>
