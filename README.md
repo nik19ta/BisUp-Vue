@@ -11,9 +11,10 @@ npm run serve
 ```
 
 ### Compiles and minifies for production
+#### Build will be located in the dist 
 ```
 npm run build
 ```
 
-### Приложение не работает без сервера:
-[Сервер](https://github.com/nik19ta/business-up-server)
+### Bisup  does not work without a server:
+[Server](https://github.com/nik19ta/business-up-server)
