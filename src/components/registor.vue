@@ -45,14 +45,66 @@ export default {
       this.$emit('AuthTemplate', data);
     },
     reg() {
+      let lthis = this;
       let email = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-      console.log($("#login-inp").val().length);
-      if ($('#passw1').val() == $('#passw2').val()) {
-        let data = $("#login-inp").val() + ',' + $('#email').val() + ',' + $('#passw1').val();
-        this.$emit('reg', data);
-        //
+
+
+      loginverification()
+      emailverification()
+      passverification()
+      matchpass()
+
+      function loginverification() {
+        if ($("#login-inp").val().length < 4) {
+          // lthis.statuslogin = 'Слишком короткий логин'
+          alert('Слишком короткий логин')
+        } else {
+          // this.statuslogin = ''
+          return true;
+        }
       }
 
+      function emailverification() {
+
+        if (email.test($('#email').val()) == false) {
+          // lthis.statusemail = 'Не корректный email'
+          alert('Не корректный email')
+        } else {
+          // this.statusemail = ''
+          return true;
+        }
+      }
+
+      function passverification() {
+
+        if ($('#passw1').val().length < 7) {
+          // lthis.statuspass = 'Пароль должен быть меньше 7 символов'
+          alert('Пароль должен быть меньше 7 символов')
+        } else {
+          // lthis.statuspass = ''
+          return true;
+        }
+      }
+
+      function matchpass() {
+
+        if ($('#passw1').val() != $('#passw2').val()) {
+          // lthis.statuspass = 'Пароли не совподают'
+          alert('Пароли не совподают')
+        } else {
+          // lthis.statuspass2 = ''
+          return true;
+        }
+      }
+
+
+      if (loginverification() == true && emailverification() == true && passverification() == true && matchpass()) {
+        // создание data (логин,пароль,email)
+        let data = $("#login-inp").val() + ',' + $('#email').val() + ',' + $('#passw1').val();
+        // функция
+        lthis.$emit('reg', data);
+        console.log(data);
+      }
     },
   }
 }

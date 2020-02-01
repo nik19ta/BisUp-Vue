@@ -205,4 +205,9 @@ body {
   display: flex;
   justify-content: center;
 }
+
+a,
+button {
+  cursor: pointer;
+}
 </style>

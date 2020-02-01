@@ -143,9 +143,6 @@ export default {
           let arruser = lthis.teamnow[2].split(',');
           for (var i = 0; i < arruser.length; i++) {
             if (arruser[i] == lthis.info.id) {
-              // console.log(i);
-
-              // console.log(arruser.length);
               lthis.teamnow[2] = arruser.splice(arruser[0][i - 1]).join();
               lthis.user(lthis.teamnow);
               break;
@@ -187,6 +184,7 @@ export default {
           if (data == 'Пользователь удален из чемпионата!') {
             // lthis.$emit('addtofunc', '')
             lthis.$emit('AddTooTeamFunc', '')
+            lthis.$emit('addtofunc', '')
             console.log('data');
           }
           let usersm = lthis.championatinfo[7].split(',');
@@ -263,6 +261,14 @@ export default {
 
       console.log(this.teamsch);
     },
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+
     AddToTeamFunc() {
       let letThis = this;
       $.ajax({
@@ -279,8 +285,10 @@ export default {
         },
         success: function(data) {
           alert(data)
+          $("#addTeam").removeClass("addTeamVisible");
           if (data == 'Команда создана!') {
             letThis.$emit('AddTooTeamFunc', '')
+
           }
         }
       });

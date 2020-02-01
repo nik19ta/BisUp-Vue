@@ -51,6 +51,7 @@ export default {
           password: data.pass,
         },
         success: function(data) {
+          console.log(data);
           if (localdata.checkbox) {
             lthis.$emit('AuthTrue', data);
           } else {
@@ -71,6 +72,7 @@ export default {
           password: data.split(',')[2]
         },
         success: function(data) {
+          console.log(data);
           $.ajax({
             type: "POST",
             url: "http://91.201.54.66/login",
@@ -79,6 +81,7 @@ export default {
               password: reg.split(',')[2],
             },
             success: function(data) {
+              console.log(data);
               lthis.$emit('AuthTrue', data);
             }
           });

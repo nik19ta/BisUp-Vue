@@ -105,11 +105,10 @@
     </div>
 
   </div>
-  <div class="rating">
+  <!-- <div class="rating">
     <h1> Хардскилы </h1>
     <hr class="line">
     <div class="scroll2">
-      <!-- {{dict}} -->
       <div v-for='hards  in virtonomika_hard' class=" hards">
         <div :id='hards.kind' class='hards_col' v-bind:style="{ background: 'rgb(252,88,48)', height: (hards.value/0.2) + '5px' }">
           <span class='value'>{{hards.value}}</span>
@@ -118,14 +117,41 @@
       </div>
 
     </div>
+  </div> -->
+  <div class="rating">
+    <h1> Хардскилы </h1>
+    <hr class="line">
+    <div class="scroll2">
+      <div v-if='virtonomika_hard' style="width: calc(100%/5)" v-for='i  in 5' class=" hards">
+        <div :id='virtonomika_hard[i].kind' class='hards_col' v-bind:style="{ background: 'rgb(252,88,48)', height: (virtonomika_hard[i].value/0.2 + i) + '5px' }">
+          <span class='value'>{{virtonomika_hard[i].value +i}}</span>
+        </div>
+        <span class='kind'>{{dict[i].name}}</span>
+      </div>
+
+    </div>
   </div>
   <div class="rating">
     <h1> Софтскилы </h1>
     <hr class="line">
     <div class="scroll2">
+      <div v-if='virtonomika_hard' style="width: calc(100%/5)" v-for='i  in 5' class=" hards">
+        <div :id='virtonomika_hard[i +5].kind' class='hards_col' v-bind:style="{ background: 'rgb(252,88,48)',
+        height: (virtonomika_hard[i+5].value/0.2 + i) + '5px' }">
+          <span class='value'>{{virtonomika_hard[i+5].value+i}}</span>
+        </div>
+        <span class='kind'>{{dict[i +5].name}}</span>
+      </div>
 
     </div>
   </div>
+  <!-- <div class="rating">
+    <h1> Софтскилы </h1>
+    <hr class="line">
+    <div class="scroll2">
+
+    </div>
+  </div> -->
 </div>
 </template>
 
@@ -140,7 +166,7 @@ export default {
     return {
       online: 'В сети',
       virtomonika: '',
-      virtonomika_hard: '',
+      virtonomika_hard: false,
       dict: [],
       isActive: 'nik'
     }
@@ -169,8 +195,11 @@ export default {
         url: `https://virtonomica.ru/api/fast/main/knowledge/browse?id==${this.inform.account}`,
         CrossDomain: true,
         success: function(data) {
-          console.log(data);
-          lthis.dict = data;
+          let dict = [];
+          for (var key in data) {
+            dict.push(data[key])
+          }
+          lthis.dict = dict;
         }
       });
     },
@@ -181,8 +210,13 @@ export default {
         url: `https://virtonomica.ru/api/vera/main/user/competences/browse?id=${this.inform.account}`,
         CrossDomain: true,
         success: function(data) {
-          console.log(data);
-          lthis.virtonomika_hard = data;
+          // console.log(data);
+          let virtonomika_hards = [];
+          for (var key in data) {
+            virtonomika_hards.push(data[key])
+          }
+          console.log(virtonomika_hards);
+          lthis.virtonomika_hard = virtonomika_hards;
         }
       });
     },
@@ -329,7 +363,7 @@ export default {
 }
 
 #medicine {
-  background: rgba(252, 88, 48) !important;
+  background: #4a2377 !important;
 }
 
 #restaurant {
@@ -438,7 +472,6 @@ export default {
   flex-wrap: nowrap;
   width: calc(100%);
   padding-bottom: 50px;
-  height: 300px;
 }
 
 .hards {
@@ -446,8 +479,6 @@ export default {
   margin-top: 10px;
   bottom: 0;
   text-align: center;
-
-
 }
 
 .hards_col {
@@ -462,6 +493,7 @@ export default {
 .kind {
   display: block;
   margin-top: 10px;
+  height: 00px;
   font-size: 12.5px;
   white-space: pre-wrap;
 }
@@ -668,24 +700,6 @@ export default {
   margin-top: 25px;
 }
 
-.close img {
-  width: 25px;
-  position: fixed;
-  float: right;
-  margin-left: 400px;
-  margin-top: 10px;
-  cursor: pointer;
-}
-
-.close2 img {
-  width: 25px;
-  position: fixed;
-  float: right;
-  margin-left: 360px;
-  margin-top: 10px;
-  cursor: pointer;
-}
-
 .inp {
   font-size: 16px !important;
 }
@@ -733,7 +747,7 @@ export default {
 }
 
 .about {
-  width: 70%;
+  width: 400px;
   height: 100%;
 }
 
@@ -871,15 +885,47 @@ progress::-moz-progress-bar {
   color: #a4a5a7;
 }
 
+/* 1300 px */
+@media screen and (max-width: 1300px) {
+  .profile {
+    width: 90%;
+  }
+
+  /* .addacc {
+    width: 550px;
+    height: 220px;
+    top: 50%;
+    left: 50%;
+    z-index: 9;
+    margin: -155px 0 0 -275px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 30px 0px #0003;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+  } */
+}
+
+/* 1100 px  */
 @media screen and (max-width: 1100px) {
   .blockR {
     width: 48%;
     height: auto;
     margin: 1%;
     border-radius: 10px;
+
+  }
+
+  .rating_flex {
+    width: 80%;
   }
 }
 
+
+/* 900px */
 @media screen and (max-width: 900px) {
   .blockR {
     background-color: #fff;
@@ -888,30 +934,23 @@ progress::-moz-progress-bar {
     margin: 1%;
     border-radius: 10px;
   }
-}
 
-@media screen and (max-width: 1300px) {
-  .profile {
-    width: 90%;
-  }
-}
-
-@media screen and (max-width: 880px) {
-  .scroll {
-    justify-content: center;
-  }
-}
-
-@media screen and (max-width: 1100px) {
-
-  .rating_flex {
-    width: 80%;
-  }
-}
-
-@media screen and (max-width: 900px) {
-  .about {
+  .content-profile-child {
     width: 100%;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+
+  .content-profile {
+    padding: 0;
+  }
+
+  .content-profile-all {
+    margin: 0;
+  }
+
+  .about {
+    width: 400px;
   }
 
   .link-mid p {
@@ -923,7 +962,6 @@ progress::-moz-progress-bar {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
     width: 650px;
   }
 
@@ -942,12 +980,10 @@ progress::-moz-progress-bar {
     width: 100%;
     display: flex;
     justify-content: flex-start;
-    /* flex-start */
-    ;
   }
 
   .content {
-    width: 90%;
+    width: 100%;
   }
 
   .title-name {
@@ -989,14 +1025,54 @@ progress::-moz-progress-bar {
     flex-wrap: wrap;
   }
 
-  .content-profile-child {
-    flex-wrap: wrap;
-  }
-
   .rating_flex {
     width: 100%;
     display: flex;
     justify-content: center;
+  }
+}
+
+@media screen and (max-width: 880px) {
+
+  .scroll {
+    justify-content: center;
+  }
+
+}
+
+@media screen and (max-width: 880px) {
+  .addTeam {
+    top: 15%;
+    width: 90%;
+    height: 70%;
+    left: 5%;
+    margin: 0;
+    border-radius: 5px;
+    box-shadow: 0px 0px 30px 0px #0003;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .addacc {
+    top: 32.5555555%;
+    width: 90%;
+    height: 35%;
+    left: 5%;
+    margin: 0;
+    border-radius: 5px;
+    box-shadow: 0px 0px 30px 0px #0003;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .virtinp {
+    width: 80%;
   }
 }
 </style>
