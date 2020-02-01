@@ -48,7 +48,6 @@ export default {
       let lthis = this;
       let email = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
-
       loginverification()
       emailverification()
       passverification()
@@ -96,8 +95,6 @@ export default {
           return true;
         }
       }
-
-
       if (loginverification() == true && emailverification() == true && passverification() == true && matchpass()) {
         // создание data (логин,пароль,email)
         let data = $("#login-inp").val() + ',' + $('#email').val() + ',' + $('#passw1').val();
