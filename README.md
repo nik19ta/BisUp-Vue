@@ -15,5 +15,5 @@ npm run serve
 npm run build
 ```
 
-#### приложение не работает без сервера
+### Приложение не работает без сервера:
 [Сервер](https://github.com/nik19ta/business-up-server)
