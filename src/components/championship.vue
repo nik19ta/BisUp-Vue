@@ -118,8 +118,6 @@
 </template>
 
 <script>
-// import blockChempionship from './blockChempionship.vue'
-import championats from './championats.vue'
 import $ from "jquery"
 
 var idblock;
@@ -165,9 +163,6 @@ export default {
   },
   mounted() {
     this.championatMethod()
-  },
-  components: {
-    championats
   },
   methods: {
     teamsinfo() {
