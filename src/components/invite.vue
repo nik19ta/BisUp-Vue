@@ -48,13 +48,13 @@ export default {
       });
     },
     invatefun(data) {
+      console.log(data);
       let block = data;
       $.ajax({
         type: "POST",
         url: "http://91.201.54.66/addUserToTeam",
         data: {
           userId: this.inform.id,
-          championatId: data[0],
           teamname: data[2],
         },
         success: function(data) {

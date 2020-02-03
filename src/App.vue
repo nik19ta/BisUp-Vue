@@ -2,7 +2,7 @@
 <div id="app">
   <div class="content">
     <!-- topBar -->
-    <topBar :image='info.info.img' @Championats='Championats' @exit='exit' v-if='Auth == "nan"' />
+    <topBar v-if='Auth == "nan"' :img='img' @Championats='Championats' @exit='exit' />
     <!-- роутеры -->
     <transition id='body' v-if='Auth == "nan"' name="component-fade" mode="out-in">
 
@@ -39,6 +39,7 @@ export default {
       allteams: '',
       championats: '',
       info: [],
+      img: ''
     }
   },
   components: {
@@ -133,6 +134,7 @@ export default {
               window.location.reload()
             } else {
               lthis.info = data;
+              lthis.img = lthis.info.info.img
             }
           }
         });

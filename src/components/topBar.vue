@@ -28,7 +28,8 @@
       </transition>
 
       <div class="btn">
-        <img class='button' @click='menu_top' :src="image" alt="click">
+
+        <img class='button' @click='menu_top' :src="img" alt="click">
       </div>
     </div>
   </div>
@@ -40,7 +41,7 @@ import $ from "jquery"
 
 export default {
   name: 'resetpassword',
-  props: ['image'],
+  props: ['img'],
   data() {
     return {
       menu: false,

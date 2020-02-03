@@ -302,6 +302,8 @@ export default {
             alert(data)
             lthis.inform.account = document.getElementsByName('accadd')[0].value;
             lthis.ajax()
+            lthis.dictfunc()
+            lthis.hardskills()
           }
         });
       }
