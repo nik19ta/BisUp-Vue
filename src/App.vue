@@ -6,7 +6,8 @@
     <!-- роутеры -->
     <transition id='body' v-if='Auth == "nan"' name="component-fade" mode="out-in">
 
-      <router-view @reset='Championats' @server='server' @Championats='Championats' :inform='info.info' :allteams='allteams' :championats='championats' />
+      <router-view @getusers='getusers' @reset='Championats' @server='server' @Championats='Championats' :inform='info.info' :allteams='allteams' :championats='championats' :people='people' :virtomonika='virtomonika'
+        :virtonomika_hard='virtonomika_hard' :dict='dict' />
 
     </transition>
     <bottomBar v-if='Auth == "nan"' />
@@ -39,7 +40,11 @@ export default {
       allteams: '',
       championats: '',
       info: [],
-      img: ''
+      img: '',
+      virtomonika: '',
+      virtonomika_hard: false,
+      people: '',
+      dict: '',
     }
   },
   components: {
@@ -53,6 +58,49 @@ export default {
     this.main()
   },
   methods: {
+    ajax() {
+      let lthis = this;
+      $.ajax({
+        type: "GET",
+        url: `https://virtonomica.ru/api/vera/main/achievement/browse?user_id=${this.info.info.account}`,
+        CrossDomain: true,
+        success: function(data) {
+          lthis.virtomonika = data;
+        }
+      });
+    },
+    dictfunc() {
+      let lthis = this;
+      $.ajax({
+        type: "GET",
+        url: `https://virtonomica.ru/api/fast/main/knowledge/browse?id==${this.info.info.account}`,
+        CrossDomain: true,
+        success: function(data) {
+          let dict = [];
+          for (var key in data) {
+            dict.push(data[key])
+          }
+          lthis.dict = dict;
+        }
+      });
+    },
+    hardskills() {
+      let lthis = this;
+      $.ajax({
+        type: "GET",
+        url: `https://virtonomica.ru/api/vera/main/user/competences/browse?id=${this.info.info.account}`,
+        CrossDomain: true,
+        success: function(data) {
+          // // console.log(data);
+          let virtonomika_hards = [];
+          for (var key in data) {
+            virtonomika_hards.push(data[key])
+          }
+          // console.log(virtonomika_hards);
+          lthis.virtonomika_hard = virtonomika_hards;
+        }
+      });
+    },
     server() {
       $.ajax({
         type: "POST",
@@ -91,8 +139,25 @@ export default {
         url: "http://91.201.54.66/championats",
         data: {},
         success: function(data) {
+          // console.log(data);
           lethis.championats = data;
         },
+      });
+    },
+    getusers() {
+      let lthis = this;
+      // console.log(lthis.info);
+      $.ajax({
+        type: "POST",
+        url: 'http://91.201.54.66/getusers',
+        CrossDomain: true,
+        data: {
+          sender: lthis.info.info.id,
+        },
+        success: function(data) {
+          // console.log(data.users);
+          lthis.people = data.users;
+        }
       });
     },
     AuthTrue(data) {
@@ -135,6 +200,10 @@ export default {
             } else {
               lthis.info = data;
               lthis.img = lthis.info.info.img
+              lthis.getusers()
+              lthis.ajax()
+              lthis.hardskills()
+              lthis.dictfunc()
             }
           }
         });

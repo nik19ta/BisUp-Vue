@@ -115,7 +115,6 @@
         </div>
         <span class='kind'>{{hards.kind}}</span>
       </div>
-
     </div>
   </div> -->
   <div class="rating">
@@ -149,7 +148,6 @@
     <h1> Софтскилы </h1>
     <hr class="line">
     <div class="scroll2">
-
     </div>
   </div> -->
 </div>
@@ -157,69 +155,23 @@
 
 <script>
 import $ from "jquery"
-
-
 export default {
   name: 'prof',
-  props: ['inform'],
+  props: {
+    inform: {},
+    virtomonika: {},
+    virtonomika_hard: {},
+    dict: {}
+  },
   data() {
     return {
       online: 'В сети',
-      virtomonika: '',
-      virtonomika_hard: false,
-      dict: [],
-      isActive: 'nik'
     }
   },
   mounted() {
-    this.ajax()
-    this.hardskills()
-    this.dictfunc()
+
   },
   methods: {
-    ajax() {
-      let lthis = this;
-      $.ajax({
-        type: "GET",
-        url: `https://virtonomica.ru/api/vera/main/achievement/browse?user_id=${this.inform.account}`,
-        CrossDomain: true,
-        success: function(data) {
-          lthis.virtomonika = data;
-        }
-      });
-    },
-    dictfunc() {
-      let lthis = this;
-      $.ajax({
-        type: "GET",
-        url: `https://virtonomica.ru/api/fast/main/knowledge/browse?id==${this.inform.account}`,
-        CrossDomain: true,
-        success: function(data) {
-          let dict = [];
-          for (var key in data) {
-            dict.push(data[key])
-          }
-          lthis.dict = dict;
-        }
-      });
-    },
-    hardskills() {
-      let lthis = this;
-      $.ajax({
-        type: "GET",
-        url: `https://virtonomica.ru/api/vera/main/user/competences/browse?id=${this.inform.account}`,
-        CrossDomain: true,
-        success: function(data) {
-          // console.log(data);
-          let virtonomika_hards = [];
-          for (var key in data) {
-            virtonomika_hards.push(data[key])
-          }
-          console.log(virtonomika_hards);
-          lthis.virtonomika_hard = virtonomika_hards;
-        }
-      });
-    },
     rddata() {
       $("#info").addClass("addTeamVisible");
       $(document).mouseup(function(e) {
@@ -253,10 +205,8 @@ export default {
       $("#" + data).addClass("more")
       $(document).mouseup(function(e) {
         var pass = $("#" + data);
-
         if (!pass.is(e.target) && pass.has(e.target).length === 0) {
           $("#" + data).removeClass("more")
-
         } else {}
       });
     },
@@ -278,10 +228,8 @@ export default {
       $("#pass").addClass("addTeamVisible");
       $(document).mouseup(function(e) {
         var pass = $("#pass");
-
         if (!pass.is(e.target) && pass.has(e.target).length === 0) {
           $("#pass").removeClass("addTeamVisible")
-
         } else {}
       });
     },
@@ -302,8 +250,6 @@ export default {
             alert(data)
             lthis.inform.account = document.getElementsByName('accadd')[0].value;
             lthis.ajax()
-            lthis.dictfunc()
-            lthis.hardskills()
           }
         });
       }
@@ -312,10 +258,8 @@ export default {
       $("#addacc").addClass("addTeamVisible");
       $(document).mouseup(function(e) {
         var pass = $("#addacc");
-
         if (!pass.is(e.target) && pass.has(e.target).length === 0) {
           $("#addacc").removeClass("addTeamVisible")
-
         } else {}
       });
     }
@@ -388,8 +332,6 @@ export default {
   background: rgba(230, 61, 99) !important;
 }
 
-
-
 .more-n {
   opacity: 0;
   visibility: hidden;
@@ -410,7 +352,6 @@ export default {
   opacity: 1;
   top: calc(50vh - 135px);
   z-index: 9;
-
 }
 
 .image {
@@ -456,7 +397,6 @@ export default {
   -webkit-box-shadow: 0px 0px 20px 0px #0003;
   box-shadow: 0px 0px 20px 0px #0003;
 }
-
 
 .scroll {
   display: flex;
@@ -555,7 +495,6 @@ export default {
   visibility: visible;
   opacity: 1;
   transform: translateY(0px);
-
 }
 
 .addTeamVisibleDown {
@@ -565,7 +504,6 @@ export default {
   visibility: hidden;
   opacity: 0;
 }
-
 
 .addTeam h1 {
   text-align: center;
@@ -601,7 +539,6 @@ export default {
   padding-left: 20px;
   padding-top: 20px;
   font-size: 16px;
-
 }
 
 .addTeam button {
@@ -614,7 +551,6 @@ export default {
   font-size: 18px;
   color: #fff;
   box-shadow: 0px 0px 20px 0px #0003;
-
 }
 
 .profile {
@@ -677,7 +613,6 @@ export default {
   height: 90%;
 }
 
-
 .form-data input {
   background: #eeeff2;
   padding-left: 20px;
@@ -724,7 +659,6 @@ export default {
   font-size: 14px;
   font-weight: 500;
 }
-
 
 .content-profile-child {
   display: flex;
@@ -806,8 +740,6 @@ export default {
   border-radius: 7px;
 }
 
-
-
 .points p {
   font-size: 12px;
   height: 0px;
@@ -871,7 +803,6 @@ progress::-moz-progress-bar {
   flex-flow: wrap;
 }
 
-
 .next {
   width: 100%;
   height: 50px;
@@ -918,14 +849,12 @@ progress::-moz-progress-bar {
     height: auto;
     margin: 1%;
     border-radius: 10px;
-
   }
 
   .rating_flex {
     width: 80%;
   }
 }
-
 
 /* 900px */
 @media screen and (max-width: 900px) {
@@ -1035,11 +964,9 @@ progress::-moz-progress-bar {
 }
 
 @media screen and (max-width: 880px) {
-
   .scroll {
     justify-content: center;
   }
-
 }
 
 @media screen and (max-width: 880px) {

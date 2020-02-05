@@ -7,16 +7,36 @@
   <!--  -->
   <div class="mess">
     <div class="contacts">
-      <blockMess v-for="p in people" :people='p' />
+      <!-- <blockMess :people='p' /> -->
+      <div @click='chat(p)' v-for="p in people">
+
+        <div class="contact">
+          <!-- {{people}} -->
+          <div class="logo">
+            <img :src="p[1]" alt="">
+          </div>
+          <div class="text">
+            <h4>{{p[0]}}</h4>
+            <!-- <p class='so'>{{people}}</p>
+            <p class='time'>{{people}}</p> -->
+          </div>
+        </div>
+      </div>
     </div>
     <!--  -->
     <div class="messens">
       <div class="Head">
-        <h3>Никита Хватов </h3>
-        <p>В сети</p>
+        <h3>{{thisuser}} </h3>
+        <!-- <p>В сети</p> -->
       </div>
       <div class="messenge">
-        <blockM v-for="m in mess" :mess='m' />
+        <!-- {{mess.chat}} -->
+        <div v-for="m in mess.chat" class="">
+          <div class="messagep" :class="[m[3] == inform.id ? 'you' : 'oth']">
+            <!-- <div  class=""> -->
+            <p>{{m[1]}}</p>
+          </div>
+        </div>
       </div>
       <div class="form">
         <img class='pick' src="../assets/Pick.png" alt="">
@@ -25,65 +45,97 @@
       </div>
     </div>
   </div>
-  <!--  -->
+</div>
+<!--  -->
 </div>
 </template>
 
 <script>
-import blockMess from './blockMess.vue'
-import blockM from './blockM.vue'
+import $ from "jquery"
 export default {
   name: 'testing',
-  components: {
-    blockMess,
-    blockM
-  },
   data() {
     return {
-      people: [{
-          name: 'Хватов Никита ',
-          img: 'static/test/blockG2.png',
-          mess: 'привет, как у тебя дела ?',
-          time: 'Вчера, 20:45'
-        },
-        {
-          name: 'Гамид',
-          img: 'static/test/blockG3.png',
-          mess: 'привет, как у тебя дела ?',
-          time: 'Вчера, 20:45'
-        },
-      ],
-      mess: [{
-          name: 'NIkita',
-          mess: 'привет, как у тебя дела ?',
-          time: 'Вчера, 20:45',
-          id: 'you'
-        },
-        {
-          name: 'NIkita2',
-          mess: 'привет, как у тебя дела ?',
-          time: 'Вчера, 20:45',
-          id: 'oth'
-        },
-        {
-          name: 'NIkita',
-          mess: 'привет, как у тебя дела ?',
-          time: 'Вчера, 20:45',
-          id: 'you'
-        },
-        {
-          name: 'NIkita2',
-          mess: 'привет, как у тебя дела ?',
-          time: 'Вчера, 20:45',
-          id: 'oth'
-        },
-      ],
+      // сообщения
+      mess: [],
+      // данный человек
+      thisuser: ''
     }
   },
+  props: {
+    people: {},
+    inform: {}
+  },
+  mounted() {
+    this.getusers()
+  },
+  methods: {
+    getusers() {
+      this.$emit('getusers', '')
+    },
+    chat(data) {
+      let lthis = this;
+      this.thisuser = data[0]
+      console.log(data);
+      $.ajax({
+        type: "POST",
+        url: "http://91.201.54.66/getchat",
+        CrossDomain: true,
+        async: false,
+        data: {
+          sender: this.inform.id,
+          recipient: data[2],
+        },
+        success: function(data) {
+          console.log(data.chat);
+          lthis.mess = data
+        }
+      });
+    },
+  }
 };
 </script>
 
 <style scoped>
+.messagep {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.you {
+  padding-left: 20px;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.you p {
+  max-width: 80%;
+  margin: 10px;
+  padding: 9px;
+  border-radius: 5px;
+  background: #fff3cd;
+}
+
+.oth {
+  /* margin: 10px; */
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.oth p {
+  max-width: 80%;
+  margin: 10px;
+  padding: 9px;
+  background: #f5f5f5;
+  border-radius: 5px;
+}
+
+
 .dialohue {
   width: 1170px;
   padding-top: 60px;
@@ -125,6 +177,7 @@ export default {
   background-color: #fff;
   border-radius: 5px;
   overflow: auto;
+  cursor: pointer;
 }
 
 .messens {
@@ -212,6 +265,64 @@ h1 {
   border-radius: 5px;
   padding-left: 10px;
   font-size: 16px;
+}
+
+.contact {
+  width: 100%;
+  height: 86px;
+  border-bottom: solid 1px #efefef;
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo {
+  width: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact:first-child {
+  border-left: 6px #ff7f00 solid;
+}
+
+.logo img {
+  width: 55px;
+  height: 55px;
+  border-radius: 100px;
+}
+
+.text {
+  width: 76%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-left: 6px;
+}
+
+h4 {
+  transform: translateY(-3px);
+}
+
+.so {
+  width: 100%;
+  font-size: 16px;
+  transform: translateY(-37px);
+  color: #363636;
+}
+
+.time {
+  width: 100%;
+  font-size: 13px;
+  transform: translateY(-62px);
+  color: #a0a0a0;
+
+}
+
+@media screen and (max-device-width: 1200px) {
+  .contact {
+    width: 100%;
+  }
 }
 
 @media screen and (max-width: 500px) {

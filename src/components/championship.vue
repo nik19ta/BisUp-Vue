@@ -3,7 +3,7 @@
   <div class="Tests">
     <h1 v-if='show'>Чемпионаты</h1>
     <!-- блок чемпионатов -->
-    <div v-if='show' @click='show=!show,championatsdataajax(block),teamsinfo()' v-for="block in championats.all">
+    <div v-if='show' @click='championatsdataajax(block),teamsinfo()' v-for="block in championats.all">
       <div id="1" class="blockT">
         <div class="data-title-o">
           <p>{{block[6]}}</p>
@@ -15,7 +15,7 @@
           <p>{{block[1]}}</p>
         </div>
         <div class="data-text">
-          <p>{{block[3]}}</p>
+          <p>Дата начала: {{block[3].split('/')[0] +'.'+ block[3].split('/')[1]+'.'+block[3].split('/')[2]}}</p>
         </div>
         <div class="link-text">
           <p><a>Подробнее ➔</a></p>
@@ -31,7 +31,7 @@
           <input id="team_name" type="text" name="team_name" value="">
           <p>Номинация</p>
           <input id='team_nomination' type="text" name="team_nomination" value="">
-          <p>Город</p>
+          <p>Описание</p>
           <textarea id='team_discribtion' name="team_discribtion"></textarea>
           <button @click='AddToTeamFunc' type="button" placeholder='описание' name="button">Сохранить команду</button>
         </div>
@@ -43,7 +43,7 @@
           <p>Название команды</p>
           <input v-model='teamsforinv' readonly type="text" value="">
           <p>Номинация</p>
-          <input id='nomination' type="text" value="">
+          <input v-model='teamdescribtion' readonly id='nomination' type="text" value="">
           <p>Сопроводительное письмо</p>
           <textarea id='coverletter'></textarea>
           <button type="button" placeholder='письмо' @click='invitetoteam' name="button">Пригласить в команду</button>
@@ -91,9 +91,10 @@
             <p v-if="teams[2]" class='addd'>Участников {{teams[2].split(',').length}}</p>
             <p class='ab'>{{teams[4]}}</p>
           </div>
-          <button v-if='addto' class='addteam' @click='invite' type="button" name="button">Добавить команду</button>
+          <button v-if='addto && !invatetrue' class='addteam' @click='invite' type="button" name="button">Добавить команду</button>
         </div>
-        <!--  -->
+
+
         <div v-if='ids' class="blocks1">
           <h3>Список участников команды: {{teamnow[1]}}</h3>
           <div v-for='id of ids' class="blockteamsP"> <img :src="id[0][8]" alt="">
@@ -110,7 +111,7 @@
             <p>Покинуть команду</p>
           </div>
         </div>
-        <!--  -->
+
       </div>
     </div>
   </div>
@@ -152,12 +153,16 @@ export default {
       countteam: '',
       //имя команды человека если он капитан
       teamsforinv: '',
+      //описание команды человека если он капитан
+      teamdescribtion: '',
       // id команды человека если он капитан
       teamid: '',
       // информация о чемпионате
       championatinfo: '',
       // все люди в данном чемпионате
       userschampionats: '',
+      // если у челвека команда
+      teamis: false,
       users: [],
     }
   },
@@ -168,6 +173,7 @@ export default {
     teamsinfo() {
       this.teamsforinv = ''
       this.teamid = false
+      this.teamis = false
 
       let usr = [];
       let user = [];
@@ -178,15 +184,19 @@ export default {
           this.invatetrue = true;
           // название команды
           this.teamsforinv = this.teamsch.all[i][1];
+          // console.log(this.teamsch.all[i]);
+          this.teamdescribtion = this.teamsch.all[i][4]
           // id команды человека
           this.teamid = this.teamsch.all[i][0];
+          // если у человека есть команда
+          this.teamis = true
         }
       }
     },
     teamzero() {
       this.ids = ''
     },
-    leavefunc() {
+    async leavefunc() {
       let lthis = this;
       let arruser = lthis.teamnow[2].split(',')
 
@@ -213,7 +223,7 @@ export default {
           lthis.leave = false;
         },
         error: function(error) {
-          alert('ошибка сервера')
+          // console.log('ошибка сервера')
         }
       });
     },
@@ -237,7 +247,7 @@ export default {
         } else {}
       });
     },
-    user(data) {
+    async user(data) {
       $(".item").css({
         background: "#fff",
         color: "#000"
@@ -267,10 +277,10 @@ export default {
         }
       }
     },
-    ExitChampionat() {
-      // Функция выхода из чемпионата
+    async ExitChampionat() {
       let lthis = this;
-      // запрос
+      // setTimeout(function() {}, 0)
+
       $.ajax({
         type: "POST",
         url: "http://91.201.54.66/exitFromChampionat",
@@ -282,24 +292,47 @@ export default {
           teamid: lthis.teamid
         },
         success: function(data) {
-          alert(data)
+          // console.log(data)
           if (data == 'участник был капитаном, поэтому и команда удалена!') {
-            lthis.championatsdataajax(lthis.championatinfo)
+            setTimeout(function() {
+              lthis.championatsdataajax(lthis.championatinfo)
+            }, 0)
             lthis.invatetrue = false;
             lthis.countteam = this.countteam - 1;
             lthis.addto = false;
+
             lthis.AddTooTeamFunc()
           }
+
           if (data == 'Пользователь удален из чемпионата!') {
-            lthis.championatsdataajax(lthis.championatinfo)
-            lthis.AddTooTeamFunc()
-            lthis.addto = false;
+            setTimeout(function() {
+              // console.log(lthis.championatinfo[7].split(','));
+              let arr = [];
+              arr.push(lthis.championatinfo[7])
+              for (var i = 0; i < lthis.championatinfo[7].split(',').length; i++) {
+                if (lthis.championatinfo[7].split(',')[i] == lthis.inform.id) {
+                  console.log(arr[0].split(','));
+                  console.log(arr[0].split(',').splice(0, i));
+                  lthis.championatinfo[7] = arr[0].split(',').splice(0, i).join();
+                }
+              }
+              console.log(lthis.championatinfo[7].split(','));
+            }, 0)
+            setTimeout(function() {
+              lthis.championatsdataajax(lthis.championatinfo)
+            }, 0)
+            setTimeout(function() {
+              lthis.AddTooTeamFunc()
+            }, 0)
+            setTimeout(function() {
+              lthis.addto = false;
+            }, 0)
           }
         }
       });
     },
 
-    addteamUser() {
+    async addteamUser() {
       let lthis = this;
       $.ajax({
         type: "POST",
@@ -315,14 +348,20 @@ export default {
           if (lthis.userschampionats == '') {
             lthis.userschampionats = arr;
           } else {
-            lthis.userschampionats.push(arr);
+            let arch = []
+            arch.push(lthis.championatinfo[7])
+            arch = arch + ',' + lthis.inform.id
+            lthis.championatinfo[7] = arch;
+            // lthis.userschampionats.push(arr);
+            lthis.championatsdataajax(lthis.championatinfo)
           }
+
           lthis.addto = !lthis.addto;
-          lthis.reset()
+          // lthis.reset()
         }
       });
     },
-    AddToTeamFunc() {
+    async AddToTeamFunc() {
       let letThis = this;
       $.ajax({
         type: "POST",
@@ -337,7 +376,9 @@ export default {
           captain_id: letThis.inform.id,
         },
         success: function(data) {
-          alert(data)
+          if (data == 'Имя команды занято') {
+            alert('Имя команды занято')
+          }
           $("#addTeam").removeClass("addTeamVisible");
           if (data == 'Команда создана!') {
             letThis.AddTooTeamFunc()
@@ -345,7 +386,7 @@ export default {
         }
       });
     },
-    invitetoteam() {
+    async invitetoteam() {
 
       let lthis = this;
       $("#addUserTeam").removeClass("addTeamVisible");
@@ -360,14 +401,14 @@ export default {
           nameuser: lthis.iduser
         },
         success: function(data) {
-          alert(data)
+          // console.log(data)
         }
       });
     },
     championatMethod() {
       this.$emit('Championats', 'st');
     },
-    AddTooTeamFunc() {
+    async AddTooTeamFunc() {
       let lthis = this;
       $.ajax({
         type: "POST",
@@ -397,41 +438,47 @@ export default {
     championshipFun() {
       this.show = !this.show;
     },
-    championatsdataajax(data) {
+    async championatsdataajax(data) {
+
       this.invatetrue = false;
       this.userschampionats = '';
       this.addto = false;
       this.championatinfo = data;
       let lthis = this;
-      $.ajax({
-        type: "POST",
-        url: "http://91.201.54.66/usersinteam",
-        async: false,
-        data: {
-          users_id: data[7]
-        },
-        success: function(data) {
-          lthis.userschampionats = data.all;
+
+      setTimeout(function() {
+
+        $.ajax({
+          type: "POST",
+          url: "http://91.201.54.66/usersinteam",
+          async: false,
+          data: {
+            users_id: data[7]
+          },
+          success: function(data) {
+            lthis.userschampionats = data.all;
+          }
+        });
+        for (var i = 0; i < data[7].split(',').length; i++) {
+          if (data[7].split(',')[i] == lthis.inform.id) {
+            lthis.addto = true;
+          }
         }
-      });
-      for (var i = 0; i < data[7].split(',').length; i++) {
-        if (data[7].split(',')[i] == this.inform.id) {
-          this.addto = true;
-        }
-      }
-      $.ajax({
-        type: "POST",
-        url: "http://91.201.54.66/teamsall",
-        CrossDomain: true,
-        async: false,
-        data: {
-          championat_id: this.championatinfo[0]
-        },
-        success: function(data) {
-          lthis.teamsch = data;
-          lthis.countteam = lthis.teamsch.all.length;
-        }
-      });
+        $.ajax({
+          type: "POST",
+          url: "http://91.201.54.66/teamsall",
+          CrossDomain: true,
+          async: false,
+          data: {
+            championat_id: lthis.championatinfo[0]
+          },
+          success: function(data) {
+            lthis.teamsch = data;
+            lthis.countteam = lthis.teamsch.all.length;
+          }
+        });
+      }, 0)
+      lthis.show = false;
     }
   },
 };
@@ -508,16 +555,15 @@ export default {
 
 .link-text p {
   color: #939497;
-  font-size: 16px;
-  font-weight: 550;
+  font-size: 15px;
   margin-top: -10px;
 }
 
 .data-text {
-  margin-top: -18px;
+  margin-top: -24px;
   font-size: 14px;
   color: #5c5c5c;
-  font-weight: 550
+  /* font-weight: 550 */
 }
 
 .blockT:hover a {
