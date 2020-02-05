@@ -21,33 +21,17 @@ import $ from 'jquery'
 export default {
   data() {
     return {
-      invatedata: ''
+
     };
   },
   props: {
     inform: {},
+    invatedata: {}
   },
-  mounted() {
-    this.invate()
-  },
+  mounted() {},
   methods: {
-    invate() {
-      let lthis = this;
-      $.ajax({
-        type: "POST",
-        url: "http://91.201.54.66/invate",
-        acync: false,
-        data: {
-          id: lthis.inform.id
-        },
-        success: function(data) {
-          lthis.invatedata = data;
-
-        },
-        error: function(error) {}
-      });
-    },
     invatefun(data) {
+      let lthis = this;
       console.log(data);
       let block = data;
       $.ajax({
@@ -58,6 +42,8 @@ export default {
           teamname: data[2],
         },
         success: function(data) {
+          lthis.$emit('invate', '')
+
           $("#" + block[0]).addClass("nan");
           console.log(data);
           alert(data)
@@ -68,6 +54,7 @@ export default {
       });
     },
     noteam(data) {
+      let lthis = this;
       let block = data;
 
       $.ajax({
@@ -79,6 +66,7 @@ export default {
           teamname: data[2],
         },
         success: function(data) {
+          lthis.$emit('invate', '')
           $("#" + block[0]).addClass("nan");
           console.log(data);
         },

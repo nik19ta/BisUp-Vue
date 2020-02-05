@@ -2,12 +2,12 @@
 <div id="app">
   <div class="content">
     <!-- topBar -->
-    <topBar v-if='Auth == "nan"' :img='img' @Championats='Championats' @exit='exit' />
+    <topBar v-if='Auth == "nan"' @invate='invate' :invatedata='invatedata' :img='img' @Championats='Championats' @exit='exit' />
     <!-- роутеры -->
     <transition id='body' v-if='Auth == "nan"' name="component-fade" mode="out-in">
 
-      <router-view @getusers='getusers' @reset='Championats' @server='server' @Championats='Championats' :inform='info.info' :allteams='allteams' :championats='championats' :people='people' :virtomonika='virtomonika'
-        :virtonomika_hard='virtonomika_hard' :dict='dict' />
+      <router-view @ajax='ajax' @invate='invate' @hardskills='hardskills' @dictfunc='dictfunc' :invatedata='invatedata' @getusers='getusers' @reset='Championats' @server='server' @Championats='Championats' :inform='info.info' :allteams='allteams'
+        :championats='championats' :people='people' :virtomonika='virtomonika' :virtonomika_hard='virtonomika_hard' :dict='dict' />
 
     </transition>
     <bottomBar v-if='Auth == "nan"' />
@@ -45,6 +45,8 @@ export default {
       virtonomika_hard: false,
       people: '',
       dict: '',
+      // приглашения
+      invatedata: ''
     }
   },
   components: {
@@ -56,8 +58,25 @@ export default {
 
   mounted() {
     this.main()
+
   },
   methods: {
+    invate() {
+      let lthis = this;
+      $.ajax({
+        type: "POST",
+        url: "http://91.201.54.66/invate",
+        acync: false,
+        data: {
+          id: lthis.info.info.id
+        },
+        success: function(data) {
+          lthis.invatedata = data;
+
+        },
+        error: function(error) {}
+      });
+    },
     ajax() {
       let lthis = this;
       $.ajax({
@@ -84,6 +103,7 @@ export default {
         }
       });
     },
+
     hardskills() {
       let lthis = this;
       $.ajax({
@@ -201,9 +221,7 @@ export default {
               lthis.info = data;
               lthis.img = lthis.info.info.img
               lthis.getusers()
-              lthis.ajax()
-              lthis.hardskills()
-              lthis.dictfunc()
+              lthis.invate()
             }
           }
         });

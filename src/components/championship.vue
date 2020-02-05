@@ -3,7 +3,7 @@
   <div class="Tests">
     <h1 v-if='show'>Чемпионаты</h1>
     <!-- блок чемпионатов -->
-    <div v-if='show' @click='championatsdataajax(block),teamsinfo()' v-for="block in championats.all">
+    <div v-if='show' @click='championatsdataajax(block)' v-for="block in championats.all">
       <div id="1" class="blockT">
         <div class="data-title-o">
           <p>{{block[6]}}</p>
@@ -175,13 +175,11 @@ export default {
       this.teamid = false
       this.teamis = false
       console.log(this.teamsch.all);
-      if (this.teamsch.all == false) {
-        console.log(lolo);
-      }
+
       if (typeof(this.teamsch.all) != "undefined") {}
       let usr = [];
       let user = [];
-
+      console.log(this.teamsch);
       for (var i = 0; i < this.teamsch.all.length; i++) {
         // смотрим капитанов и сравниваем
         if (this.teamsch.all[i][6] == this.inform.id) {
@@ -395,6 +393,7 @@ export default {
           captain_id: letThis.inform.id,
         },
         success: function(data) {
+          console.log(data);
           if (data == 'Имя команды занято') {
             alert('Имя команды занято')
           }
@@ -441,6 +440,7 @@ export default {
           lthis.teamsch = data;
           lthis.countteam = lthis.teamsch.all.length;
           lthis.teamsinfo()
+          // ,teamsinfo()
         }
       });
     },
@@ -466,6 +466,8 @@ export default {
       let lthis = this;
 
       setTimeout(function() {
+        lthis.AddTooTeamFunc()
+
 
         $.ajax({
           type: "POST",
