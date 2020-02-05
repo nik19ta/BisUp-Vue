@@ -174,17 +174,22 @@ export default {
       this.teamsforinv = ''
       this.teamid = false
       this.teamis = false
-
+      console.log(this.teamsch.all);
+      if (this.teamsch.all == false) {
+        console.log(lolo);
+      }
+      if (typeof(this.teamsch.all) != "undefined") {}
       let usr = [];
       let user = [];
 
       for (var i = 0; i < this.teamsch.all.length; i++) {
         // смотрим капитанов и сравниваем
         if (this.teamsch.all[i][6] == this.inform.id) {
+
           this.invatetrue = true;
           // название команды
           this.teamsforinv = this.teamsch.all[i][1];
-          // console.log(this.teamsch.all[i]);
+          // // console.log(this.teamsch.all[i]);
           this.teamdescribtion = this.teamsch.all[i][4]
           // id команды человека
           this.teamid = this.teamsch.all[i][0];
@@ -223,7 +228,7 @@ export default {
           lthis.leave = false;
         },
         error: function(error) {
-          // console.log('ошибка сервера')
+          // // console.log('ошибка сервера')
         }
       });
     },
@@ -279,6 +284,8 @@ export default {
     },
     async ExitChampionat() {
       let lthis = this;
+      let arr = [];
+
       // setTimeout(function() {}, 0)
 
       $.ajax({
@@ -292,8 +299,20 @@ export default {
           teamid: lthis.teamid
         },
         success: function(data) {
-          // console.log(data)
+          // // console.log(data)
           if (data == 'участник был капитаном, поэтому и команда удалена!') {
+            setTimeout(function() {
+              // // console.log(lthis.championatinfo[7].split(','));
+              arr.push(lthis.championatinfo[7])
+              for (var i = 0; i < lthis.championatinfo[7].split(',').length; i++) {
+                if (lthis.championatinfo[7].split(',')[i] == lthis.inform.id) {
+                  // console.log(arr[0].split(','));
+                  // console.log(arr[0].split(',').splice(0, i));
+                  lthis.championatinfo[7] = arr[0].split(',').splice(0, i).join();
+                }
+              }
+              // console.log(lthis.championatinfo[7].split(','));
+            }, 0)
             setTimeout(function() {
               lthis.championatsdataajax(lthis.championatinfo)
             }, 0)
@@ -306,17 +325,17 @@ export default {
 
           if (data == 'Пользователь удален из чемпионата!') {
             setTimeout(function() {
-              // console.log(lthis.championatinfo[7].split(','));
+              // // console.log(lthis.championatinfo[7].split(','));
               let arr = [];
               arr.push(lthis.championatinfo[7])
               for (var i = 0; i < lthis.championatinfo[7].split(',').length; i++) {
                 if (lthis.championatinfo[7].split(',')[i] == lthis.inform.id) {
-                  console.log(arr[0].split(','));
-                  console.log(arr[0].split(',').splice(0, i));
+                  // console.log(arr[0].split(','));
+                  // console.log(arr[0].split(',').splice(0, i));
                   lthis.championatinfo[7] = arr[0].split(',').splice(0, i).join();
                 }
               }
-              console.log(lthis.championatinfo[7].split(','));
+              // console.log(lthis.championatinfo[7].split(','));
             }, 0)
             setTimeout(function() {
               lthis.championatsdataajax(lthis.championatinfo)
@@ -401,7 +420,7 @@ export default {
           nameuser: lthis.iduser
         },
         success: function(data) {
-          // console.log(data)
+          console.log(data)
         }
       });
     },
