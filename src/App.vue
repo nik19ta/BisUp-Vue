@@ -85,6 +85,7 @@ export default {
         type: "GET",
         url: `https://virtonomica.ru/api/vera/main/achievement/browse?user_id=${this.info.info.account}`,
         CrossDomain: true,
+
         success: function(data) {
           lthis.virtomonika = data;
         }
@@ -139,6 +140,7 @@ export default {
         type: "POST",
         url: 'http://91.201.54.66/getusers',
         CrossDomain: true,
+        async: false,
         data: {
           sender: lthis.info.info.id,
         },
@@ -187,14 +189,42 @@ export default {
               window.location.reload()
               lthis.Auth = "server";
             } else {
+              lthis.info = data;
+              lthis.img = lthis.info.info.img;
+
               setTimeout(async function() {
-                lthis.info = data;
-                lthis.img = lthis.info.info.img
-              }, 0)
+                $.ajax({
+                  type: "POST",
+                  url: 'http://91.201.54.66/getusers',
+                  CrossDomain: true,
+                  async: false,
+                  data: {
+                    sender: lthis.info.info.id,
+                  },
+                  success: function(data) {
+                    lthis.people = data.users;
+                  }
+                });
+              }, 0);
+              //
               setTimeout(async function() {
-                lthis.invate()
-                lthis.getusers()
+                $.ajax({
+                  type: "POST",
+                  url: "http://91.201.54.66/invate",
+                  acync: false,
+                  data: {
+                    id: lthis.info.info.id
+                  },
+                  success: function(data) {
+                    lthis.countinv = data.inform.length;
+                    lthis.invatedata = data;
+                    console.log(data);
+
+                  },
+                  error: function(error) {}
+                });
               }, 0)
+              //
             }
           }
         });

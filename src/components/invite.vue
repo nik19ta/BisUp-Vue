@@ -53,7 +53,7 @@ export default {
         }
       });
     },
-    noteam(data) {
+    async noteam(data) {
       let lthis = this;
       let block = data;
 
@@ -66,7 +66,9 @@ export default {
           teamname: data[2],
         },
         success: function(data) {
-          lthis.$emit('invate', '')
+          setTimeout(function() {
+            lthis.$emit('invate', '')
+          }, 0)
           $("#" + block[0]).addClass("nan");
           console.log(data);
         },

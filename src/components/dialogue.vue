@@ -37,11 +37,11 @@
           </div>
         </div>
       </div>
-      <div class="form">
+      <form @submit='sendmessage' class="form">
         <img class='pick' src="../assets/Pick.png" alt="">
         <input class="int" type="text" id='message' placeholder="Напишите сообщение" name="" value="">
-        <button class='otpmess' type="button" @click='sendmessage' name="button">➜</button>
-      </div>
+        <button class='otpmess' type="submit" @click='sendmessage' name="button">➜</button>
+      </form>
     </div>
   </div>
 </div>
@@ -70,12 +70,6 @@ export default {
   created() {
     this.getusers()
   },
-  // beforeMount() {
-  //   this.getusers()
-  // },
-  // mounted() {
-  //   this.getusers()
-  // },
   methods: {
     getusers() {
       if (this.inform) {
@@ -103,9 +97,16 @@ export default {
         }
       });
     },
-
+    scrollchat() {
+      let scrollHeight = document.querySelector('.messenge').scrollHeight;
+      let clientHeight = document.querySelector('.messenge').clientHeight;
+      let scrollTop = scrollHeight - clientHeight;
+      document.querySelector('.messenge').scrollTop = scrollTop;
+    },
     sendmessage() {
+      event.preventDefault()
       let lthis = this;
+      let mes = '';
       $.ajax({
         type: "POST",
         url: "http://91.201.54.66/sendchat",
@@ -117,7 +118,13 @@ export default {
           message: $("#message").val()
         },
         success: function(data) {
-          lthis.mess = data
+          let mes = data;
+          setTimeout(function functionName() {
+            lthis.mess = mes;
+          }, )
+          setTimeout(function functionName() {
+            lthis.scrollchat();
+          }, )
         }
       });
     },
@@ -187,7 +194,7 @@ export default {
 
 .form {
   bottom: 0;
-  position: absolute;
+  position: sticky;
   background: #fff;
   border-radius: 0px 0px 10px 10px;
 }
@@ -198,7 +205,6 @@ export default {
   border-radius: 5px;
   display: flex;
   justify-content: center;
-
 
 }
 
@@ -218,6 +224,7 @@ export default {
   border-radius: 5px;
   margin-left: 1%;
   position: relative;
+
 }
 
 .Head {
@@ -264,18 +271,19 @@ button {
   border-radius: 100px;
   background: #ff7f00;
   color: #fff;
-  font-size: 15px;
+  font-size: 25px;
 }
 
 .int {
   width: 85%;
-  height: 30px;
+  height: 35px;
   border: solid 0;
   border-radius: 100px;
   background-color: #eeeff2;
   margin-left: 15px;
   margin-right: 15px;
   padding-left: 20px;
+  font-size: 16px;
 
 }
 
@@ -286,7 +294,8 @@ h1 {
 
 .messenge {
   overflow-x: auto;
-  height: 59vh;
+  height: 55vh;
+
 }
 
 .search {
@@ -344,7 +353,7 @@ h4 {
 
 .time {
   width: 100%;
-  font-size: 13px;
+  /* font-size: 16px; */
   transform: translateY(-62px);
   color: #a0a0a0;
 
