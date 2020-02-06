@@ -22,7 +22,7 @@
         </div> -->
           <router-link class="link-r" to="/">Профиль</router-link>
           <router-link class="link-r" to="/chat">Сообщения <span class='num'> (0) </span> </router-link>
-          <router-link class="link-r" to="/invite">Приглашения <span class='num'> ({{invatedata.inform.length}})</span> </router-link>
+          <router-link class="link-r" to="/invite">Приглашения <span class='num'> ({{invatedata}})</span> </router-link>
           <router-link @click.native='exit' class="link-r" to="/">Выход</router-link>
         </div>
       </transition>
@@ -85,11 +85,10 @@ export default {
       this.$emit('Championats', 'st');
     },
     exit() {
-      this.$emit('exit', )
+      this.$emit('exit', '')
       localStorage.st = 'login';
       localStorage.name = '';
     },
-    prof() {}
   },
 
 }

@@ -2,11 +2,11 @@
 <div id="app">
   <div class="content">
     <!-- topBar -->
-    <topBar v-if='Auth == "nan"' @invate='invate' :invatedata='invatedata' :img='img' @Championats='Championats' @exit='exit' />
+    <topBar v-if='Auth == "nan"' @invate='invate' :invatedata='countinv' :img='img' @Championats='Championats' @exit='exit' />
     <!-- роутеры -->
     <transition id='body' v-if='Auth == "nan"' name="component-fade" mode="out-in">
 
-      <router-view @ajax='ajax' @invate='invate' @hardskills='hardskills' @dictfunc='dictfunc' :invatedata='invatedata' @getusers='getusers' @reset='Championats' @server='server' @Championats='Championats' :inform='info.info' :allteams='allteams'
+      <router-view @ajax='ajax' @invate='invate' @hardskills='hardskills' @dictfunc='dictfunc' :invatedata='invatedata' @getusers='getusers' @reset='Championats' @Championats='Championats' :inform='info.info' :allteams='allteams'
         :championats='championats' :people='people' :virtomonika='virtomonika' :virtonomika_hard='virtonomika_hard' :dict='dict' />
 
     </transition>
@@ -39,14 +39,16 @@ export default {
       Auth: localStorage.st,
       allteams: '',
       championats: '',
-      info: [],
+      info: '',
       img: '',
       virtomonika: '',
       virtonomika_hard: false,
       people: '',
       dict: '',
       // приглашения
-      invatedata: ''
+      invatedata: '',
+      countinv: ''
+      // countinv: invatedata.inform.length
     }
   },
   components: {
@@ -56,9 +58,8 @@ export default {
     error
   },
 
-  mounted() {
-    this.main()
-
+  created() {
+    this.AutoLogIn()
   },
   methods: {
     invate() {
@@ -71,6 +72,7 @@ export default {
           id: lthis.info.info.id
         },
         success: function(data) {
+          lthis.countinv = data.inform.length;
           lthis.invatedata = data;
 
         },
@@ -116,39 +118,7 @@ export default {
           for (var key in data) {
             virtonomika_hards.push(data[key])
           }
-          // console.log(virtonomika_hards);
           lthis.virtonomika_hard = virtonomika_hards;
-        }
-      });
-    },
-    server() {
-      $.ajax({
-        type: "POST",
-        url: "http://91.201.54.66/server",
-        acync: false,
-        data: {
-          server: ''
-        },
-        success: function(data) {},
-        error: function(error) {
-          lthis.Auth = "server";
-        }
-      });
-    },
-    main() {
-      let lthis = this;
-      $.ajax({
-        type: "POST",
-        url: "http://91.201.54.66/server",
-        acync: false,
-        data: {
-          server: ''
-        },
-        success: function(data) {
-          lthis.AutoLogIn()
-        },
-        error: function(error) {
-          lthis.Auth = "server";
         }
       });
     },
@@ -159,14 +129,12 @@ export default {
         url: "http://91.201.54.66/championats",
         data: {},
         success: function(data) {
-          // console.log(data);
           lethis.championats = data;
         },
       });
     },
     getusers() {
       let lthis = this;
-      // console.log(lthis.info);
       $.ajax({
         type: "POST",
         url: 'http://91.201.54.66/getusers',
@@ -175,7 +143,6 @@ export default {
           sender: lthis.info.info.id,
         },
         success: function(data) {
-          // console.log(data.users);
           lthis.people = data.users;
         }
       });
@@ -214,14 +181,20 @@ export default {
             password: authdata[1],
           },
           success: function(data) {
+
             if (data == 'error') {
               localStorage.st = 'login';
               window.location.reload()
+              lthis.Auth = "server";
             } else {
-              lthis.info = data;
-              lthis.img = lthis.info.info.img
-              lthis.getusers()
-              lthis.invate()
+              setTimeout(async function() {
+                lthis.info = data;
+                lthis.img = lthis.info.info.img
+              }, 0)
+              setTimeout(async function() {
+                lthis.invate()
+                lthis.getusers()
+              }, 0)
             }
           }
         });

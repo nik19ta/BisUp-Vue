@@ -10,8 +10,7 @@
       <!-- <blockMess :people='p' /> -->
       <div @click='chat(p)' v-for="p in people">
 
-        <div class="contact">
-          <!-- {{people}} -->
+        <div id="contact" class="contact">
           <div class="logo">
             <img :src="p[1]" alt="">
           </div>
@@ -40,8 +39,8 @@
       </div>
       <div class="form">
         <img class='pick' src="../assets/Pick.png" alt="">
-        <input class="int" type="text" placeholder="Напишите сообщение" name="" value="">
-        <button class='otpmess' type="button" name="button">➜</button>
+        <input class="int" type="text" id='message' placeholder="Напишите сообщение" name="" value="">
+        <button class='otpmess' type="button" @click='sendmessage' name="button">➜</button>
       </div>
     </div>
   </div>
@@ -59,23 +58,35 @@ export default {
       // сообщения
       mess: [],
       // данный человек
-      thisuser: ''
+      thisuser: '',
+      // id человека
+      thisid: ''
     }
   },
   props: {
     people: {},
     inform: {}
   },
-  mounted() {
+  created() {
     this.getusers()
   },
+  // beforeMount() {
+  //   this.getusers()
+  // },
+  // mounted() {
+  //   this.getusers()
+  // },
   methods: {
     getusers() {
-      this.$emit('getusers', '')
+      if (this.inform) {
+        this.$emit('getusers', '')
+        console.log('загрузилась')
+      }
     },
     chat(data) {
       let lthis = this;
       this.thisuser = data[0]
+      this.thisid = data[2]
       console.log(data);
       $.ajax({
         type: "POST",
@@ -92,6 +103,26 @@ export default {
         }
       });
     },
+
+    sendmessage() {
+      let lthis = this;
+      $.ajax({
+        type: "POST",
+        url: "http://91.201.54.66/sendchat",
+        CrossDomain: true,
+        async: false,
+        data: {
+          sender: this.inform.id,
+          recipient: this.thisid,
+          message: $("#message").val()
+        },
+        success: function(data) {
+          lthis.mess = data
+        }
+      });
+    },
+
+
   }
 };
 </script>
@@ -282,7 +313,7 @@ h1 {
   align-items: center;
 }
 
-.contact:first-child {
+.contact {
   border-left: 6px #ff7f00 solid;
 }
 

@@ -1,5 +1,8 @@
 <template>
 <div class="testing">
+  <div v-if='notificationparams' class="notification">
+    <p>{{notification}}</p>
+  </div>
   <div class="Tests">
     <h1 v-if='show'>Чемпионаты</h1>
     <!-- блок чемпионатов -->
@@ -164,12 +167,35 @@ export default {
       // если у челвека команда
       teamis: false,
       users: [],
+      // уведомление
+      notification: '',
+      notificationparams: true
     }
   },
   mounted() {
     this.championatMethod()
+    // this.notificationfunc()
   },
   methods: {
+    notificationfunc(data) {
+      console.log(data);
+      let content = data;
+      setTimeout(async function() {
+        console.log(content);
+        this.notification = content;
+        this.notificationparams = true;
+      }, 3000)
+      // setTimeout(async function() {
+      //   console.log(content);
+      //   this.notification = 'content';
+      // }, 3000)
+
+      // this.notification = 'content';
+      // this.notification = 'nik';
+      // this.notificationparams = false;
+
+
+    },
     teamsinfo() {
       this.teamsforinv = ''
       this.teamid = false
@@ -298,6 +324,7 @@ export default {
         },
         success: function(data) {
           // // console.log(data)
+          lthis.notificationfunc(data)
           if (data == 'участник был капитаном, поэтому и команда удалена!') {
             setTimeout(function() {
               // // console.log(lthis.championatinfo[7].split(','));
@@ -506,6 +533,22 @@ export default {
 </script>
 
 <style scoped>
+.notification {
+  width: 400px;
+  height: 80px;
+  padding: 8px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background: #fff;
+  border-radius: 5px;
+  position: absolute;
+  right: 20px;
+  top: 80px;
+  z-index: 20;
+  box-shadow: 0px 0px 10px 0px #0001;
+}
+
 .blockT {
   width: 270px;
   height: 360px;
