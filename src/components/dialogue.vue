@@ -93,7 +93,10 @@ export default {
         },
         success: function(data) {
           console.log(data.chat);
-          lthis.mess = data
+          lthis.mess = data;
+          setTimeout(function functionName() {
+            lthis.scrollchat()
+          }, 0)
         }
       });
     },
@@ -104,7 +107,9 @@ export default {
       document.querySelector('.messenge').scrollTop = scrollTop;
     },
     sendmessage() {
-      event.preventDefault()
+      event.preventDefault();
+      // $("#message").val() = '';
+      let zero = 0;
       let lthis = this;
       let mes = '';
       $.ajax({
@@ -121,6 +126,7 @@ export default {
           let mes = data;
           setTimeout(function functionName() {
             lthis.mess = mes;
+            document.querySelector('#message').value = '';
           }, )
           setTimeout(function functionName() {
             lthis.scrollchat();
