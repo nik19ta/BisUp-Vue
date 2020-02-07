@@ -1,16 +1,17 @@
 <template>
 <div class="dialohue">
   <h1>Чат</h1>
-  <div class="sarch-input">
-    <input class='search' type="text" placeholder="  Поиск по людям, диалогам и сообщениям" name="" value="">
-  </div>
+  <form class="" @submit='sarch' action="index.html" method="post" class="sarch-input">
+    <input class='search' id='search' type="text" placeholder="  Поиск по людям, диалогам и сообщениям" name="" value="">
+
+  </form>
   <!--  -->
   <div class="mess">
     <div class="contacts">
       <!-- <blockMess :people='p' /> -->
       <div @click='chat(p)' v-for="p in people">
 
-        <div id="contact" class="contact">
+        <div :id="'i' +p[2]" class="contact i">
           <div class="logo">
             <img :src="p[1]" alt="">
           </div>
@@ -78,6 +79,13 @@ export default {
       }
     },
     chat(data) {
+      console.log(data[2]);
+      $(".i").css({
+        borderLeft: "solid 6px #fff",
+      });
+      $("#i" + data[2]).css({
+        borderLeft: "solid 6px #ff7f00",
+      });
       let lthis = this;
       this.thisuser = data[0]
       this.thisid = data[2]
@@ -100,6 +108,30 @@ export default {
         }
       });
     },
+    sarch() {
+      event.preventDefault();
+      // if (document.querySelector('#search').value > 1) {
+
+      console.log(document.querySelector('#search').value);
+
+      $.ajax({
+        type: "POST",
+        url: "http://91.201.54.66/search",
+        CrossDomain: true,
+        async: false,
+        data: {
+          content: document.querySelector('#search').value,
+        },
+        success: function(data) {
+          document.querySelector('#search').value = '';
+          console.log(data);
+
+        }
+      });
+
+      // }
+
+    },
     scrollchat() {
       let scrollHeight = document.querySelector('.messenge').scrollHeight;
       let clientHeight = document.querySelector('.messenge').clientHeight;
@@ -108,31 +140,35 @@ export default {
     },
     sendmessage() {
       event.preventDefault();
-      // $("#message").val() = '';
-      let zero = 0;
-      let lthis = this;
-      let mes = '';
-      $.ajax({
-        type: "POST",
-        url: "http://91.201.54.66/sendchat",
-        CrossDomain: true,
-        async: false,
-        data: {
-          sender: this.inform.id,
-          recipient: this.thisid,
-          message: $("#message").val()
-        },
-        success: function(data) {
-          let mes = data;
-          setTimeout(function functionName() {
-            lthis.mess = mes;
-            document.querySelector('#message').value = '';
-          }, )
-          setTimeout(function functionName() {
-            lthis.scrollchat();
-          }, )
-        }
-      });
+      if ($("#message").val().length > 1 && $("#message").val() != '') {
+
+
+        // $("#message").val() = '';
+        let zero = 0;
+        let lthis = this;
+        let mes = '';
+        $.ajax({
+          type: "POST",
+          url: "http://91.201.54.66/sendchat",
+          CrossDomain: true,
+          async: false,
+          data: {
+            sender: this.inform.id,
+            recipient: this.thisid,
+            message: $("#message").val()
+          },
+          success: function(data) {
+            let mes = data;
+            setTimeout(function functionName() {
+              lthis.mess = mes;
+              document.querySelector('#message').value = '';
+            }, )
+            setTimeout(function functionName() {
+              lthis.scrollchat();
+            }, )
+          }
+        });
+      }
     },
 
 
@@ -319,6 +355,7 @@ h1 {
   border-bottom: solid 1px #efefef;
   display: flex;
   justify-content: space-between;
+  border-Left: solid 6px #fff;
 }
 
 .logo {
@@ -328,9 +365,6 @@ h1 {
   align-items: center;
 }
 
-.contact {
-  border-left: 6px #ff7f00 solid;
-}
 
 .logo img {
   width: 55px;

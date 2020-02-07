@@ -136,6 +136,8 @@ export default {
     },
     getusers() {
       let lthis = this;
+      // for (var i = 0; i < 1000; i++) {
+
       $.ajax({
         type: "POST",
         url: 'http://91.201.54.66/getusers',
@@ -148,6 +150,8 @@ export default {
           lthis.people = data.users;
         }
       });
+
+      // }
     },
     AuthTrue(data) {
       if (data == 'error') {
@@ -183,7 +187,6 @@ export default {
             password: authdata[1],
           },
           success: function(data) {
-
             if (data == 'error') {
               localStorage.st = 'login';
               window.location.reload()
@@ -223,6 +226,15 @@ export default {
                   },
                   error: function(error) {}
                 });
+              }, 0)
+              setTimeout(async function() {
+                lthis.hardskills()
+              }, 0)
+              setTimeout(async function() {
+                lthis.dictfunc()
+              }, 0)
+              setTimeout(async function() {
+                lthis.ajax()
               }, 0)
               //
             }

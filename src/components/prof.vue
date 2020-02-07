@@ -169,9 +169,11 @@ export default {
     }
   },
   mounted() {
-    this.$emit('ajax', '')
-    this.$emit('hardskills', '')
-    this.$emit('dictfunc', '')
+    if (this.inform != '') {
+      this.$emit('ajax', '')
+      this.$emit('hardskills', '')
+      this.$emit('dictfunc', '')
+    }
   },
   methods: {
     rddata() {

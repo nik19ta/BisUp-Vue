@@ -16,6 +16,7 @@
       <router-link id='contact' @click.native='menunav("contact")' class="link" to="/contact">Контакты</router-link>
     </div>
     <div class="prof">
+
       <transition name="component-fade" mode="out-in">
         <div id="dop" class="dop ">
           <!-- <div class="trap">
@@ -26,7 +27,6 @@
           <router-link @click.native='exit' class="link-r" to="/">Выход</router-link>
         </div>
       </transition>
-
       <div class="btn">
 
         <img class='button' @click='menu_top' :src="img" alt="click">
@@ -140,17 +140,18 @@ export default {
   box-shadow: 0px 0px 20px 1px #0003;
   font-size: 14px;
   padding: 10px 20px 10px 20px;
-  right: 150px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   flex-wrap: wrap;
   font-weight: 500;
-  position: absolute;
+  position: fixed;
   transform: translateY(-93px);
   visibility: hidden;
-  transition: all 0.3s !important;
   opacity: 0;
+  transition: all 0.3s !important;
+  /* background: #456; */
+  margin-left: -100px;
 }
 
 .dopclick {
@@ -284,24 +285,6 @@ export default {
 
 }
 
-@media screen and (max-width: 1600px) {
-  .dop {
-    right: 115px;
-  }
-}
-
-@media screen and (max-width: 1300px) {
-  .dop {
-    right: 80px;
-  }
-}
-
-@media screen and (max-width: 1100px) {
-  .dop {
-    right: 50px;
-  }
-}
-
 @media screen and (max-width: 1000px) {
 
   .menu {
@@ -337,10 +320,6 @@ export default {
   .test::before,
   .test::before {
     display: none;
-  }
-
-  .dop {
-    right: 25px;
   }
 }
 </style>
