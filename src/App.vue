@@ -60,6 +60,7 @@ export default {
 
   created() {
     this.AutoLogIn()
+    this.testapi()
   },
   methods: {
     invate() {
@@ -120,6 +121,15 @@ export default {
             virtonomika_hards.push(data[key])
           }
           lthis.virtonomika_hard = virtonomika_hards;
+        }
+      });
+    },
+    testapi() {
+      $.ajax({
+        type: "GET",
+        url: 'http://localhost:3000/',
+        success: function(data) {
+          console.log(data);
         }
       });
     },

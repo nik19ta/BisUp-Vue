@@ -77,12 +77,14 @@
           <router-link class="half" :to="{ name: 'user', params: {id:users.data[0][0]} }">
             <img :src="users.data[0][8]" alt="">
             <div class="participant-text">
-              <!-- <p>{{users.team}}</p> -->
               <h3 style="color: #000;">{{users.data[0][1]}}</h3>
               <p>{{users.data[0][4]}}, {{users.data[0][7]}}</p>
             </div>
           </router-link>
-          <p @click='addTeams(users[0][0])' v-if='invatetrue && users.team' class='invite'>Пригласить </p>
+          <!-- {{users.inv}}
+          {{teamsforinv}} -->
+          <p @click='addTeams(users.data[0][0])' v-if='in_array(teamsforinv, users.inv)&& invatetrue && users.team && users.data[0][0] !=inform.id' class='invite'>Пригласить </p>
+          <p v-if='!in_array(teamsforinv, users.inv)&& invatetrue && users.team && users.data[0][0] !=inform.id' class='invite'>Приглашение отправлено</p>
         </div>
         <!--  -->
         <button v-if='!addto' class="participant-btn" @click='addteamUser' type="button" name="button">Присоедениться к чемпионату</button>
@@ -133,6 +135,8 @@ export default {
   props: {
     championats: {},
     inform: {},
+    // все приглашения
+    invatedata: {}
   },
   data() {
     return {
@@ -171,7 +175,9 @@ export default {
       users: [],
       // уведомление
       notification: '',
-      notificationparams: false
+      notificationparams: false,
+      // приглашения
+      invates: ''
     }
   },
   mounted() {
@@ -180,10 +186,10 @@ export default {
   },
   methods: {
     notificationfunc(data) {
-      console.log(data);
+      // console.log(data);
       // let content = data;
       // setTimeout(async function() {
-      //   console.log(content);
+      //   // console.log(content);
       //   this.notification = content;
       //   this.notificationparams = true;
       // }, 3000)
@@ -204,7 +210,7 @@ export default {
           this.invatetrue = true;
           // название команды
           this.teamsforinv = this.teamsch.all[i][1];
-          // // console.log(this.teamsch.all[i]);
+          // // // console.log(this.teamsch.all[i]);
           this.teamdescribtion = this.teamsch.all[i][4]
           // id команды человека
           this.teamid = this.teamsch.all[i][0];
@@ -213,7 +219,15 @@ export default {
         }
       }
       for (var i = 0; i < this.userschampionats.length; i++) {
-        console.log(this.userschampionats[i]);
+        // console.log("Шаг " + i);
+        // приглашение
+        // console.log(this.invatedata.inform[0][0]);
+        // console.log(this.invatedata.inform[0]);
+
+        // console.log(this.userschampionats[i].data[0][0]);
+
+        // console.log(this.inform.id);
+        // }
       }
     },
     teamzero() {
@@ -247,7 +261,7 @@ export default {
           lthis.leave = false;
         },
         error: function(error) {
-          // // console.log('ошибка сервера')
+          // // // console.log('ошибка сервера')
         }
       });
     },
@@ -272,7 +286,7 @@ export default {
       });
     },
     async user(data) {
-      console.log(data);
+      // console.log(data);
       $(".item").css({
         background: "#fff",
         color: "#000"
@@ -294,7 +308,7 @@ export default {
         },
         success: function(data) {
           lthis.ids = data.all;
-          console.log(data);
+          // console.log(data);
         }
       });
       // проходит по всем пользователяс
@@ -346,7 +360,7 @@ export default {
 
           if (data == 'Пользователь удален из чемпионата!') {
             setTimeout(function() {
-              // // console.log(lthis.championatinfo[7].split(','));
+              // // // console.log(lthis.championatinfo[7].split(','));
               let arr = [];
               arr.push(lthis.championatinfo[7])
               for (var i = 0; i < lthis.championatinfo[7].split(',').length; i++) {
@@ -412,7 +426,7 @@ export default {
           captain_id: letThis.inform.id,
         },
         success: function(data) {
-          console.log(data);
+          // console.log(data);
           if (data == 'Имя команды занято') {
             alert('Имя команды занято')
           }
@@ -439,7 +453,7 @@ export default {
           nameuser: lthis.iduser
         },
         success: function(data) {
-          console.log(data)
+          // console.log(data)
         }
       });
     },
@@ -477,13 +491,19 @@ export default {
     championshipFun() {
       this.show = !this.show;
     },
+    in_array(value, array) {
+      for (var i = 0; i < array.length; i++) {
+        if (value == array[i][1]) return false;
+      }
+      return true;
+    },
     async championatsdataajax(data) {
       this.invatetrue = false;
       this.userschampionats = '';
       this.addto = false;
       this.championatinfo = data;
       let lthis = this;
-      console.log(lthis.championatinfo[0]);
+      // console.log(lthis.championatinfo[0]);
 
       setTimeout(function() {
 
@@ -498,7 +518,7 @@ export default {
           },
           success: function(data) {
             lthis.userschampionats = data.all;
-            console.log(data);
+
           }
         });
         for (var i = 0; i < data[7].split(',').length; i++) {
@@ -506,20 +526,19 @@ export default {
             lthis.addto = true;
           }
         }
-        $.ajax({
-          type: "POST",
-          url: "http://91.201.54.66/teamsall",
-          CrossDomain: true,
-          async: false,
-          data: {
-            championat_id: lthis.championatinfo[0]
-          },
-          success: function(data) {
-            lthis.teamsch = data;
-            lthis.countteam = lthis.teamsch.all.length;
-          }
-        });
-
+        // $.ajax({
+        //   type: "POST",
+        //   url: "http://91.201.54.66/teamsall",
+        //   CrossDomain: true,
+        //   async: false,
+        //   data: {
+        //     championat_id: lthis.championatinfo[0]
+        //   },
+        //   success: function(data) {
+        //     lthis.teamsch = data;
+        //     lthis.countteam = lthis.teamsch.all.length;
+        //   }
+        // });
         lthis.AddTooTeamFunc()
       }, 0)
       lthis.show = false;
