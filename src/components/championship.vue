@@ -218,17 +218,6 @@ export default {
           this.teamis = true
         }
       }
-      for (var i = 0; i < this.userschampionats.length; i++) {
-        // console.log("Шаг " + i);
-        // приглашение
-        // console.log(this.invatedata.inform[0][0]);
-        // console.log(this.invatedata.inform[0]);
-
-        // console.log(this.userschampionats[i].data[0][0]);
-
-        // console.log(this.inform.id);
-        // }
-      }
     },
     teamzero() {
       this.ids = false;
@@ -453,6 +442,7 @@ export default {
           nameuser: lthis.iduser
         },
         success: function(data) {
+          lthis.championatsdataajax(lthis.championatinfo)
           // console.log(data)
         }
       });
