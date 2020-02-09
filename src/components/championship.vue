@@ -1,7 +1,8 @@
 <template>
 <div class="testing">
   <div v-if='notificationparams' class="notification">
-    <p>{{notification}}</p>
+    <p class='title-notification'>Уведомление: </p> <br>
+    <p class='content-notification'>{{notification}}</p>
   </div>
   <div class="Tests">
     <h1 v-if='show'>Чемпионаты</h1>
@@ -182,17 +183,20 @@ export default {
   },
   mounted() {
     this.championatMethod()
-    // this.notificationfunc()
   },
   methods: {
     notificationfunc(data) {
-      // console.log(data);
-      // let content = data;
-      // setTimeout(async function() {
-      //   // console.log(content);
-      //   this.notification = content;
-      //   this.notificationparams = true;
-      // }, 3000)
+      let lthis = this;
+      setTimeout(function() {
+        lthis.notificationparams = true;
+        lthis.notification = data;
+
+      }, 0)
+      setTimeout(function() {
+        lthis.notificationparams = false;
+        lthis.notification = '';
+
+      }, 3000)
 
     },
     teamsinfo() {
@@ -249,9 +253,7 @@ export default {
 
           lthis.leave = false;
         },
-        error: function(error) {
-          // // // console.log('ошибка сервера')
-        }
+        error: function(error) {}
       });
     },
     addTeams(data) {
@@ -402,6 +404,7 @@ export default {
     },
     async AddToTeamFunc() {
       let letThis = this;
+
       $.ajax({
         type: "POST",
         url: "http://91.201.54.66/AddToTeam",
@@ -417,10 +420,11 @@ export default {
         success: function(data) {
           // console.log(data);
           if (data == 'Имя команды занято') {
-            alert('Имя команды занято')
+            letThis.notificationfunc('Имя команды занято')
           }
           $("#addTeam").removeClass("addTeamVisible");
           if (data == 'Команда создана!') {
+            letThis.notificationfunc('Команда создана!')
             letThis.AddTooTeamFunc()
           }
         }
@@ -540,11 +544,8 @@ export default {
 <style scoped>
 .notification {
   width: 400px;
-  height: 80px;
+  height: 100px;
   padding: 8px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
   background: #fff;
   border-radius: 5px;
   position: absolute;
@@ -552,6 +553,18 @@ export default {
   top: 80px;
   z-index: 20;
   box-shadow: 0px 0px 10px 0px #0001;
+}
+
+.title-notification {
+  width: 100%;
+  margin: 10px;
+}
+
+.content-notification {
+  width: 100%;
+  margin: 0;
+  margin-left: 10px;
+  margin-top: -10px;
 }
 
 .blockT {
