@@ -447,7 +447,6 @@ export default {
         },
         success: function(data) {
           lthis.championatsdataajax(lthis.championatinfo)
-          // console.log(data)
         }
       });
     },
@@ -677,7 +676,7 @@ h1 {
 
 .testing {
   width: 100%;
-  padding-bottom: 50px;
+  /* padding-bottom: 90px; */
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -692,6 +691,8 @@ h1 {
   justify-content: flex-start;
   flex-wrap: wrap;
   margin: auto -1.5%;
+  height: auto;
+  padding-bottom: 50px;
 }
 
 h1 {
@@ -797,6 +798,8 @@ img {
   padding-left: 20px;
   padding-top: 20px;
   font-size: 16px;
+  font-family: roboto, sans-serif;
+  resize: none;
 }
 
 .addTeam button {

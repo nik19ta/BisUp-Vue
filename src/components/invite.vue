@@ -1,18 +1,19 @@
-<template lang="html">
-  <div class="content">
-  <div class="invite">
+<template>
+<div class="testing">
+  <div class="Tests">
     <h1>Приглашения</h1>
-    <div class="invate_blocks">
-      <div :id='invate[0]' v-for='invate in invatedata.inform' class="invate_block inv">
-        <p class='porag1 porags'>Приглашение в команду: <b>{{invate[2]}}</b> </p>
-        <p class='porag3 porags'>Номинация:</p><p> <b> {{invate[3]}}</b> </p>
-        <p class='porag5 porags'>сопроводительное письмо:</p><p> {{invate[4]}}</p>
-        <a id="click1" @click='invatefun(invate)'>Принять приглашение</a> <br>
-        <a id="click2" @click='noteam(invate)'>Отказатся </a>
-      </div>
+    <div :id='invate[0]' v-for='invate in invatedata.inform' class="invate_block inv">
+      <p class='porag1 porags'>Приглашение в команду: <b>{{invate[2]}}</b> </p>
+      <p class='porag3 porags'>Номинация:</p>
+      <p> <b> {{invate[3]}}</b> </p>
+      <p class='porag5 porags'>сопроводительное письмо:</p>
+      <p> {{invate[4]}}</p>
+      <a id="click1" @click='invatefun(invate)'>Принять приглашение</a> <br>
+      <a id="click2" @click='noteam(invate)'>Отказатся </a>
     </div>
+
   </div>
-  </div>
+</div>
 </template>
 
 <script>
@@ -81,43 +82,76 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
-.content{
+<style scoped>
+h1 {
+  width: 100%;
+  text-align: left;
+  margin-left: 15px;
+}
+
+.testing {
+  width: 100%;
+  padding-bottom: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-top: 60px;
+
+}
+
+.Tests {
+  width: 1200px;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  /* margin:; */
+}
+
+.content {
   width: 100%;
   display: flex;
   justify-content: center;
 }
-.nan{
-  display: none!important;
+
+.nan {
+  display: none !important;
 
 }
-.invite{
+
+.invite {
   padding-top: 50px;
   width: 90%;
 }
-.porag1{
+
+.porag1 {
   font-weight: 400;
   font-size: 21px;
 }
-.porag2{
+
+.porag2 {
   font-weight: 400;
 }
-.porag3{
+
+.porag3 {
   font-weight: 400;
 }
-.porag4{
+
+.porag4 {
   font-size: 16px;
   font-weight: 400;
 }
-.porag5{
+
+.porag5 {
   font-size: 16px;
   font-weight: 400;
 }
-.porag6{
+
+.porag6 {
   font-size: 16px;
   font-weight: 400;
 }
-#click1{
+
+#click1 {
   width: 76%;
   background: #ff8000;
   border-radius: 10px;
@@ -127,7 +161,8 @@ export default {
   align-items: center;
   color: #fff;
 }
-#click2{
+
+#click2 {
   width: 76%;
   margin-top: 20px;
   text-align: center;
@@ -137,7 +172,8 @@ export default {
   height: 50px;
 
 }
-.invate_block{
+
+.invate_block {
   background: #fff;
   max-width: 570px;
   height: 500px;
@@ -150,28 +186,34 @@ export default {
   justify-content: center;
   flex-wrap: wrap;
 }
-p{
+
+p {
   width: 100%;
   text-align: center;
 }
-h1{
+
+h1 {
   padding: 10px;
 
 }
-h4{
+
+h4 {
   font-size: 17px;
 }
-.countuser{
+
+.countuser {
   transform: translateY(-16px);
   font-size: 14px;
   color: #717171;
 }
-.desk{
+
+.desk {
   transform: translateY(-19px);
   font-size: 14px;
   color: #717171;
 }
-.invate_blocks{
+
+.invate_blocks {
   width: 100%;
   margin: auto -10px;
   padding: 10px;
@@ -179,11 +221,37 @@ h4{
   justify-content: flex-start;
   flex-wrap: wrap;
 }
-@media screen and (max-width: 1200px) {
-  .invate_blocks{
-  }
-  .invate_block{
 
+@media screen and (max-width: 1200px) {
+  .invate_blocks {}
+
+  .invate_block {}
 }
+
+@media screen and (max-width: 1350px) {
+  .Tests {
+    width: 900px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  h1 {
+    text-align: center;
+  }
+
+  .Tests {
+    width: 600px;
+  }
+}
+
+@media screen and (max-width: 599px) {
+  h1 {
+    text-align: center;
+  }
+
+  .Tests {
+    width: 100%;
+    justify-content: center;
+  }
 }
 </style>

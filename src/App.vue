@@ -2,7 +2,7 @@
 <div id="app">
   <div class="content">
     <!-- topBar -->
-    <topBar v-if='Auth == "nan"' @invate='invate' :invatedata='countinv' :img='img' @Championats='Championats' @exit='exit' />
+    <topBar v-if='Auth == "nan"' @invate='invate' :invatedata='countinv' :img='info.info.img' @Championats='Championats' @exit='exit' />
     <!-- роутеры -->
     <transition id='body' v-if='Auth == "nan"' name="component-fade" mode="out-in">
 
@@ -17,8 +17,13 @@
     <error v-if='Auth == "server"' />
 
 
-
+    <div v-if='notificationcparamsp' class="notificationc">
+      <img src="../src/assets/notification.png" alt="">
+      <p class='content-notificationc'>{{notificationc}}</p>
+    </div>
   </div>
+
+
 </div>
 </template>
 <script>
@@ -40,15 +45,18 @@ export default {
       allteams: '',
       championats: '',
       info: '',
-      img: '',
+
       virtomonika: '',
-      virtonomika_hard: false,
-      people: '',
+      virtonomika_hard: '',
       dict: '',
+
+      people: '',
       // приглашения
       invatedata: '',
-      countinv: ''
-      // countinv: invatedata.inform.length
+      countinv: '',
+      // уведомление
+      notificationc: '',
+      notificationcparamsp: false,
     }
   },
   components: {
@@ -63,6 +71,20 @@ export default {
     this.testapi()
   },
   methods: {
+    notificationcfunc(data) {
+      let lthis = this;
+      setTimeout(function() {
+        lthis.notificationcparamsp = true;
+        lthis.notificationc = data;
+
+      }, 0)
+      setTimeout(function() {
+        lthis.notificationcparamsp = false;
+        lthis.notificationc = '';
+
+      }, 3000)
+
+    },
     invate() {
       let lthis = this;
       $.ajax({
@@ -165,7 +187,7 @@ export default {
     },
     AuthTrue(data) {
       if (data == 'error') {
-        alert('не верный логин или пароль')
+        this.notificationcfunc('не верный логин или пароль')
       } else if (data.status == 'ok') {
         let datastrong = data.info.login + ',' + data.info.password;
         datastrong = datastrong.split(',');
@@ -177,7 +199,7 @@ export default {
     },
     AuthFalse(data) {
       if (data == 'error') {
-        alert('не верный логин или пароль')
+        this.notificationcfunc('не верный логин или пароль')
       } else if (data.status == 'ok') {
         let datastrong = data.info.login + ',' + data.info.password;
         datastrong = datastrong.split(',');
@@ -203,7 +225,6 @@ export default {
               lthis.Auth = "server";
             } else {
               lthis.info = data;
-              lthis.img = lthis.info.info.img;
 
               setTimeout(async function() {
                 $.ajax({
@@ -260,6 +281,27 @@ export default {
 </script>
 
 <style>
+.notificationc {
+  position: absolute;
+  background: rgb(234, 85, 83);
+  bottom: 50px;
+  right: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 3px;
+  color: #fff;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.notificationc img {
+  width: 35px;
+  margin-top: -5px;
+  margin-left: -15px;
+  margin-right: 5px;
+}
+
 button,
 a,
 #checkbox-id {

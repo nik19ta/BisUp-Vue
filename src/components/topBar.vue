@@ -19,11 +19,9 @@
 
       <transition name="component-fade" mode="out-in">
         <div id="dop" class="dop ">
-          <!-- <div class="trap">
-        </div> -->
           <router-link class="link-r" to="/">Профиль</router-link>
           <router-link class="link-r" to="/chat">Сообщения <span class='num'> (0) </span> </router-link>
-          <router-link class="link-r" to="/invite">Приглашения <span class='num'> ({{invatedata}})</span> </router-link>
+          <router-link class="link-r" to="/invite">Приглашения <span class='num'> ({{invatedata}}<span v-if='invatedata == ""'>0</span>) </span> </router-link>
           <router-link @click.native='exit' class="link-r" to="/">Выход</router-link>
         </div>
       </transition>
@@ -193,6 +191,7 @@ export default {
 
 .logo {
   height: 100%;
+  padding-left: 20px;
   display: flex;
   justify-content: flex-end;
   align-items: center;

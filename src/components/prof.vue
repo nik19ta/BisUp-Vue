@@ -75,7 +75,7 @@
   <hr class="line">
   <div class="scroll">
 
-    <div v-for='virt in virtomonika' class="blockR">
+    <div v-if='inform.account > 1' v-for='virt in virtomonika' class="blockR">
       <div :id='virt.template_id' class="more-n">
         <h4>{{virt.name}}</h4>
         <p>Описание: {{virt.descr}}</p>
@@ -117,11 +117,14 @@
       </div>
     </div>
   </div> -->
+
+
+
   <div class="rating">
     <h1> Хардскилы </h1>
     <hr class="line">
     <div class="scroll2">
-      <div v-if='virtonomika_hard' style="width: calc(100%/5)" v-for='i  in 5' class=" hards">
+      <div v-if='inform.account > 1' style="width: calc(100%/5)" v-for='i  in 5' class=" hards">
         <div :id='virtonomika_hard[i].kind' class='hards_col' v-bind:style="{ background: 'rgb(252,88,48)', height: (virtonomika_hard[i].value/0.2 + i) + '5px' }">
           <span class='value'>{{virtonomika_hard[i].value +i}}</span>
         </div>
@@ -130,11 +133,14 @@
 
     </div>
   </div>
+
+
+
   <div class="rating">
     <h1> Софтскилы </h1>
     <hr class="line">
     <div class="scroll2">
-      <div v-if='virtonomika_hard' style="width: calc(100%/5)" v-for='i  in 5' class=" hards">
+      <div v-if='inform.account > 1' style="width: calc(100%/5)" v-for='i  in 5' class=" hards">
         <div :id='virtonomika_hard[i +5].kind' class='hards_col' v-bind:style="{ background: 'rgb(252,88,48)',
         height: (virtonomika_hard[i+5].value/0.2 + i) + '5px' }">
           <span class='value'>{{virtonomika_hard[i+5].value+i}}</span>
@@ -144,6 +150,8 @@
 
     </div>
   </div>
+
+
   <!-- <div class="rating">
     <h1> Софтскилы </h1>
     <hr class="line">

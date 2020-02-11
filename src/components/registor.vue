@@ -23,6 +23,10 @@
       <a> <img src="../assets/google.png" alt=""> </a>
       <a> <img src="../assets/odnoklassniki.png" alt=""> </a>
     </div>
+    <div v-if='notificationparams' class="notification">
+      <img src="../assets/notification.png" alt="">
+      <p class='content-notification'>{{notification}}</p>
+    </div>
   </div>
 </div>
 </template>
@@ -38,9 +42,26 @@ export default {
       statusemail: '',
       statuspass: '',
       statuspass2: '',
+      // уведомление
+      notification: '',
+      notificationparams: false,
     }
   },
   methods: {
+    notificationfunc(data) {
+      let lthis = this;
+      setTimeout(function() {
+        lthis.notificationparams = true;
+        lthis.notification = data;
+
+      }, 0)
+      setTimeout(function() {
+        lthis.notificationparams = false;
+        lthis.notification = '';
+
+      }, 3000)
+
+    },
     AuthTemplate(data) {
       this.$emit('AuthTemplate', data);
     },
@@ -55,10 +76,8 @@ export default {
 
       function loginverification() {
         if ($("#login-inp").val().length < 4) {
-          // lthis.statuslogin = 'Слишком короткий логин'
-          alert('Слишком короткий логин')
+          lthis.notificationfunc('Слишком короткий логин')
         } else {
-          // this.statuslogin = ''
           return true;
         }
       }
@@ -66,10 +85,8 @@ export default {
       function emailverification() {
 
         if (email.test($('#email').val()) == false) {
-          // lthis.statusemail = 'Не корректный email'
-          alert('Не корректный email')
+          lthis.notificationfunc('Не корректный email')
         } else {
-          // this.statusemail = ''
           return true;
         }
       }
@@ -77,10 +94,9 @@ export default {
       function passverification() {
 
         if ($('#passw1').val().length < 7) {
-          // lthis.statuspass = 'Пароль должен быть меньше 7 символов'
-          alert('Пароль должен быть меньше 7 символов')
+          lthis.notificationfunc('Пароль должен быть меньше 7 символов')
+
         } else {
-          // lthis.statuspass = ''
           return true;
         }
       }
@@ -88,10 +104,9 @@ export default {
       function matchpass() {
 
         if ($('#passw1').val() != $('#passw2').val()) {
-          // lthis.statuspass = 'Пароли не совподают'
-          alert('Пароли не совподают')
+          lthis.notificationfunc('Пароли не совподают')
+
         } else {
-          // lthis.statuspass2 = ''
           return true;
         }
       }
@@ -100,7 +115,6 @@ export default {
         let data = $("#login-inp").val() + ',' + $('#email').val() + ',' + $('#passw1').val();
         // функция
         lthis.$emit('reg', data);
-        console.log(data);
       }
     },
   }
@@ -108,6 +122,27 @@ export default {
 </script>
 
 <style scoped>
+.notification {
+  position: absolute;
+  background: rgb(234, 85, 83);
+  bottom: 50px;
+  right: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 3px;
+  color: #fff;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.notification img {
+  width: 35px;
+  margin-top: -5px;
+  margin-left: -15px;
+  margin-right: 5px;
+}
+
 .error {
   color: red;
   font-size: 14px;

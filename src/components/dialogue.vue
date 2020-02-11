@@ -2,26 +2,36 @@
 <div class="dialohue">
   <h1>Чат</h1>
   <form class="" @submit='sarch' action="index.html" method="post" class="sarch-input">
-    <input class='search' id='search' type="text" placeholder="  Поиск по людям, диалогам и сообщениям" name="" value="">
+    <input class='search' id='search' type="text" placeholder="Поиск по людям" name="" value="">
+    <!-- <input class='search' id='search' type="text" placeholder="  Поиск по людям, диалогам и сообщениям" name="" value=""> -->
 
   </form>
   <!--  -->
   <div class="mess">
     <div class="contacts">
-      <!-- <blockMess :people='p' /> -->
-      <div @click='chat(p)' v-for="p in people">
 
+
+      <div v-if='!searchdata' @click='chat(p)' v-for="p in people">
         <div :id="'i' +p[2]" class="contact i">
           <div class="logo">
             <img :src="p[1]" alt="">
           </div>
           <div class="text">
             <h4>{{p[0]}}</h4>
-            <!-- <p class='so'>{{people}}</p>
-            <p class='time'>{{people}}</p> -->
           </div>
         </div>
       </div>
+      <div @click='chat(p[0])' v-for="p in searchdata">
+        <div :id="'i' +p[0][2]" class="contact i">
+          <div class="logo">
+            <img :src="p[0][1]" alt="">
+          </div>
+          <div class="text">
+            <h4>{{p[0][0]}}</h4>
+          </div>
+        </div>
+      </div>
+
     </div>
     <!--  -->
     <div class="messens">
@@ -61,7 +71,9 @@ export default {
       // данный человек
       thisuser: '',
       // id человека
-      thisid: ''
+      thisid: '',
+      // search
+      searchdata: ''
     }
   },
   props: {
@@ -109,25 +121,33 @@ export default {
       });
     },
     sarch() {
+      let lthis = this;
       event.preventDefault();
-      // if (document.querySelector('#search').value > 1) {
 
       console.log(document.querySelector('#search').value);
+      if (document.querySelector('#search').value.length == 0) {
+        lthis.searchdata = false
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "http://91.201.54.66/search",
+          CrossDomain: true,
+          async: false,
+          data: {
+            content: document.querySelector('#search').value,
+          },
+          success: function(data) {
+            document.querySelector('#search').value = '';
+            lthis.searchdata = data
 
-      $.ajax({
-        type: "POST",
-        url: "http://91.201.54.66/search",
-        CrossDomain: true,
-        async: false,
-        data: {
-          content: document.querySelector('#search').value,
-        },
-        success: function(data) {
-          document.querySelector('#search').value = '';
-          console.log(data);
+          },
+          error: function(error) {
+            console.log('Нет такого пользователя');
+            lthis.searchdata = []
+          }
+        });
+      }
 
-        }
-      });
 
       // }
 
