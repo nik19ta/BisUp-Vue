@@ -321,7 +321,6 @@ a,
   opacity: 0;
 }
 
-@import url('font/stylesheet.css');
 
 * {
   box-sizing: border-box;

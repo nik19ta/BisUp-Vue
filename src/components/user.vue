@@ -330,7 +330,6 @@ progress::-moz-progress-bar {
 
 .profile {
   width: 1200px;
-  font-family: 'PF BeauSans Pro' !important;
   font-style: normal;
   padding-top: 60px;
 }

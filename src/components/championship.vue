@@ -129,7 +129,7 @@
 <script>
 import $ from "jquery"
 
-var idblock;
+// var idblock;
 
 export default {
   name: 'testing',
@@ -478,8 +478,9 @@ export default {
       this.addto = !this.addto;
     },
     BlockFun(id) {
-      idblock = id;
-      this.$emit('BlockFun', idblock);
+      // idblock = id;
+      this.$emit('BlockFun', id);
+      // this.$emit('BlockFun', idblock);
     },
     championshipFun() {
       this.show = !this.show;
@@ -716,16 +717,6 @@ h1 {
   }
 }
 
-@media screen and (max-width: 599px) {
-  h1 {
-    text-align: center;
-  }
-
-  .Tests {
-    width: 100%;
-    justify-content: center;
-  }
-}
 
 #nameteam {
   color: #0007;
@@ -1079,7 +1070,49 @@ hr {
 
 @media screen and (max-width: 800px) {
   .participant {
+    width: 95%;
+    margin-left: 4.5%;
+  }
+
+  .participant-btn {
+    width: 95%;
+    margin-left: 4.5%;
+  }
+
+  .participants {
     width: 100%;
   }
+
+  .bl {
+    padding-left: 18px;
+    height: 140px;
+  }
+
+  .testing {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .Tests {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+  }
+
+  .addTeam {
+    width: 100vw;
+    /* height: calc(100vh - (60px + 50px)); */
+    height: calc(100vh - 60px);
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+
 }
 </style>
