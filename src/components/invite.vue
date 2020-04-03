@@ -37,7 +37,7 @@ export default {
       let block = data;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66/addUserToTeam",
+        url: "http://91.201.54.125:5000/addUserToTeam",
         data: {
           userId: this.inform.id,
           teamname: data[2],
@@ -60,7 +60,7 @@ export default {
 
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66/noAddToTeam",
+        url: "http://91.201.54.125:5000/noAddToTeam",
         data: {
           userId: this.inform.id,
           championatId: data[0],

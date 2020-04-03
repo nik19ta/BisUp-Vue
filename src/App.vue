@@ -89,7 +89,7 @@ export default {
       let lthis = this;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66/invate",
+        url: "http://91.201.54.125:5000/invate",
         acync: false,
         data: {
           id: lthis.info.info.id
@@ -159,7 +159,7 @@ export default {
       let lethis = this;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66/championats",
+        url: "http://91.201.54.125:5000/championats",
         data: {},
         success: function(data) {
           lethis.championats = data;
@@ -172,7 +172,7 @@ export default {
 
       $.ajax({
         type: "POST",
-        url: 'http://91.201.54.66/getusers',
+        url: 'http://91.201.54.125:5000/getusers',
         CrossDomain: true,
         async: false,
         data: {
@@ -213,7 +213,7 @@ export default {
         let authdata = JSON.parse(localStorage.name)
         $.ajax({
           type: "POST",
-          url: "http://91.201.54.66/login",
+          url: "http://91.201.54.125:5000/login",
           data: {
             login: authdata[0],
             password: authdata[1],
@@ -229,7 +229,7 @@ export default {
               setTimeout(async function() {
                 $.ajax({
                   type: "POST",
-                  url: 'http://91.201.54.66/getusers',
+                  url: 'http://91.201.54.125:5000/getusers',
                   CrossDomain: true,
                   async: false,
                   data: {
@@ -244,7 +244,7 @@ export default {
               setTimeout(async function() {
                 $.ajax({
                   type: "POST",
-                  url: "http://91.201.54.66/invate",
+                  url: "http://91.201.54.125:5000/invate",
                   acync: false,
                   data: {
                     id: lthis.info.info.id

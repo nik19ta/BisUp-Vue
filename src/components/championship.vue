@@ -232,7 +232,7 @@ export default {
 
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66/deluser",
+        url: "http://91.201.54.125:5000/deluser",
         CrossDomain: true,
         async: false,
         data: {
@@ -292,7 +292,7 @@ export default {
       lthis.leave = false;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66/users",
+        url: "http://91.201.54.125:5000/users",
         async: false,
         data: {
           users_id: data[2]
@@ -320,7 +320,7 @@ export default {
 
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66/exitFromChampionat",
+        url: "http://91.201.54.125:5000/exitFromChampionat",
         CrossDomain: true,
         async: false,
         data: {
@@ -376,7 +376,7 @@ export default {
       let lthis = this;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66/addteamUser",
+        url: "http://91.201.54.125:5000/addteamUser",
         CrossDomain: true,
         async: false,
         data: {
@@ -407,7 +407,7 @@ export default {
 
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66/AddToTeam",
+        url: "http://91.201.54.125:5000/AddToTeam",
         CrossDomain: true,
         async: false,
         data: {
@@ -436,7 +436,7 @@ export default {
       $("#addUserTeam").removeClass("addTeamVisible");
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66/invatetoadd",
+        url: "http://91.201.54.125:5000/invatetoadd",
         CrossDomain: true,
         async: false,
         data: {
@@ -457,7 +457,7 @@ export default {
       let lthis = this;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66/teamsall",
+        url: "http://91.201.54.125:5000/teamsall",
         CrossDomain: true,
         async: false,
         data: {
@@ -504,7 +504,7 @@ export default {
 
         $.ajax({
           type: "POST",
-          url: "http://91.201.54.66/usersinchampionat",
+          url: "http://91.201.54.125:5000/usersinchampionat",
           async: false,
           data: {
             users_id: data[7],
@@ -522,7 +522,7 @@ export default {
         }
         // $.ajax({
         //   type: "POST",
-        //   url: "http://91.201.54.66/teamsall",
+        //   url: "http://91.201.54.125:5000/teamsall",
         //   CrossDomain: true,
         //   async: false,
         //   data: {

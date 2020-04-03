@@ -104,7 +104,7 @@ export default {
       console.log(data);
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66/getchat",
+        url: "http://91.201.54.125:5000/getchat",
         CrossDomain: true,
         async: false,
         data: {
@@ -130,7 +130,7 @@ export default {
       } else {
         $.ajax({
           type: "POST",
-          url: "http://91.201.54.66/search",
+          url: "http://91.201.54.125:5000/search",
           CrossDomain: true,
           async: false,
           data: {
@@ -169,7 +169,7 @@ export default {
         let mes = '';
         $.ajax({
           type: "POST",
-          url: "http://91.201.54.66/sendchat",
+          url: "http://91.201.54.125:5000/sendchat",
           CrossDomain: true,
           async: false,
           data: {

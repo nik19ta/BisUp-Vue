@@ -197,7 +197,7 @@ export default {
       let lthis = this;
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66/chengedata",
+        url: "http://91.201.54.125:5000/chengedata",
         CrossDomain: true,
         data: {
           id: lthis.inform.id,
@@ -225,7 +225,7 @@ export default {
     changepassword() {
       $.ajax({
         type: "POST",
-        url: "http://91.201.54.66/changepass",
+        url: "http://91.201.54.125:5000/changepass",
         CrossDomain: true,
         async: false,
         data: {
@@ -250,7 +250,7 @@ export default {
       if (document.getElementsByName('accadd')[0].value) {
         $.ajax({
           type: "POST",
-          url: "http://91.201.54.66/addacc",
+          url: "http://91.201.54.125:5000/addacc",
           CrossDomain: true,
           data: {
             accid: document.getElementsByName('accadd')[0].value,
